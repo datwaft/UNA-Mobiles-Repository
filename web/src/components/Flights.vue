@@ -15,11 +15,11 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 
-import { getAllFlights } from '@/server.ts'
+import { getAllFlights } from '@/server.js'
 
 export default {
   name: 'Flights',
@@ -39,7 +39,7 @@ export default {
   },
   computed: {
     data() {
-      const result: object[] = []
+      const result = []
       if (this.flights == null) return result
       for (const o of this.flights) {
         result.push({
