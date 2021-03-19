@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="14.3.0">
-  <zoom_level>13</zoom_level>
+  <zoom_level>10</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>221</x>
-      <y>169</y>
-      <w>195</w>
-      <h>208</h>
+      <x>240</x>
+      <y>160</y>
+      <w>150</w>
+      <h>160</h>
     </coordinates>
     <panel_attributes>*User*
 --
@@ -24,10 +24,10 @@ mobilephone: varchar</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>871</x>
-      <y>325</y>
-      <w>182</w>
-      <h>130</h>
+      <x>740</x>
+      <y>280</y>
+      <w>140</w>
+      <h>100</h>
     </coordinates>
     <panel_attributes>*Route*
 --
@@ -40,10 +40,10 @@ duration: datetime?</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>208</x>
-      <y>481</y>
-      <w>221</w>
-      <h>117</h>
+      <x>230</x>
+      <y>400</y>
+      <w>170</w>
+      <h>90</h>
     </coordinates>
     <panel_attributes>*Purchase*
 --
@@ -55,10 +55,10 @@ ticket_number: int</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>897</x>
-      <y>13</y>
-      <w>156</w>
-      <h>169</h>
+      <x>760</x>
+      <y>40</y>
+      <w>120</w>
+      <h>130</h>
     </coordinates>
     <panel_attributes>*PlaneType*
 --
@@ -74,26 +74,27 @@ columns: int[6-9]
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>546</x>
-      <y>312</y>
-      <w>247</w>
-      <h>143</h>
+      <x>490</x>
+      <y>270</y>
+      <w>190</w>
+      <h>110</h>
     </coordinates>
     <panel_attributes>*Schedule*
 --
 identifier: int
 departure_time: time
 weekday: int [Enum]
-price: double</panel_attributes>
+price: double
+discount: double [0-1]</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>559</x>
-      <y>65</y>
-      <w>195</w>
-      <h>169</h>
+      <x>500</x>
+      <y>80</y>
+      <w>150</w>
+      <h>130</h>
     </coordinates>
     <panel_attributes>*Plane*
 --
@@ -103,10 +104,10 @@ identifier: int</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>637</x>
-      <y>221</y>
-      <w>39</w>
-      <h>117</h>
+      <x>560</x>
+      <y>200</y>
+      <w>30</w>
+      <h>90</h>
     </coordinates>
     <panel_attributes>lt=-&gt;</panel_attributes>
     <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
@@ -114,10 +115,10 @@ identifier: int</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>741</x>
-      <y>104</y>
-      <w>182</w>
-      <h>39</h>
+      <x>640</x>
+      <y>110</y>
+      <w>140</w>
+      <h>30</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>120.0;10.0;10.0;10.0</additional_attributes>
@@ -125,10 +126,10 @@ identifier: int</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>247</x>
-      <y>689</y>
-      <w>130</w>
-      <h>104</h>
+      <x>260</x>
+      <y>560</y>
+      <w>100</w>
+      <h>80</h>
     </coordinates>
     <panel_attributes>*Ticket*
 --
@@ -141,10 +142,10 @@ column: int
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>299</x>
-      <y>364</y>
-      <w>39</w>
-      <h>143</h>
+      <x>300</x>
+      <y>310</y>
+      <w>30</w>
+      <h>110</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
@@ -152,10 +153,10 @@ column: int
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>299</x>
-      <y>585</y>
-      <w>39</w>
-      <h>130</h>
+      <x>300</x>
+      <y>480</y>
+      <w>30</w>
+      <h>100</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
@@ -163,10 +164,10 @@ column: int
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>637</x>
-      <y>442</y>
-      <w>39</w>
-      <h>156</h>
+      <x>560</x>
+      <y>370</y>
+      <w>30</w>
+      <h>120</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
@@ -174,10 +175,10 @@ column: int
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>780</x>
-      <y>377</y>
-      <w>117</w>
-      <h>39</h>
+      <x>670</x>
+      <y>320</y>
+      <w>90</w>
+      <h>30</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
@@ -185,10 +186,10 @@ column: int
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>533</x>
-      <y>572</y>
-      <w>260</w>
-      <h>143</h>
+      <x>480</x>
+      <y>470</y>
+      <w>200</w>
+      <h>110</h>
     </coordinates>
     <panel_attributes>*Flight*
 --
@@ -203,10 +204,10 @@ inbound_schedule?: Schedule
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>416</x>
-      <y>533</y>
-      <w>143</w>
-      <h>117</h>
+      <x>390</x>
+      <y>440</y>
+      <w>110</w>
+      <h>90</h>
     </coordinates>
     <panel_attributes>lt=-&gt;</panel_attributes>
     <additional_attributes>10.0;10.0;40.0;10.0;40.0;70.0;90.0;70.0</additional_attributes>
