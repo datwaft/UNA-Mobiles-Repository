@@ -8,10 +8,20 @@ const routes: Array<RouteRecordRaw> = [
     component: Home
   },
   {
-    path: '/about',
-    name: 'About',
-    component: () => import('../views/About.vue')
-  }
+    path: '/about/history',
+    name: 'History',
+    component: () => import('../views/about/History.vue')
+  },
+  {
+    path: '/about/contact',
+    name: 'Contact Information',
+    component: () => import('../views/about/Contact.vue')
+  },
+  {
+    path: '/about/reference',
+    name: 'Institutional Reference',
+    component: () => import('../views/about/Reference.vue')
+  },
 ]
 
 const router = createRouter({

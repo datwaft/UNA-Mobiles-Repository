@@ -1,30 +1,72 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
+  <Menubar :model="items">
+    <template #start>
+      <div class="logo">
+        <font-awesome-icon icon="plane-departure" />
+        {{ brandName }}
+      </div>
+    </template>
+  </Menubar>
   <router-view/>
 </template>
 
+<script>
+import Menubar from 'primevue/menubar'
+
+export default {
+  name: 'App',
+  components: {
+    Menubar,
+  },
+  data() {
+    return {
+      brandName: 'Patitos Airlines',
+      items: [
+        { icon: 'pi pi-home', label: 'Home', to: '/' },
+        { icon: 'pi pi-info-circle', label: 'About', items: [
+          { label: 'History', to: '/about/history' },
+          { label: 'Contact Information', to: '/about/contact' },
+          { label: 'Institutional Reference', to: '/about/reference' },
+        ]},
+      ],
+    }
+  }
+}
+</script>
+
 <style>
+body {
+  margin: 0;
+}
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
 }
 
-#nav {
-  padding: 30px;
-}
-
-#nav a {
+.header {
+  font-size: 2rem;
   font-weight: bold;
-  color: #2c3e50;
+  color: var(--primary-color);
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+.window {
+  margin: 0.5rem;
+}
+
+a {
+  color: var(--text-color);
+  text-decoration: none;
+}
+</style>
+
+<style scoped>
+.logo {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  margin-right: .25rem;
+  user-select: none;
 }
 </style>

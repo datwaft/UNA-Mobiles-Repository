@@ -1,14 +1,11 @@
 <template>
   <div class="home">
     <TabView>
-      <TabPanel header="Header I">
-        Content I
+      <TabPanel header="Flights">
+        <Flights />
       </TabPanel>
-      <TabPanel header="Header II">
+      <TabPanel header="Schedules with discount">
         Content II
-      </TabPanel>
-      <TabPanel header="Header III">
-        Content III
       </TabPanel>
     </TabView>
   </div>
@@ -17,12 +14,14 @@
 <script>
 import TabView from 'primevue/tabview'
 import TabPanel from 'primevue/tabpanel'
+import Flights from '../components/Flights.vue'
 
 export default {
   name: 'Home',
   components: {
     TabView,
     TabPanel,
+    Flights,
   }
 }
 </script>
