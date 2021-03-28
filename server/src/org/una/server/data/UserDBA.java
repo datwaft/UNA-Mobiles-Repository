@@ -8,7 +8,7 @@ import java.sql.Types;
 public class UserDBA {
     private static UserDBA instance = null;
 
-    private Connection connection = DatabaseConnection.getInstance().getConnection();
+    private final Connection connection = DatabaseConnection.getInstance().getConnection();
 
     public Boolean canLogIn(String username, String password) throws SQLException {
         CallableStatement query = connection.prepareCall("{ ? = call can_log_in( ?, ? ) }");

@@ -8,13 +8,12 @@ import static java.lang.System.exit;
 public class DatabaseConnection {
     private static DatabaseConnection instance = null;
 
-    private final String url = "jdbc:postgresql://localhost/airline";
-    private final String user = "postgres";
-    private final String password = "losiram01";
-
     private Connection connection;
 
     private DatabaseConnection() {
+        String password = "losiram01";
+        String user = "postgres";
+        String url = "jdbc:postgresql://localhost/airline";
         try {
             this.connection = DriverManager.getConnection(url, user, password);
         } catch (Exception ex) {
