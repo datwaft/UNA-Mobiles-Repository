@@ -1,16 +1,19 @@
 package org.una.server.controller;
 
+import org.javatuples.Pair;
 import org.json.JSONObject;
-import org.una.server.data.UserDBA;
+import org.una.server.model.UserModel;
 
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class UserController {
     private static UserController instance = null;
 
     public JSONObject processQuery(JSONObject object) {
         return switch (object.getString("action")) {
-            case "login" -> login(object.getString("username"), object.getString("password"));
+            case "LOGIN" -> login(object.getString("username"), object.getString("password"));
             default -> null;
         };
     }
@@ -18,7 +21,8 @@ public class UserController {
     public JSONObject login(String username, String password) {
         try {
             var response = new JSONObject();
-            response.put("data", UserDBA.getInstance().canLogIn(username, password));
+            response.put("action", "LOGIN");
+            response.put("value", UserModel.getInstance().canLogIn(username, password));
             return response;
         } catch (SQLException ex) {
             System.err.format("SQLException: %s%n", ex.getMessage());

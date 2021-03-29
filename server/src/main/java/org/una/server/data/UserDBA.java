@@ -11,7 +11,7 @@ public class UserDBA {
     private final Connection connection = DatabaseConnection.getInstance().getConnection();
 
     public Boolean canLogIn(String username, String password) throws SQLException {
-        CallableStatement query = connection.prepareCall("{ ? = call can_log_in( ?, ? ) }");
+        var query = connection.prepareCall("{ ? = call can_log_in( ?, ? ) }");
         query.registerOutParameter(1, Types.BOOLEAN);
         query.setString(2, username);
         query.setString(3, password);
