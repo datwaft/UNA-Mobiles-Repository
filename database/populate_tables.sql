@@ -115,19 +115,16 @@ INSERT INTO "plane" (
 );
 
 INSERT INTO "schedule" (
-  "plane",
   "route",
   "departure_time",
   "weekday",
   "discount"
 ) values (
   1,
-  1,
   '22:30',
   0,
   0.30
 ), (
-  2,
   4,
   '10:30',
   3,
@@ -135,18 +132,31 @@ INSERT INTO "schedule" (
 );
 
 INSERT INTO "flight" (
+  "plane",
   "outbound_date",
   "outbound_schedule",
   "inbound_date",
   "inbound_schedule"
 ) values (
+  1,
   '2020-03-22',
   1,
   null,
   null
 ), (
+  2,
   '2020-05-12',
   1,
   '2020-06-12',
   2
+);
+
+INSERT INTO "purchase" (
+  "ticket_number",
+  "flight",
+  "user"
+) values (
+  5,
+  1,
+  'user1'
 );

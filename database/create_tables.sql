@@ -40,7 +40,6 @@ CREATE TABLE IF NOT EXISTS "plane" (
 
 CREATE TABLE IF NOT EXISTS "schedule" (
   "identifier"     SERIAL        NOT NULL PRIMARY KEY,
-  "plane"          SERIAL        NOT NULL,
   "route"          SERIAL        NOT NULL,
   "departure_time" TIME          NOT NULL,
   "weekday"        NUMERIC(1, 0) NOT NULL,
@@ -49,6 +48,7 @@ CREATE TABLE IF NOT EXISTS "schedule" (
 
 CREATE TABLE IF NOT EXISTS "flight" (
   "identifier"        SERIAL NOT NULL PRIMARY KEY,
+  "plane"             SERIAL NOT NULL,
   "outbound_date"     DATE   NOT NULL,
   "outbound_schedule" SERIAL NOT NULL,
   "inbound_date"      DATE       NULL,
@@ -87,14 +87,14 @@ FOREIGN KEY ("type")
 REFERENCES "plane_type" ("identifier");
 
 ALTER TABLE "schedule"
-ADD CONSTRAINT "schedule_plane_fk"
-FOREIGN KEY ("plane")
-REFERENCES "plane" ("identifier");
-
-ALTER TABLE "schedule"
 ADD CONSTRAINT "schedule_route_fk"
 FOREIGN KEY ("route")
 REFERENCES "route" ("identifier");
+
+ALTER TABLE "flight"
+ADD CONSTRAINT "flight_plane_fk"
+FOREIGN KEY ("plane")
+REFERENCES "plane" ("identifier");
 
 ALTER TABLE "flight"
 ADD CONSTRAINT "flight_outbound_schedule_fk"
