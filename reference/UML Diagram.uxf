@@ -98,7 +98,8 @@ discount: double [0-1]</panel_attributes>
     </coordinates>
     <panel_attributes>*Plane*
 --
-identifier: int</panel_attributes>
+identifier: int
+name: varchar</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
