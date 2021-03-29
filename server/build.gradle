@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
+group 'org.una'
+version '0.1.0'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    junitVersion = '5.7.0'
+}
+
+sourceCompatibility = 15
+targetCompatibility = 15
+
+dependencies {
+    compileOnly('jakarta.websocket:jakarta.websocket-api:2.0.0')
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+
+    implementation group: 'org.json', name: 'json', version: '20210307'
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.19'
+}
+
+test {
+    useJUnitPlatform()
+}

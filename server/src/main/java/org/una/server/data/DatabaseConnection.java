@@ -11,10 +11,11 @@ public class DatabaseConnection {
     private Connection connection;
 
     private DatabaseConnection() {
-        String password = "losiram01";
         String user = "postgres";
+        String password = "losiram01";
         String url = "jdbc:postgresql://localhost/airline";
         try {
+            Class.forName("org.postgresql.Driver");
             this.connection = DriverManager.getConnection(url, user, password);
         } catch (Exception ex) {
             System.err.println("Couldn't connect to database");
