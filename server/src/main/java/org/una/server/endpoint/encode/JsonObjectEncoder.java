@@ -1,4 +1,4 @@
-package org.una.server.socket.encode;
+package org.una.server.endpoint.encode;
 
 import jakarta.websocket.EncodeException;
 import jakarta.websocket.Encoder;

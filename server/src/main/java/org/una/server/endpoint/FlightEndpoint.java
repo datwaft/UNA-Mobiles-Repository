@@ -1,11 +1,11 @@
-package org.una.server.socket;
+package org.una.server.endpoint;
 
 import jakarta.websocket.*;
 import jakarta.websocket.server.ServerEndpoint;
 import org.json.JSONObject;
 import org.una.server.controller.FlightController;
-import org.una.server.socket.decode.JsonObjectDecoder;
-import org.una.server.socket.encode.JsonObjectEncoder;
+import org.una.server.endpoint.decode.JsonObjectDecoder;
+import org.una.server.endpoint.encode.JsonObjectEncoder;
 
 import java.io.IOException;
 import java.util.HashSet;

@@ -19,8 +19,6 @@
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 
-import { getAllFlights } from '@/server.js'
-
 export default {
   name: 'Flights',
   components: {
@@ -32,11 +30,6 @@ export default {
       flights: [],
     }
   },
-  methods: {
-    formatDate(value) {
-      return value.toISOString().slice(0, -14)
-    }
-  },
   computed: {
     data() {
       const result = []
@@ -45,16 +38,26 @@ export default {
         result.push({
           origin: o.origin,
           destination: o.destination,
-          outboundDate: this.formatDate(o.outboundDate),
-          inboundDate: this.formatDate(o.inboundDate),
-          passengers: o.passengerAmount + " of " + o.passengerTotal,
+          outboundDate: o.outbound_date,
+          inboundDate: o.inbound_date ?? 'N/A',
+          passengers: `${o.passenger_amount} of ${o.passenger_total}`,
         })
       }
       return result
     }
   },
   async mounted() {
-    this.flights = await getAllFlights()
+    // Open websocket
+    let ws = new WebSocket("ws://localhost:8099/server/flight")
+    ws.onopen = () => ws.send(JSON.stringify({ action: "GET_ALL" }))
+    ws.onmessage = (event) => {
+      let data = JSON.parse(event.data)
+      switch(data.action) {
+        case "GET_ALL":
+          this.flights = data.value
+          break
+      }
+    }
   },
 }
 </script>

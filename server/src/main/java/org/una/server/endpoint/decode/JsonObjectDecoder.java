@@ -1,4 +1,4 @@
-package org.una.server.socket.decode;
+package org.una.server.endpoint.decode;
 
 import jakarta.websocket.Decoder;
 import jakarta.websocket.EndpointConfig;
