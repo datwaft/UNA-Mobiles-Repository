@@ -33,3 +33,18 @@ CREATE VIEW "view_flight" AS
     f.inbound_date,
     pt.columns,
     pt.rows;
+
+CREATE VIEW "view_schedule" AS
+  SELECT
+    s.identifier as identifier,
+    r.origin as origin,
+    r.destination as destination,
+    s.departure_time as departure_time,
+    s.weekday as weekday,
+    r.duration as duration,
+    r.price as price,
+    s.discount as discount
+  FROM
+    schedule s
+  INNER JOIN route r
+    ON s.route = r.identifier;

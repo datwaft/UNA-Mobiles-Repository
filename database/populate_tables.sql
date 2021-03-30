@@ -129,6 +129,11 @@ INSERT INTO "schedule" (
   '10:30',
   3,
   0.40
+), (
+  2,
+  '07:00',
+  2,
+  0
 );
 
 INSERT INTO "flight" (

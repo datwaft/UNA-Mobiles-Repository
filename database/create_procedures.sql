@@ -41,3 +41,17 @@ AS $$
     RETURN "out_cursor";
   END;
 $$ LANGUAGE plpgsql;
+
+\echo '-> Creating schedule functions and procedures...'
+
+CREATE OR REPLACE FUNCTION "get_all_schedules_with_discount" ()
+RETURNS REFCURSOR
+AS $$
+  DECLARE
+    "out_cursor" REFCURSOR;
+  BEGIN
+    OPEN "out_cursor" FOR
+      SELECT * FROM "view_schedule" where "discount" > 0;
+    RETURN "out_cursor";
+  END;
+$$ LANGUAGE plpgsql;

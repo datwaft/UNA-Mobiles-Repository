@@ -5,7 +5,7 @@
         <Flights />
       </TabPanel>
       <TabPanel header="Schedules with discount">
-        Content II
+        <SchedulesWithDiscount />
       </TabPanel>
     </TabView>
   </div>
@@ -15,6 +15,7 @@
 import TabView from 'primevue/tabview'
 import TabPanel from 'primevue/tabpanel'
 import Flights from '../components/Flights.vue'
+import SchedulesWithDiscount from '../components/SchedulesWithDiscount.vue'
 
 export default {
   name: 'Home',
@@ -22,6 +23,7 @@ export default {
     TabView,
     TabPanel,
     Flights,
+    SchedulesWithDiscount,
   }
 }
 </script>
