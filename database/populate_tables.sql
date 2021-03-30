@@ -154,6 +154,12 @@ INSERT INTO "flight" (
   1,
   '2020-06-12',
   2
+), (
+  3,
+  '2020-09-10',
+  3,
+  null,
+  null
 );
 
 INSERT INTO "purchase" (
