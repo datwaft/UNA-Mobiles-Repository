@@ -22,9 +22,16 @@ public class UserEndpoint {
 
     @OnMessage
     public void onMessage(JSONObject message, Session session) throws IOException, EncodeException {
-        var response = UserController.getInstance().processQuery(message);
+        var response = UserController.getInstance().processQuery(message, session);
         if (response != null) {
             session.getBasicRemote().sendObject(response);
+            if (response.get("action") == "REGISTER") {
+                var loginMessage = new JSONObject();
+                loginMessage.put("action", "LOGIN");
+                loginMessage.put("username", message.get("username"));
+                loginMessage.put("password", message.get("password"));
+                session.getBasicRemote().sendObject(UserController.getInstance().processQuery(loginMessage, session));
+            }
         }
     }
 
@@ -36,5 +43,6 @@ public class UserEndpoint {
     @OnClose
     public void onClose(Session session, CloseReason closeReason) {
         sessions.remove(session);
+        UserController.getInstance().logout(session);
     }
 }

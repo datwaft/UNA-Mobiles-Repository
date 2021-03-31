@@ -5,14 +5,15 @@
 \echo '=> Creating tables...'
 
 CREATE TABLE IF NOT EXISTS "user" (
-  "username"    VARCHAR NOT NULL PRIMARY KEY,
-  "password"    VARCHAR NOT NULL,
-  "name"        VARCHAR NOT NULL,
-  "lastname"    VARCHAR NOT NULL,
-  "email"       VARCHAR NOT NULL,
-  "address"     VARCHAR NOT NULL,
-  "workphone"   VARCHAR NOT NULL,
-  "mobilephone" VARCHAR NOT NULL
+  "username"      VARCHAR NOT NULL PRIMARY KEY,
+  "password"      VARCHAR NOT NULL,
+  "authorization" VARCHAR NOT NULL,
+  "name"          VARCHAR NOT NULL,
+  "lastname"      VARCHAR NOT NULL,
+  "email"         VARCHAR NOT NULL,
+  "address"       VARCHAR NOT NULL,
+  "workphone"     VARCHAR NOT NULL,
+  "mobilephone"   VARCHAR NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "plane_type" (
@@ -70,6 +71,10 @@ CREATE TABLE IF NOT EXISTS "ticket" (
 );
 
 \echo '=> Creating constraints...'
+
+ALTER TABLE "user"
+ADD CONSTRAINT "user_authorization_check"
+CHECK ( "authorization" IN ('user', 'admin') );
 
 ALTER TABLE "schedule"
 ADD CONSTRAINT "schedule_weekday_check"

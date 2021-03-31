@@ -65,7 +65,7 @@ export default {
     ws.onopen = () => ws.send(JSON.stringify({ action: "GET_ALL_WITH_DISCOUNT" }))
     ws.onmessage = (event) => {
       let data = JSON.parse(event.data)
-      switch(data.action) {
+      switch (data.action) {
         case "GET_ALL_WITH_DISCOUNT":
           this.schedules = data.value
           break

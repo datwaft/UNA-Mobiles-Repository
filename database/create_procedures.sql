@@ -6,25 +6,65 @@
 
 \echo '-> Creating user functions and procedures...'
 
-CREATE OR REPLACE FUNCTION "can_log_in" (
+CREATE OR REPLACE FUNCTION "get_authorization" (
   "input_username" VARCHAR,
   "input_password" VARCHAR
-)
-RETURNS BOOLEAN
+) RETURNS VARCHAR
 AS $$
   DECLARE
-    "true_password" VARCHAR;
+    "user_password"      VARCHAR;
+    "user_authorization" VARCHAR;
   BEGIN
     SELECT "password"
-    FROM "user"
-    INTO "true_password"
-    WHERE "username" = "input_username";
+      FROM "user"
+      INTO "user_password"
+      WHERE "username" = "input_username";
 
-    IF "true_password" = "input_password" then
-      RETURN TRUE;
+    IF "user_password" = "input_password" then
+      SELECT "authorization"
+        FROM "user"
+        INTO "user_authorization"
+        WHERE "username" = "input_username";
+      RETURN "user_authorization";
     ELSE
-      RETURN FALSE;
+      RETURN 'none';
     END IF;
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE PROCEDURE "register_user" (
+  "input_username"    VARCHAR,
+  "input_password"    VARCHAR,
+  "input_name"        VARCHAR,
+  "input_lastname"    VARCHAR,
+  "input_email"       VARCHAR,
+  "input_address"     VARCHAR,
+  "input_workphone"   VARCHAR,
+  "input_mobilephone" VARCHAR
+)
+AS $$
+  BEGIN
+    INSERT INTO "user" (
+      "username",
+      "password",
+      "authorization",
+      "name",
+      "lastname",
+      "email",
+      "address",
+      "workphone",
+      "mobilephone"
+    ) VALUES (
+      "input_username",
+      "input_password",
+      'user',
+      "input_name",
+      "input_lastname",
+      "input_email",
+      "input_address",
+      "input_workphone",
+      "input_mobilephone"
+    );
   END;
 $$ LANGUAGE plpgsql;
 

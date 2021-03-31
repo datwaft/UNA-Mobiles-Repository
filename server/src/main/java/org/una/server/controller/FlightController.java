@@ -1,5 +1,6 @@
 package org.una.server.controller;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.una.server.model.FlightModel;
 
@@ -9,10 +10,14 @@ public class FlightController {
     private static FlightController instance = null;
 
     public JSONObject processQuery(JSONObject object) {
-        return switch (object.getString("action")) {
-            case "GET_ALL" -> getAll();
-            default -> null;
-        };
+        try {
+            return switch (object.getString("action")) {
+                case "GET_ALL" -> getAll();
+                default -> null;
+            };
+        } catch (JSONException ex) {
+            return null;
+        }
     }
 
     public JSONObject getAll() {

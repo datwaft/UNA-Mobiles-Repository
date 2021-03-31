@@ -7,15 +7,17 @@
 INSERT INTO "user" (
   "username",
   "password",
+  "authorization",
   "name",
   "lastname",
   "email",
   "address",
   "workphone",
   "mobilephone"
-) values (
+) VALUES (
   'user1',
   'password',
+  'user',
   'Pepito',
   'Maximov',
   'user1@mail.com',
@@ -25,12 +27,23 @@ INSERT INTO "user" (
 ), (
   'user2',
   'password',
+  'user',
   'Juanito',
   'Calaquero',
   'user2@mail.com',
   'Lorem ipsum dolor sit amet, consectetur.',
   '82672590',
   '86624597'
+), (
+  'admin',
+  'admin',
+  'admin',
+  'Administrator',
+  'Administrator',
+  'admin@mail.com',
+  'Administrator',
+  '00000000',
+  '00000000'
 );
 
 INSERT INTO "plane_type" (
@@ -39,7 +52,7 @@ INSERT INTO "plane_type" (
   "brand",
   "rows",
   "columns"
-) values (
+) VALUES (
   1999,
   'GFA-69',
   'Kawasaki',
@@ -70,7 +83,7 @@ INSERT INTO "route" (
   "destination",
   "duration",
   "price"
-) values (
+) VALUES (
   'Costa Rica',
   'China',
   '17:00:00',
@@ -100,7 +113,7 @@ INSERT INTO "route" (
 INSERT INTO "plane" (
   "name",
   "type"
-) values (
+) VALUES (
   'Bill Gates',
   1
 ), (
@@ -119,7 +132,7 @@ INSERT INTO "schedule" (
   "departure_time",
   "weekday",
   "discount"
-) values (
+) VALUES (
   1,
   '22:30',
   0,
@@ -142,12 +155,12 @@ INSERT INTO "flight" (
   "outbound_schedule",
   "inbound_date",
   "inbound_schedule"
-) values (
+) VALUES (
   1,
   '2020-03-22',
   1,
-  null,
-  null
+  NULL,
+  NULL
 ), (
   2,
   '2020-05-12',
@@ -158,15 +171,15 @@ INSERT INTO "flight" (
   3,
   '2020-09-10',
   3,
-  null,
-  null
+  NULL,
+  NULL
 );
 
 INSERT INTO "purchase" (
   "ticket_number",
   "flight",
   "user"
-) values (
+) VALUES (
   5,
   1,
   'user1'

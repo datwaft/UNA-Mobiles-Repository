@@ -2,6 +2,7 @@ package org.una.server.data;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.Properties;
 
 import static java.lang.System.exit;
 

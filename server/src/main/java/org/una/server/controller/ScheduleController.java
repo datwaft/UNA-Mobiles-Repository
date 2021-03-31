@@ -1,5 +1,6 @@
 package org.una.server.controller;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.una.server.model.ScheduleModel;
 
@@ -9,10 +10,14 @@ public class ScheduleController {
     private static ScheduleController instance = null;
 
     public JSONObject processQuery(JSONObject object) {
-        return switch (object.getString("action")) {
-            case "GET_ALL_WITH_DISCOUNT" -> getAllWithDiscount();
-            default -> null;
-        };
+        try {
+            return switch (object.getString("action")) {
+                case "GET_ALL_WITH_DISCOUNT" -> getAllWithDiscount();
+                default -> null;
+            };
+        } catch (JSONException ex) {
+            return null;
+        }
     }
 
     public JSONObject getAllWithDiscount() {
