@@ -12,13 +12,13 @@
 </template>
 
 <script>
-import TabView from 'primevue/tabview'
-import TabPanel from 'primevue/tabpanel'
-import Flights from '../components/Flights.vue'
-import SchedulesWithDiscount from '../components/SchedulesWithDiscount.vue'
+import TabView from "primevue/tabview";
+import TabPanel from "primevue/tabpanel";
+import Flights from "../components/Flights.vue";
+import SchedulesWithDiscount from "../components/SchedulesWithDiscount.vue";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
     TabView,
     TabPanel,
@@ -28,5 +28,5 @@ export default {
   props: {
     user: Object,
   },
-}
+};
 </script>

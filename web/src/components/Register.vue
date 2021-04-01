@@ -1,8 +1,10 @@
 <template>
-  <Dialog header="Please, enter your information"
-      v-model:visible="isVisible"
-      :style="{ width: '50vw' }">
-    <br>
+  <Dialog
+    header="Please, enter your information"
+    v-model:visible="isVisible"
+    :style="{ width: '50vw' }"
+  >
+    <br />
     <div class="p-fluid">
       <div class="p-field">
         <div class="p-inputgroup">
@@ -10,8 +12,11 @@
             <i class="pi pi-user" />
           </span>
           <span class="p-float-label">
-            <InputText id="username" v-model.trim="username"
-                :class="{ 'p-invalid': !isUsernameValid }" />
+            <InputText
+              id="username"
+              v-model.trim="username"
+              :class="{ 'p-invalid': !isUsernameValid }"
+            />
             <label for="username">Username</label>
           </span>
         </div>
@@ -21,15 +26,19 @@
           </template>
         </small>
       </div>
-      <br>
+      <br />
       <div class="p-field">
         <div class="p-inputgroup">
           <span class="p-inputgroup-addon">
             <i class="pi pi-key" />
           </span>
           <span class="p-float-label">
-            <Password id="password" v-model.trim="password" :feedback="false"
-                :class="{ 'p-invalid': !isPasswordValid }" />
+            <Password
+              id="password"
+              v-model.trim="password"
+              :feedback="false"
+              :class="{ 'p-invalid': !isPasswordValid }"
+            />
             <label for="password">Password</label>
           </span>
         </div>
@@ -39,15 +48,18 @@
           </template>
         </small>
       </div>
-      <br>
+      <br />
       <div class="p-field">
         <div class="p-inputgroup">
           <span class="p-inputgroup-addon">
             <i class="pi pi-id-card" />
           </span>
           <span class="p-float-label">
-            <InputText id="name" v-model.trim="name"
-                :class="{ 'p-invalid': !isNameValid }" />
+            <InputText
+              id="name"
+              v-model.trim="name"
+              :class="{ 'p-invalid': !isNameValid }"
+            />
             <label for="name">Name</label>
           </span>
         </div>
@@ -57,15 +69,18 @@
           </template>
         </small>
       </div>
-      <br>
+      <br />
       <div class="p-field">
         <div class="p-inputgroup">
           <span class="p-inputgroup-addon">
             <i class="pi pi-id-card" />
           </span>
           <span class="p-float-label">
-            <InputText id="lastname" v-model.trim="lastname"
-                :class="{ 'p-invalid': !isLastnameValid }" />
+            <InputText
+              id="lastname"
+              v-model.trim="lastname"
+              :class="{ 'p-invalid': !isLastnameValid }"
+            />
             <label for="lastname">Lastname</label>
           </span>
         </div>
@@ -75,15 +90,16 @@
           </template>
         </small>
       </div>
-      <br>
+      <br />
       <div class="p-field">
         <div class="p-inputgroup">
-          <span class="p-inputgroup-addon">
-            @
-          </span>
+          <span class="p-inputgroup-addon"> @ </span>
           <span class="p-float-label">
-            <InputText id="email" v-model.trim="email"
-                :class="{ 'p-invalid': !isEmailValid }" />
+            <InputText
+              id="email"
+              v-model.trim="email"
+              :class="{ 'p-invalid': !isEmailValid }"
+            />
             <label for="email">Email</label>
           </span>
         </div>
@@ -93,15 +109,18 @@
           </template>
         </small>
       </div>
-      <br>
+      <br />
       <div class="p-field">
         <div class="p-inputgroup">
           <span class="p-inputgroup-addon">
             <i class="pi pi-directions" />
           </span>
           <span class="p-float-label">
-            <InputText id="address" v-model.trim="address"
-                :class="{ 'p-invalid': !isAddressValid }" />
+            <InputText
+              id="address"
+              v-model.trim="address"
+              :class="{ 'p-invalid': !isAddressValid }"
+            />
             <label for="address">Address</label>
           </span>
         </div>
@@ -111,15 +130,18 @@
           </template>
         </small>
       </div>
-      <br>
+      <br />
       <div class="p-field">
         <div class="p-inputgroup">
           <span class="p-inputgroup-addon">
             <i class="pi pi-mobile" />
           </span>
           <span class="p-float-label">
-            <InputText id="mobilephone" v-model.trim="mobilephone"
-                :class="{ 'p-invalid': !isMobilephoneValid }" />
+            <InputText
+              id="mobilephone"
+              v-model.trim="mobilephone"
+              :class="{ 'p-invalid': !isMobilephoneValid }"
+            />
             <label for="mobilephone">Mobilephone</label>
           </span>
         </div>
@@ -129,15 +151,18 @@
           </template>
         </small>
       </div>
-      <br>
+      <br />
       <div class="p-field">
         <div class="p-inputgroup">
           <span class="p-inputgroup-addon">
             <i class="pi pi-briefcase" />
           </span>
           <span class="p-float-label">
-            <InputText id="workphone" v-model.trim="workphone"
-                :class="{ 'p-invalid': !isWorkphoneValid }" />
+            <InputText
+              id="workphone"
+              v-model.trim="workphone"
+              :class="{ 'p-invalid': !isWorkphoneValid }"
+            />
             <label for="workphone">Workphone</label>
           </span>
         </div>
@@ -150,21 +175,29 @@
     </div>
 
     <template #footer>
-      <Button icon="pi pi-user-plus" label="Register" @click="register()"
-          :disabled="!isValid" />
-      <Button icon="pi pi-times-circle" label="Cancel" @click="isVisible = false" />
+      <Button
+        icon="pi pi-user-plus"
+        label="Register"
+        @click="register()"
+        :disabled="!isValid"
+      />
+      <Button
+        icon="pi pi-times-circle"
+        label="Cancel"
+        @click="isVisible = false"
+      />
     </template>
   </Dialog>
 </template>
 
 <script>
-import Dialog from 'primevue/dialog';
-import InputText from 'primevue/inputtext';
-import Password from 'primevue/password';
-import Button from 'primevue/button';
+import Dialog from "primevue/dialog";
+import InputText from "primevue/inputtext";
+import Password from "primevue/password";
+import Button from "primevue/button";
 
 export default {
-  name: 'Register',
+  name: "Register",
   components: {
     Dialog,
     InputText,
@@ -175,7 +208,7 @@ export default {
     visible: Boolean,
     userSocket: Object,
   },
-  emits: [ 'update:visible' ],
+  emits: ["update:visible"],
   data() {
     return {
       username: "",
@@ -186,96 +219,96 @@ export default {
       address: "",
       workphone: "",
       mobilephone: "",
-    }
+    };
   },
   computed: {
     isVisible: {
       get() {
-        return this.visible
+        return this.visible;
       },
       set(value) {
-        this.$emit('update:visible', value)
-      }
+        this.$emit("update:visible", value);
+      },
     },
     isUsernameValid() {
-      return [
-        this.username.length > 0,
-      ].every(e => e)
+      return [this.username.length > 0].every((e) => e);
     },
     usernameHelp() {
       return [
-        this.username.length > 0 ? null : 'Username must have at least 1 non-blank character',
-      ].filter((e) => e != null)
+        this.username.length > 0
+          ? null
+          : "Username must have at least 1 non-blank character",
+      ].filter((e) => e != null);
     },
     isPasswordValid() {
-      return [
-        this.password.length > 0,
-      ].every(e => e)
+      return [this.password.length > 0].every((e) => e);
     },
     passwordHelp() {
       return [
-        this.password.length > 0 ? null : 'Password must have at least 1 non-blank character',
-      ].filter((e) => e != null)
+        this.password.length > 0
+          ? null
+          : "Password must have at least 1 non-blank character",
+      ].filter((e) => e != null);
     },
     isNameValid() {
-      return [
-        this.name.length > 0,
-      ].every(e => e)
+      return [this.name.length > 0].every((e) => e);
     },
     nameHelp() {
       return [
-        this.name.length > 0 ? null : 'Name must have at least 1 non-blank character',
-      ].filter((e) => e != null)
+        this.name.length > 0
+          ? null
+          : "Name must have at least 1 non-blank character",
+      ].filter((e) => e != null);
     },
     isLastnameValid() {
-      return [
-        this.lastname.length > 0,
-      ].every(e => e)
+      return [this.lastname.length > 0].every((e) => e);
     },
     lastnameHelp() {
       return [
-        this.lastname.length > 0 ? null : 'Lastname must have at least 1 non-blank character',
-      ].filter((e) => e != null)
+        this.lastname.length > 0
+          ? null
+          : "Lastname must have at least 1 non-blank character",
+      ].filter((e) => e != null);
     },
     isEmailValid() {
-      return [
-        this.email.length > 0,
-      ].every(e => e)
+      return [this.email.length > 0].every((e) => e);
     },
     emailHelp() {
       return [
-        this.email.length > 0 ? null : 'Email must have at least 1 non-blank character',
-      ].filter((e) => e != null)
+        this.email.length > 0
+          ? null
+          : "Email must have at least 1 non-blank character",
+      ].filter((e) => e != null);
     },
     isAddressValid() {
-      return [
-        this.address.length > 0,
-      ].every(e => e)
+      return [this.address.length > 0].every((e) => e);
     },
     addressHelp() {
       return [
-        this.address.length > 0 ? null : 'Address must have at least 1 non-blank character',
-      ].filter((e) => e != null)
+        this.address.length > 0
+          ? null
+          : "Address must have at least 1 non-blank character",
+      ].filter((e) => e != null);
     },
     isWorkphoneValid() {
-      return [
-        this.workphone.length > 0,
-      ].every(e => e)
+      return [this.workphone.length > 0].every((e) => e);
     },
     workphoneHelp() {
       return [
-        this.workphone.length > 0 ? null : 'Workphone must have at least 1 non-blank character',
-      ].filter((e) => e != null)
+        this.workphone.length > 0
+          ? null
+          : "Workphone must have at least 1 non-blank character",
+      ].filter((e) => e != null);
     },
     isMobilephoneValid() {
-      return [
-        this.mobilephone.length > 0,
-      ].every(e => e)
+      return [this.mobilephone.length > 0].every((e) => e);
     },
     mobilephoneHelp() {
       return [
-        this.mobilephone.length > 0 ? null : 'Mobilephone must have at least 1 non-blank character',
-      ].filter((e) => e != null)
+        this.mobilephone.length > 0
+          ? null
+          : "Mobilephone must have at least 1 non-blank character",
+      ].filter((e) => e != null);
     },
     isValid() {
       return [
@@ -287,23 +320,25 @@ export default {
         this.isAddressValid,
         this.isWorkphoneValid,
         this.isMobilephoneValid,
-      ].every(e => e)
-    }
+      ].every((e) => e);
+    },
   },
   methods: {
     register() {
-      this.userSocket.send(JSON.stringify({
-        action: 'REGISTER',
-        username: this.username,
-        password: this.password,
-        name: this.name,
-        lastname: this.lastname,
-        email: this.email,
-        address: this.address,
-        workphone: this.workphone,
-        mobilephone: this.mobilephone,
-      }))
-    }
+      this.userSocket.send(
+        JSON.stringify({
+          action: "REGISTER",
+          username: this.username,
+          password: this.password,
+          name: this.name,
+          lastname: this.lastname,
+          email: this.email,
+          address: this.address,
+          workphone: this.workphone,
+          mobilephone: this.mobilephone,
+        })
+      );
+    },
   },
-}
+};
 </script>

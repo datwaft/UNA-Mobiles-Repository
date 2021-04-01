@@ -1,18 +1,27 @@
 <template>
   <div class="schedules-with-discount">
-    <div class="header p-text-center p-d-block">
-      Schedules with discount
-    </div>
-    <br>
-    <Message v-for="message of messages" :severity="message?.severity" :key="message?.content" :closable="message?.closable">
+    <div class="header p-text-center p-d-block">Schedules with discount</div>
+    <br />
+    <Message
+      v-for="message of messages"
+      :severity="message?.severity"
+      :key="message?.content"
+      :closable="message?.closable"
+    >
       {{ message?.content }}
     </Message>
-    <DataTable class="p-datatable-sm" :value="data" :paginator="true" :rows="10"
-        paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-        :rowsPerPageOptions="[10,20,50]"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-        stateStorage="session" stateKey="dt-state-schedules-with-discount"
-        responsiveLayout="scroll">
+    <DataTable
+      class="p-datatable-sm"
+      :value="data"
+      :paginator="true"
+      :rows="10"
+      paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+      :rowsPerPageOptions="[10, 20, 50]"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+      stateStorage="session"
+      stateKey="dt-state-schedules-with-discount"
+      responsiveLayout="scroll"
+    >
       <Column field="origin" header="Origin" :sortable="true" />
       <Column field="destination" header="Destination" :sortable="true" />
       <Column field="departureTime" header="Departure Time" :sortable="true" />
@@ -26,12 +35,12 @@
 </template>
 
 <script>
-import Message from 'primevue/message';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
+import Message from "primevue/message";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
 
 export default {
-  name: 'schedules-with-discount',
+  name: "schedules-with-discount",
   components: {
     Message,
     DataTable,
@@ -41,43 +50,47 @@ export default {
     return {
       schedules: [],
       messages: [],
-    }
+    };
   },
   computed: {
     data() {
-      const result = []
-      if (this.schedules == null) return result
+      const result = [];
+      if (this.schedules == null) return result;
       for (const o of this.schedules) {
         result.push({
           ...o,
           departureTime: o.departure_time,
           price: `$${o.price}`,
           discount: `${o.discount * 100}%`,
-          finalPrice: `$${o.price - o.price * o.discount}`
-        })
+          finalPrice: `$${o.price - o.price * o.discount}`,
+        });
       }
-      return result
-    }
+      return result;
+    },
   },
   mounted() {
     // Open websocket
-    let ws = new WebSocket("ws://localhost:8099/server/schedule")
-    ws.onopen = () => ws.send(JSON.stringify({ action: "GET_ALL_WITH_DISCOUNT" }))
+    let ws = new WebSocket("ws://localhost:8099/server/schedule");
+    ws.onopen = () =>
+      ws.send(JSON.stringify({ action: "GET_ALL_WITH_DISCOUNT" }));
     ws.onmessage = (event) => {
-      let data = JSON.parse(event.data)
+      let data = JSON.parse(event.data);
       switch (data.action) {
         case "GET_ALL_WITH_DISCOUNT":
-          this.schedules = data.value
-          break
+          this.schedules = data.value;
+          break;
       }
-    }
+    };
     ws.onerror = () => {
-      this.messages = [...this.messages, {
-        content: "Error: Couldn't connect to server",
-        severity: "error",
-        closable: true,
-      }]
-    }
+      this.messages = [
+        ...this.messages,
+        {
+          content: "Error: Couldn't connect to server",
+          severity: "error",
+          closable: true,
+        },
+      ];
+    };
   },
-}
+};
 </script>
