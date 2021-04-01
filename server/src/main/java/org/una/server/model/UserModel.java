@@ -1,5 +1,6 @@
 package org.una.server.model;
 
+import org.json.JSONObject;
 import org.una.server.data.UserDBA;
 
 import java.sql.SQLException;
@@ -20,6 +21,15 @@ public class UserModel {
     public void registerUser(String username, String password, String name, String lastname, String email,
                              String address, String workphone, String mobilephone) throws SQLException {
         dba.registerUser(username, password, name, lastname, email, address, workphone, mobilephone);
+    }
+
+    public void updateUser(String username, String name, String lastname, String email, String address,
+                           String workphone, String mobilephone) throws SQLException {
+        dba.updateUser(username, name, lastname, email, address, workphone, mobilephone);
+    }
+
+    public JSONObject getUser(String username) throws SQLException {
+        return dba.getUser(username);
     }
 
     public static UserModel getInstance() {

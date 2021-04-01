@@ -27,7 +27,7 @@
       </template>
     </template>
   </Menubar>
-  <router-view/>
+  <router-view :data="userInformation" :user="userData" :socket="userSocket"/>
 </template>
 
 <script>
@@ -53,17 +53,24 @@ export default {
       brandName: 'Patitos Airlines',
       items: [
         { icon: 'pi pi-home', label: 'Home', to: '/' },
+        { icon: 'pi pi-user', label: 'User options', visible: () => this.userData != null && this.userData.authorization == 'user', items: [
+            { label: 'User information', to: '/user/userinformation' },
+            { label: 'Purchase history' },
+          ]
+        },
         { icon: 'pi pi-info-circle', label: 'About', items: [
-          { label: 'History', to: '/about/history' },
-          { label: 'Contact Information', to: '/about/contact' },
-          { label: 'Institutional Reference', to: '/about/reference' },
-        ]},
+            { label: 'History', to: '/about/history' },
+            { label: 'Contact Information', to: '/about/contact' },
+            { label: 'Institutional Reference', to: '/about/reference' },
+          ]
+        },
       ],
       displayLogin: false,
       displayRegister: false,
 
       userSocket: null,
       userData: null,
+      userInformation: null,
     }
   },
   mounted() {
@@ -73,6 +80,8 @@ export default {
       switch (data.action) {
         case 'LOGIN': this.handleLogIn(data); break;
         case 'REGISTER': this.handleRegister(data); break;
+        case 'GET': this.handleGet(data); break;
+        case 'UPDATE': this.handleUpdate(data); break;
         case 'LOGOUT': this.handleLogOut(); break;
         case 'ERROR': this.handleError(data); break;
       }
@@ -84,6 +93,9 @@ export default {
         detail: "The connection to the server couldn't be made",
         life: 3000,
       })
+    }
+    this.userSocket.onclose = () => {
+      this.userData = null
     }
   },
   methods: {
@@ -121,6 +133,17 @@ export default {
         life: 3000,
       })
     },
+    handleGet(data) {
+      this.userInformation = data.value
+    },
+    handleUpdate() {
+      this.$toast.add({
+        severity: "success",
+        summary: "Success",
+        detail: "Update was made successfully",
+        life: 3000,
+      })
+    },
     handleLogOut() {
       this.userData = null
       this.$toast.add({
@@ -136,6 +159,10 @@ export default {
       if (data.type && data.type == "DUPLICATE") {
         summary = "Registration error"
         detail = "Username already exists"
+      }
+      if (data.type && data.type == "CREDENTIALS") {
+        summary = "Credentials error"
+        detail = "Invalid credentials"
       }
       this.$toast.add({
         severity: "error",

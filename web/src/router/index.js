@@ -8,19 +8,25 @@ const routes = [
     component: Home
   },
   {
+    path: '/user/userinformation',
+    name: 'User Information',
+    component: () => import('@/views/user/UserInformation.vue'),
+    
+  },
+  {
     path: '/about/history',
     name: 'History',
-    component: () => import('../views/about/History.vue')
+    component: () => import('@/views/about/History.vue')
   },
   {
     path: '/about/contact',
     name: 'Contact Information',
-    component: () => import('../views/about/Contact.vue')
+    component: () => import('@/views/about/Contact.vue')
   },
   {
     path: '/about/reference',
     name: 'Institutional Reference',
-    component: () => import('../views/about/Reference.vue')
+    component: () => import('@/views/about/Reference.vue')
   },
 ]
 

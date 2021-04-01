@@ -21,6 +21,8 @@ public class UserController {
                 case "LOGIN" -> login(object.optString("username"), object.optString("password"), session);
                 case "REGISTER" -> register(object);
                 case "LOGOUT" -> logout(session);
+                case "GET" -> get(session);
+                case "UPDATE" -> update(object, session);
                 case "DEBUG" -> debug();
                 default -> null;
             };
@@ -30,7 +32,7 @@ public class UserController {
     }
 
     // TODO: delete this
-    public JSONObject debug() {
+    private JSONObject debug() {
         var response = new JSONObject();
         for (var session: sessionData.keySet()) {
             var sessionData = new JSONObject();
@@ -41,7 +43,22 @@ public class UserController {
         return response;
     }
 
-    public JSONObject loginCaseAlreadyLoggedIn(Session session) {
+    public JSONObject checkCredentials(Session session) {
+        if (!sessionData.containsKey(session)) {
+            var response = new JSONObject();
+            response.put("action", "ERROR");
+            response.put("type", "CREDENTIALS");
+            return response;
+        } else {
+            return null;
+        }
+    }
+
+    public Boolean accountIsEqual(Session session1, Session session2) {
+        return sessionData.get(session1).getValue0().equals(sessionData.get(session2).getValue0());
+    }
+
+    private JSONObject loginCaseAlreadyLoggedIn(Session session) {
         var response = new JSONObject();
 
         var username = sessionData.get(session).getValue(0);
@@ -53,14 +70,14 @@ public class UserController {
         return response;
     }
 
-    public JSONObject loginCaseInvalid() {
+    private JSONObject loginCaseInvalid() {
         var response = new JSONObject();
         response.put("action", "ERROR");
         response.put("message", "Invalid credentials");
         return response;
     }
 
-    public JSONObject loginCaseValid(String username, String authorization, Session session) {
+    private JSONObject loginCaseValid(String username, String authorization, Session session) {
         var response = new JSONObject();
 
         sessionData.put(session, Pair.with(username, authorization));
@@ -71,10 +88,10 @@ public class UserController {
         return response;
     }
 
-    public JSONObject login(String username, String password, Session session) {
+    private JSONObject login(String username, String password, Session session) {
         try {
             // Case 1: Already logged in
-            if (sessionData.get(session) != null) return loginCaseAlreadyLoggedIn(session);
+            if (sessionData.containsKey(session)) return loginCaseAlreadyLoggedIn(session);
             // Case 2: Invalid credentials
             if (username == null || password == null) return loginCaseInvalid();
             var authorization = UserModel.getInstance().getAuthorization(username, password) ;
@@ -87,7 +104,7 @@ public class UserController {
         }
     }
 
-    public JSONObject register(JSONObject object) {
+    private JSONObject register(JSONObject object) {
         var response = new JSONObject();
         try {
             UserModel.getInstance().registerUser(
@@ -111,12 +128,55 @@ public class UserController {
     }
 
     public JSONObject logout(Session session) {
-        if (sessionData.get(session) == null) return null;
+        if (!sessionData.containsKey(session)) return null;
 
         sessionData.remove(session);
 
         var response = new JSONObject();
         response.put("action", "LOGOUT");
+        return response;
+    }
+
+    private JSONObject get(Session session) {
+        JSONObject error;
+        if ((error = checkCredentials(session)) != null) {
+            return error;
+        }
+        var response = new JSONObject();
+        try {
+            var data = UserModel.getInstance().getUser(sessionData.get(session).getValue0());
+            response.put("action", "GET");
+            response.put("value", data);
+        } catch (SQLException ex) {
+            response.put("action", "ERROR");
+            response.put("message", ex.getMessage());
+        }
+        return response;
+    }
+
+    private JSONObject update(JSONObject object, Session session) {
+        JSONObject error;
+        if ((error = checkCredentials(session)) != null) {
+            return error;
+        }
+        var response = new JSONObject();
+        try {
+            UserModel.getInstance().updateUser(
+                    sessionData.get(session).getValue0(),
+                    object.getString("name"),
+                    object.getString("lastname"),
+                    object.getString("email"),
+                    object.getString("address"),
+                    object.getString("workphone"),
+                    object.getString("mobilephone")
+            );
+            response.put("action", "UPDATE");
+        } catch (SQLException ex) {
+            response.put("action", "ERROR");
+            response.put("message", ex.getMessage());
+        } catch (JSONException ex) {
+            return null;
+        }
         return response;
     }
 

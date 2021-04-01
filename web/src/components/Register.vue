@@ -150,7 +150,8 @@
     </div>
 
     <template #footer>
-      <Button icon="pi pi-user-plus" label="Register" @click="register()" :disabled="!isValid" />
+      <Button icon="pi pi-user-plus" label="Register" @click="register()"
+          :disabled="!isValid" />
       <Button icon="pi pi-times-circle" label="Cancel" @click="isVisible = false" />
     </template>
   </Dialog>
