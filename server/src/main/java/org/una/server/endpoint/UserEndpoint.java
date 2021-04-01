@@ -35,13 +35,13 @@ public class UserEndpoint {
         var response = UserController.getInstance().processQuery(message, session);
         if (response != null) {
             session.getBasicRemote().sendObject(response);
-            if (response.get("action") == "REGISTER") {
+            if (response.opt("action") == "REGISTER") {
                 var newMessage = new JSONObject();
                 newMessage.put("action", "LOGIN");
                 newMessage.put("username", message.get("username"));
                 newMessage.put("password", message.get("password"));
                 session.getBasicRemote().sendObject(UserController.getInstance().processQuery(newMessage, session));
-            } else if (response.get("action") == "UPDATE") {
+            } else if (response.opt("action") == "UPDATE") {
                 var newMessage = new JSONObject();
                 newMessage.put("action", "GET");
                 sendToMany(newMessage, (s) -> UserController.getInstance().accountIsEqual(s, session));
