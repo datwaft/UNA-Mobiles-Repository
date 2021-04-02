@@ -84,7 +84,11 @@ ALTER TABLE "schedule"
 ADD CONSTRAINT "schedule_discount_check"
 CHECK ( "discount" BETWEEN 0 AND 1 );
 
-\echo '=> Creating foreing keys...'
+ALTER TABLE "flight"
+ADD CONSTRAINT "flight_date_check"
+CHECK ( "outbound_date" < "inbound_date" );
+
+\echo '=> Creating foreign keys...'
 
 ALTER TABLE "plane"
 ADD CONSTRAINT "plane_plane_type_fk"
