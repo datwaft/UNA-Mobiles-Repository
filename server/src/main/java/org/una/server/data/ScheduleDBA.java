@@ -2,7 +2,7 @@ package org.una.server.data;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.una.server.util.Transform;
+import org.una.server.util.TransformUtils;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -27,7 +27,7 @@ public class ScheduleDBA {
             object.put("origin", rs.getString("origin"));
             object.put("destination", rs.getString("destination"));
             object.put("departure_time", rs.getTime("departure_time"));
-            object.put("weekday", Transform.transformWeekday(rs.getInt("weekday")));
+            object.put("weekday", TransformUtils.transformWeekday(rs.getInt("weekday")));
             object.put("duration", rs.getTime("duration"));
             object.put("price", rs.getDouble("price"));
             object.put("discount", rs.getDouble("discount"));

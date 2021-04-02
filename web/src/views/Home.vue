@@ -2,7 +2,7 @@
   <div class="home">
     <TabView>
       <TabPanel header="Flights">
-        <Flights :user="user" />
+        <Flights />
       </TabPanel>
       <TabPanel header="Schedules with discount">
         <SchedulesWithDiscount />
@@ -24,9 +24,6 @@ export default {
     TabPanel,
     Flights,
     SchedulesWithDiscount,
-  },
-  props: {
-    user: Object,
   },
 };
 </script>

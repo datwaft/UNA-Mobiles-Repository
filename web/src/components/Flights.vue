@@ -2,15 +2,7 @@
   <div class="flights">
     <div class="header p-text-center p-d-block">Flights</div>
     <br />
-    <Message
-      v-for="message of messages"
-      :severity="message?.severity"
-      :key="message?.content"
-      :closable="message?.closable"
-    >
-      {{ message?.content }}
-    </Message>
-    <Toolbar v-if="user != null">
+    <Toolbar v-if="session">
       <template #left>
         <Button
           icon="pi pi-credit-card"
@@ -31,7 +23,7 @@
       responsiveLayout="scroll"
       v-model:selection="selectedFlight"
       dataKey="identifier"
-      v-if="user != null"
+      v-if="session"
     >
       <Column selectionMode="single" headerStyle="width: 3em" />
       <Column field="origin" header="Origin" :sortable="true" />
@@ -62,7 +54,8 @@
 </template>
 
 <script>
-import Message from "primevue/message";
+import { mapState } from "vuex";
+
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Toolbar from "primevue/toolbar";
@@ -71,26 +64,22 @@ import Button from "primevue/button";
 export default {
   name: "Flights",
   components: {
-    Message,
     DataTable,
     Column,
     Toolbar,
     Button,
   },
-  props: {
-    user: Object,
-  },
   data() {
     return {
-      flights: [],
-      messages: [],
       selectedFlight: null,
     };
   },
   computed: {
+    ...mapState("flight", { flights: (state) => state.data }),
+    ...mapState("session", { session: (state) => state.data }),
     data() {
       const result = [];
-      if (this.flights == null) return result;
+      if (!this.flights) return result;
       for (const o of this.flights) {
         result.push({
           ...o,
@@ -101,29 +90,6 @@ export default {
       }
       return result;
     },
-  },
-  async mounted() {
-    // Open websocket
-    let ws = new WebSocket("ws://localhost:8099/server/flight");
-    ws.onopen = () => ws.send(JSON.stringify({ action: "GET_ALL" }));
-    ws.onmessage = (event) => {
-      let data = JSON.parse(event.data);
-      switch (data.action) {
-        case "GET_ALL":
-          this.flights = data.value;
-          break;
-      }
-    };
-    ws.onerror = () => {
-      this.messages = [
-        ...this.messages,
-        {
-          content: "Error: Couldn't connect to server",
-          severity: "error",
-          closable: true,
-        },
-      ];
-    };
   },
 };
 </script>

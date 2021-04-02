@@ -206,7 +206,6 @@ export default {
   },
   props: {
     visible: Boolean,
-    userSocket: Object,
   },
   emits: ["update:visible"],
   data() {
@@ -325,19 +324,17 @@ export default {
   },
   methods: {
     register() {
-      this.userSocket.send(
-        JSON.stringify({
-          action: "REGISTER",
-          username: this.username,
-          password: this.password,
-          name: this.name,
-          lastname: this.lastname,
-          email: this.email,
-          address: this.address,
-          workphone: this.workphone,
-          mobilephone: this.mobilephone,
-        })
-      );
+      this.$store.dispatch("user/sendMessage", {
+        action: "REGISTER",
+        username: this.username,
+        password: this.password,
+        name: this.name,
+        lastname: this.lastname,
+        email: this.email,
+        address: this.address,
+        workphone: this.workphone,
+        mobilephone: this.mobilephone,
+      });
     },
   },
 };

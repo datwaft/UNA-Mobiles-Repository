@@ -1,6 +1,6 @@
 package org.una.server.util;
 
-public class Transform {
+public class TransformUtils {
     public static String transformWeekday(Integer original) {
         return switch (original) {
             case 0 -> "Monday";

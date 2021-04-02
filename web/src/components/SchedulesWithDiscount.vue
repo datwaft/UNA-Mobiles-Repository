@@ -2,14 +2,6 @@
   <div class="schedules-with-discount">
     <div class="header p-text-center p-d-block">Schedules with discount</div>
     <br />
-    <Message
-      v-for="message of messages"
-      :severity="message?.severity"
-      :key="message?.content"
-      :closable="message?.closable"
-    >
-      {{ message?.content }}
-    </Message>
     <DataTable
       class="p-datatable-sm"
       :value="data"
@@ -35,27 +27,22 @@
 </template>
 
 <script>
-import Message from "primevue/message";
+import { mapState } from "vuex";
+
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 
 export default {
   name: "schedules-with-discount",
   components: {
-    Message,
     DataTable,
     Column,
   },
-  data() {
-    return {
-      schedules: [],
-      messages: [],
-    };
-  },
   computed: {
+    ...mapState("schedule", { schedules: (state) => state.data }),
     data() {
       const result = [];
-      if (this.schedules == null) return result;
+      if (!this.schedules) return result;
       for (const o of this.schedules) {
         result.push({
           ...o,
@@ -67,30 +54,6 @@ export default {
       }
       return result;
     },
-  },
-  mounted() {
-    // Open websocket
-    let ws = new WebSocket("ws://localhost:8099/server/schedule");
-    ws.onopen = () =>
-      ws.send(JSON.stringify({ action: "GET_ALL_WITH_DISCOUNT" }));
-    ws.onmessage = (event) => {
-      let data = JSON.parse(event.data);
-      switch (data.action) {
-        case "GET_ALL_WITH_DISCOUNT":
-          this.schedules = data.value;
-          break;
-      }
-    };
-    ws.onerror = () => {
-      this.messages = [
-        ...this.messages,
-        {
-          content: "Error: Couldn't connect to server",
-          severity: "error",
-          closable: true,
-        },
-      ];
-    };
   },
 };
 </script>

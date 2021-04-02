@@ -39,7 +39,7 @@
           <Column field="value" header="Value">
             <template #editor="slotProps">
               <InputText
-                v-model="slotProps.data[slotProps.column.props.field]"
+                v-model.trim="slotProps.data[slotProps.column.props.field]"
               />
             </template>
             <template #body="slotProps">
@@ -55,6 +55,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import InputText from "primevue/inputtext";
@@ -63,11 +65,6 @@ import Button from "primevue/button";
 
 export default {
   name: "UserInformation",
-  props: {
-    user: Object,
-    data: Object,
-    socket: Object,
-  },
   components: {
     DataTable,
     Column,
@@ -86,6 +83,8 @@ export default {
     };
   },
   computed: {
+    ...mapState("session", { session: (state) => state.data }),
+    ...mapState("user", { data: (state) => state.data }),
     tableData() {
       return [
         { field: "Name", value: this.name },
@@ -162,8 +161,8 @@ export default {
       this.workphone = newValue.workphone;
       this.mobilephone = newValue.mobilephone;
     },
-    user() {
-      if (this.user == null) {
+    session() {
+      if (!this.session) {
         this.$router.push({ name: "Home" });
       }
     },
@@ -203,17 +202,16 @@ export default {
         header: "Are you sure?",
         icon: "pi pi-user-edit",
         accept: () => {
-          this.socket.send(
-            JSON.stringify({
-              action: "UPDATE",
-              name: this.name,
-              lastname: this.lastname,
-              email: this.email,
-              address: this.address,
-              workphone: this.workphone,
-              mobilephone: this.mobilephone,
-            })
-          );
+          this.$store.dispatch("user/sendMessage", {
+            action: "UPDATE",
+            token: this.$store.state.session.data.token,
+            name: this.name,
+            lastname: this.lastname,
+            email: this.email,
+            address: this.address,
+            workphone: this.workphone,
+            mobilephone: this.mobilephone,
+          });
         },
       });
     },
@@ -227,16 +225,17 @@ export default {
     },
   },
   created() {
-    if (this.user == null) {
+    if (!this.session) {
       this.$router.push({ name: "Home" });
     }
   },
   mounted() {
-    this.socket.send(
-      JSON.stringify({
+    if (this.session) {
+      this.$store.dispatch("user/sendMessage", {
         action: "GET",
-      })
-    );
+        token: this.$store.state.session.data.token,
+      });
+    }
   },
 };
 </script>

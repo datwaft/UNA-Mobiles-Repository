@@ -82,7 +82,6 @@ export default {
   },
   props: {
     visible: Boolean,
-    userSocket: Object,
   },
   emits: ["update:visible"],
   data() {
@@ -126,13 +125,11 @@ export default {
   },
   methods: {
     login() {
-      this.userSocket.send(
-        JSON.stringify({
-          action: "LOGIN",
-          username: this.username,
-          password: this.password,
-        })
-      );
+      this.$store.dispatch("session/sendMessage", {
+        action: "LOGIN",
+        username: this.username,
+        password: this.password,
+      });
     },
   },
 };

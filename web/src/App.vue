@@ -1,8 +1,8 @@
 <template>
   <Toast />
-  <template v-if="userData == null">
-    <Login v-model:visible="displayLogin" :userSocket="userSocket" />
-    <Register v-model:visible="displayRegister" :userSocket="userSocket" />
+  <template v-if="!session">
+    <Login v-model:visible="displayLogin" />
+    <Register v-model:visible="displayRegister" />
   </template>
   <template v-else>
     <ConfirmDialog />
@@ -15,7 +15,7 @@
       </div>
     </template>
     <template #end>
-      <template v-if="userData == null">
+      <template v-if="!session">
         <span class="p-buttonset">
           <Button
             icon="pi pi-user-plus"
@@ -35,10 +35,12 @@
       </template>
     </template>
   </Menubar>
-  <router-view :data="userInformation" :user="userData" :socket="userSocket" />
+  <router-view />
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 import Toast from "primevue/toast";
 import Menubar from "primevue/menubar";
 import Button from "primevue/button";
@@ -64,8 +66,7 @@ export default {
         {
           icon: "pi pi-user",
           label: "User options",
-          visible: () =>
-            this.userData != null && this.userData.authorization == "user",
+          visible: () => this.session?.authorization == "user",
           items: [
             { label: "User information", to: "/user/userinformation" },
             { label: "Purchase history" },
@@ -83,48 +84,31 @@ export default {
       ],
       displayLogin: false,
       displayRegister: false,
-
-      userSocket: null,
-      userData: null,
-      userInformation: null,
     };
   },
-  mounted() {
-    this.userSocket = new WebSocket("ws://localhost:8099/server/user");
-    this.userSocket.onmessage = (event) => {
-      let data = JSON.parse(event.data);
-      switch (data.action) {
-        case "LOGIN":
-          this.handleLogIn(data);
-          break;
-        case "REGISTER":
-          this.handleRegister(data);
-          break;
-        case "GET":
-          this.handleGet(data);
-          break;
-        case "UPDATE":
-          this.handleUpdate(data);
-          break;
-        case "LOGOUT":
-          this.handleLogOut();
-          break;
-        case "ERROR":
-          this.handleError(data);
-          break;
-      }
-    };
-    this.userSocket.onerror = () => {
+  computed: {
+    ...mapState({ toast: (state) => state.message }),
+    ...mapState("session", { session: (state) => state.data }),
+  },
+  watch: {
+    toast(newValue) {
+      if (!newValue) return;
       this.$toast.add({
-        severity: "error",
-        summary: "Server connection error",
-        detail: "The connection to the server couldn't be made",
-        life: 3000,
+        severity: newValue.severity,
+        summary: newValue.summary,
+        detail: newValue.detail,
+        life: newValue?.life,
       });
-    };
-    this.userSocket.onclose = () => {
-      this.userData = null;
-    };
+      if (newValue.severity == "success") {
+        this.displayRegister = false;
+      }
+    },
+    session(newValue) {
+      if (newValue) {
+        this.displayLogin = false;
+        this.displayRegister = false;
+      }
+    },
   },
   methods: {
     logout() {
@@ -133,72 +117,10 @@ export default {
         header: "Are you sure?",
         icon: "pi pi-sign-out",
         accept: () => {
-          this.userSocket.send(
-            JSON.stringify({
-              action: "LOGOUT",
-            })
-          );
+          this.$store.dispatch("session/sendMessage", {
+            action: "LOGOUT",
+          });
         },
-      });
-    },
-    handleLogIn(data) {
-      this.userData = {
-        username: data.username,
-        authorization: data.authorization,
-      };
-      this.$toast.add({
-        severity: "success",
-        summary: "Success",
-        detail: `Logged in as "${data.username}"`,
-        life: 3000,
-      });
-      this.displayLogin = false;
-      this.displayRegister = false;
-    },
-    handleRegister() {
-      this.$toast.add({
-        severity: "success",
-        summary: "Success",
-        detail: "Registration made successfully",
-        life: 3000,
-      });
-    },
-    handleGet(data) {
-      this.userInformation = data.value;
-    },
-    handleUpdate() {
-      this.$toast.add({
-        severity: "success",
-        summary: "Success",
-        detail: "Update was made successfully",
-        life: 3000,
-      });
-    },
-    handleLogOut() {
-      this.userData = null;
-      this.$toast.add({
-        severity: "success",
-        summary: "Success",
-        detail: "Logged out",
-        life: 3000,
-      });
-    },
-    handleError(data) {
-      let summary = "Authentication error";
-      let detail = data.message;
-      if (data.type && data.type == "DUPLICATE") {
-        summary = "Registration error";
-        detail = "Username already exists";
-      }
-      if (data.type && data.type == "CREDENTIALS") {
-        summary = "Credentials error";
-        detail = "Invalid credentials";
-      }
-      this.$toast.add({
-        severity: "error",
-        summary: summary,
-        detail: detail,
-        life: 3000,
       });
     },
   },
