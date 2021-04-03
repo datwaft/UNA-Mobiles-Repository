@@ -70,7 +70,7 @@ export default {
           visible: () => this.session?.authorization == "user",
           items: [
             { label: "User information", to: "/user/userinformation" },
-            { label: "Purchase history" },
+            { label: "Purchase history", to: "/user/purchasehistory" },
           ],
         },
         {
@@ -89,7 +89,7 @@ export default {
   },
   computed: {
     ...mapState({ toast: (state) => state.message }),
-    ...mapState("session", { session: (state) => state.data }),
+    ...mapState("session", { session: (state) => state.session }),
   },
   watch: {
     toast(newValue) {

@@ -86,8 +86,9 @@ export default {
     };
   },
   computed: {
-    ...mapState("flight", { flights: (state) => state.data }),
-    ...mapState("session", { session: (state) => state.data }),
+    ...mapState("flight", { flights: (state) => state.view }),
+    ...mapState("session", { session: (state) => state.session }),
+    ...mapState("purchase", { purchaseData: (state) => state.view }),
     data() {
       const result = [];
       if (!this.flights) return result;
@@ -101,6 +102,19 @@ export default {
         });
       }
       return result;
+    },
+  },
+  watch: {
+    session(newValue) {
+      if (!newValue) {
+        this.displayPurchase = false;
+        this.selectedFlight = null;
+      }
+    },
+    purchaseData() {
+      this.$store.dispatch("flight/sendMessage", {
+        action: "VIEW_ALL",
+      });
     },
   },
 };

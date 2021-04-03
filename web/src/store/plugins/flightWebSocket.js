@@ -8,7 +8,7 @@ export default function sessionWebSocket() {
 
       // Request data
       store.dispatch("flight/sendMessage", {
-        action: "GET_ALL",
+        action: "VIEW_ALL",
       });
     };
     socket.onclose = () => {
@@ -21,8 +21,8 @@ export default function sessionWebSocket() {
     socket.onmessage = (event) => {
       let data = JSON.parse(event.data);
       switch (data.action) {
-        case "GET_ALL":
-          store.commit("flight/setData", data.value);
+        case "VIEW_ALL":
+          store.commit("flight/setView", data.view);
           break;
         case "ERROR":
           store.dispatch("processError", data);

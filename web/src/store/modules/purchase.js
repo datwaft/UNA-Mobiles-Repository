@@ -2,14 +2,14 @@ export default {
   namespaced: true,
   state: () => ({
     connected: false,
-    get: null,
+    view: null,
   }),
   mutations: {
     setConnection(state, value) {
       state.connected = value;
     },
-    setGet(state, value) {
-      state.get = value;
+    setView(state, value) {
+      state.view = value;
     },
   },
   actions: {
@@ -31,25 +31,13 @@ export default {
         { root: true }
       );
     },
-    emitRegistered({ commit }) {
+    emitCreated({ commit }) {
       commit(
         "setMessage",
         {
           severity: "success",
           summary: "Success",
-          detail: "The registration was successful",
-          life: 3000,
-        },
-        { root: true }
-      );
-    },
-    emitUpdated({ commit }) {
-      commit(
-        "setMessage",
-        {
-          severity: "success",
-          summary: "Success",
-          detail: "The user information update was successful",
+          detail: "Your purchase was registered successfully",
           life: 3000,
         },
         { root: true }

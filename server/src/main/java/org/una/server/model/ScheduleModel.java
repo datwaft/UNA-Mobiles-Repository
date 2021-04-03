@@ -14,8 +14,8 @@ public class ScheduleModel {
         this.dba = ScheduleDBA.getInstance();
     }
 
-    public JSONArray getAllWithDiscount() throws SQLException {
-        return this.dba.getAllWithDiscount();
+    public JSONArray viewAllWithDiscount() throws SQLException {
+        return this.dba.viewAllWithDiscount();
     }
 
     public static ScheduleModel getInstance() {

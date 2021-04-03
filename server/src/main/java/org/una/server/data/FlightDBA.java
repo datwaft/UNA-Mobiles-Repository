@@ -10,9 +10,9 @@ public class FlightDBA {
 
     private final Connection connection = DatabaseConnection.getInstance().getConnection();
 
-    public JSONArray getAll() throws SQLException {
+    public JSONArray viewAll() throws SQLException {
         connection.setAutoCommit(false);
-        var query = connection.prepareCall("{ ? = call get_all_flights() }");
+        var query = connection.prepareCall("{ ? = call view_all_flight() }");
         query.registerOutParameter(1, Types.OTHER);
         query.execute();
         var rs = (ResultSet) query.getObject(1);

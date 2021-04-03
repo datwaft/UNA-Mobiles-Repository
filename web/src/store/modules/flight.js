@@ -2,14 +2,14 @@ export default {
   namespaced: true,
   state: () => ({
     connected: false,
-    data: null,
+    view: null,
   }),
   mutations: {
     setConnection(state, value) {
       state.connected = value;
     },
-    setData(state, value) {
-      state.data = value;
+    setView(state, value) {
+      state.view = value;
     },
   },
   actions: {

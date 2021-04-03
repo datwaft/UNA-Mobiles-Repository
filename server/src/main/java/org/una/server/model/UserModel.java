@@ -18,18 +18,18 @@ public class UserModel {
         return dba.getAuthorization(username, password);
     }
 
-    public void registerUser(String username, String password, String name, String lastname, String email,
-                             String address, String workphone, String mobilephone) throws SQLException {
-        dba.registerUser(username, password, name, lastname, email, address, workphone, mobilephone);
+    public void register(String username, String password, String name, String lastname, String email,
+                         String address, String workphone, String mobilephone) throws SQLException {
+        dba.register(username, password, name, lastname, email, address, workphone, mobilephone);
     }
 
-    public void updateUser(String username, String name, String lastname, String email, String address,
-                           String workphone, String mobilephone) throws SQLException {
-        dba.updateUser(username, name, lastname, email, address, workphone, mobilephone);
+    public void update(String username, String name, String lastname, String email, String address,
+                       String workphone, String mobilephone) throws SQLException {
+        dba.update(username, name, lastname, email, address, workphone, mobilephone);
     }
 
-    public JSONObject getUser(String username) throws SQLException {
-        return dba.getUser(username);
+    public JSONObject get(String username) throws SQLException {
+        return dba.get(username);
     }
 
     public static UserModel getInstance() {

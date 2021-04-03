@@ -113,7 +113,7 @@ $$ LANGUAGE plpgsql;
 
 \echo '-> Creating flight functions and procedures...'
 
-CREATE OR REPLACE FUNCTION "get_all_flights" ()
+CREATE OR REPLACE FUNCTION "view_all_flight" ()
 RETURNS REFCURSOR
 AS $$
   DECLARE
@@ -127,7 +127,7 @@ $$ LANGUAGE plpgsql;
 
 \echo '-> Creating schedule functions and procedures...'
 
-CREATE OR REPLACE FUNCTION "get_all_schedules_with_discount" ()
+CREATE OR REPLACE FUNCTION "view_all_schedule_with_discount" ()
 RETURNS REFCURSOR
 AS $$
   DECLARE
@@ -135,6 +135,43 @@ AS $$
   BEGIN
     OPEN "out_cursor" FOR
       SELECT * FROM "view_schedule" where "discount" > 0;
+    RETURN "out_cursor";
+  END;
+$$ LANGUAGE plpgsql;
+
+\echo '-> Creating purchase functions and procedures...'
+
+CREATE OR REPLACE PROCEDURE "create_purchase" (
+  "in_ticket_number" NUMERIC,
+  "in_flight"        INTEGER,
+  "in_user"          VARCHAR
+)
+AS $$
+  BEGIN
+    INSERT INTO "purchase" (
+      "ticket_number",
+      "flight",
+      "user"
+    ) VALUES (
+      "in_ticket_number",
+      "in_flight",
+      "in_user"
+    );
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION "view_all_purchase" (
+  "in_username" VARCHAR
+)
+RETURNS REFCURSOR
+AS $$
+  DECLARE
+    "out_cursor" REFCURSOR;
+  BEGIN
+    OPEN "out_cursor" FOR
+      SELECT * 
+      FROM "view_purchase"
+      WHERE "user" = "in_username";
     RETURN "out_cursor";
   END;
 $$ LANGUAGE plpgsql;

@@ -104,6 +104,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 import Dialog from "primevue/dialog";
 import InputNumber from "primevue/inputnumber";
 import Dropdown from "primevue/dropdown";
@@ -136,6 +138,7 @@ export default {
     };
   },
   computed: {
+    ...mapState("purchase", { purchaseData: (state) => state.view }),
     isVisible: {
       get() {
         return this.visible;
@@ -199,10 +202,21 @@ export default {
         this.selectedPaymentMethod = null;
       }
     },
+    purchaseData() {
+      this.section = 1;
+      this.ticketNumber = 0;
+      this.selectedPaymentMethod = null;
+      this.isVisible = false;
+    },
   },
   methods: {
     purchase() {
-      console.log("Make purchase");
+      this.$store.dispatch("purchase/sendMessage", {
+        action: "CREATE",
+        token: this.$store.state.session.session.token,
+        ticket_number: this.ticketNumber,
+        flight: this.selectedFlight.identifier,
+      });
     },
   },
 };

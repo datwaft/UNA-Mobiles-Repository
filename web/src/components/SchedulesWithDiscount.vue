@@ -1,9 +1,8 @@
 <template>
   <div class="schedules-with-discount">
-    <div class="header p-text-center p-d-block">Schedules with discount</div>
+    <div class="header p-text-center p-d-block">Schedules with Discount</div>
     <br />
     <DataTable
-      class="p-datatable-sm"
       :value="data"
       :paginator="true"
       :rows="10"
@@ -39,7 +38,7 @@ export default {
     Column,
   },
   computed: {
-    ...mapState("schedule", { schedules: (state) => state.data }),
+    ...mapState("schedule", { schedules: (state) => state.view }),
     data() {
       const result = [];
       if (!this.schedules) return result;

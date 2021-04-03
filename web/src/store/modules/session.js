@@ -2,21 +2,21 @@ export default {
   namespaced: true,
   state: () => ({
     connected: false,
-    data: null,
+    session: null,
   }),
   mutations: {
     setConnection(state, value) {
       state.connected = value;
     },
     signIn(state, { username, token, authorization }) {
-      state.data = {
+      state.session = {
         username,
         token,
         authorization,
       };
     },
     signOut(state) {
-      state.data = null;
+      state.session = null;
     },
   },
   actions: {

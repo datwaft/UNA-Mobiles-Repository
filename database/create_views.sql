@@ -58,3 +58,43 @@ CREATE VIEW "view_schedule" AS
     schedule s
   INNER JOIN route r
     ON s.route = r.identifier;
+
+CREATE VIEW "view_purchase" AS
+  SELECT
+    p.identifier AS identifier,
+    p.user AS "user",
+    r1.origin AS origin,
+    r1.destination AS destination,
+    f.outbound_date AS outbound_date,
+    f.inbound_date AS inbound_date,
+    p.ticket_number AS ticket_amount,
+    r1.price - (r1.price * s1.discount) +
+      COALESCE(r2.price - (r2.price * s2.discount), 0) *
+      p.ticket_number AS total_cost,
+    count(t) <> 0 AS has_been_reserved
+  FROM
+    purchase p
+  INNER JOIN flight f
+    ON f.identifier = p.flight
+  INNER JOIN schedule s1
+    ON s1.identifier = f.outbound_schedule
+  LEFT JOIN schedule s2
+    ON s2.identifier = f.inbound_schedule
+  INNER JOIN route r1
+    ON r1.identifier = s1.route
+  LEFT JOIN route r2
+    ON r2.identifier = s2.route
+  FULL OUTER JOIN ticket t
+    ON t.purchase = p.identifier
+  GROUP BY
+    p.identifier,
+    p.user,
+    r1.origin,
+    r1.destination,
+    r1.price,
+    r2.price,
+    s1.discount,
+    s2.discount,
+    f.outbound_date,
+    f.inbound_date,
+    p.ticket_number;

@@ -1,5 +1,6 @@
 <template>
   <div class="userinformation">
+    <br />
     <div class="header p-text-center p-d-block">User Information</div>
     <br />
     <div class="content">
@@ -83,8 +84,8 @@ export default {
     };
   },
   computed: {
-    ...mapState("session", { session: (state) => state.data }),
-    ...mapState("user", { data: (state) => state.data }),
+    ...mapState("session", { session: (state) => state.session }),
+    ...mapState("user", { data: (state) => state.get }),
     tableData() {
       return [
         { field: "Name", value: this.name },
@@ -204,7 +205,7 @@ export default {
         accept: () => {
           this.$store.dispatch("user/sendMessage", {
             action: "UPDATE",
-            token: this.$store.state.session.data.token,
+            token: this.$store.state.session.session.token,
             name: this.name,
             lastname: this.lastname,
             email: this.email,
@@ -233,7 +234,7 @@ export default {
     if (this.session) {
       this.$store.dispatch("user/sendMessage", {
         action: "GET",
-        token: this.$store.state.session.data.token,
+        token: this.$store.state.session.session.token,
       });
     }
   },

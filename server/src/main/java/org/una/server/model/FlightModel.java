@@ -14,8 +14,8 @@ public class FlightModel {
         this.dba = FlightDBA.getInstance();
     }
 
-    public JSONArray getAll() throws SQLException {
-        return this.dba.getAll();
+    public JSONArray viewAll() throws SQLException {
+        return this.dba.viewAll();
     }
 
     public static FlightModel getInstance() {

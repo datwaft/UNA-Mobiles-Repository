@@ -12,7 +12,7 @@ public class FlightController {
     public JSONObject processQuery(JSONObject object) {
         try {
             return switch (object.getString("action")) {
-                case "GET_ALL" -> getAll();
+                case "VIEW_ALL" -> viewAll();
                 default -> null;
             };
         } catch (JSONException ex) {
@@ -20,11 +20,11 @@ public class FlightController {
         }
     }
 
-    public JSONObject getAll() {
+    public JSONObject viewAll() {
         try {
             var response = new JSONObject();
-            response.put("action", "GET_ALL");
-            response.put("value", FlightModel.getInstance().getAll());
+            response.put("action", "VIEW_ALL");
+            response.put("view", FlightModel.getInstance().viewAll());
             return response;
         } catch (SQLException ex) {
             System.err.format("SQLException: %s%n", ex.getMessage());

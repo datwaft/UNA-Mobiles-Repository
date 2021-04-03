@@ -21,8 +21,8 @@ public class UserDBA {
         return query.getString(1);
     }
 
-    public void registerUser(String username, String password, String name, String lastname, String email,
-                             String address, String workphone, String mobilephone) throws SQLException {
+    public void register(String username, String password, String name, String lastname, String email,
+                         String address, String workphone, String mobilephone) throws SQLException {
         connection.setAutoCommit(true);
         var query = connection.prepareStatement("call register_user( ?, ?, ?, ?, ?, ?, ?, ? )");
         query.setString(1, username);
@@ -37,8 +37,8 @@ public class UserDBA {
         query.close();
     }
 
-    public void updateUser(String username, String name, String lastname, String email, String address,
-                           String workphone, String mobilephone) throws SQLException {
+    public void update(String username, String name, String lastname, String email, String address,
+                       String workphone, String mobilephone) throws SQLException {
         connection.setAutoCommit(true);
         var query = connection.prepareStatement("call update_user( ?, ?, ?, ?, ?, ?, ? )");
         query.setString(1, username);
@@ -52,7 +52,7 @@ public class UserDBA {
         query.close();
     }
 
-    public JSONObject getUser(String username) throws SQLException {
+    public JSONObject get(String username) throws SQLException {
         connection.setAutoCommit(false);
         var query = connection.prepareCall("{ ? = call get_user( ? ) }");
         query.registerOutParameter(1, Types.OTHER);

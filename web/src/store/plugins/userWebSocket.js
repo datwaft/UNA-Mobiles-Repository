@@ -20,7 +20,7 @@ export default function sessionWebSocket() {
           store.dispatch("user/emitRegistered");
           break;
         case "GET":
-          store.commit("user/setData", data.value);
+          store.commit("user/setGet", data.get);
           break;
         case "UPDATE":
           store.dispatch("user/emitUpdated");

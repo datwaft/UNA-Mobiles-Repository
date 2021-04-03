@@ -12,7 +12,7 @@ public class ScheduleController {
     public JSONObject processQuery(JSONObject object) {
         try {
             return switch (object.getString("action")) {
-                case "GET_ALL_WITH_DISCOUNT" -> getAllWithDiscount();
+                case "VIEW_ALL_WITH_DISCOUNT" -> viewAllWithDiscount();
                 default -> null;
             };
         } catch (JSONException ex) {
@@ -20,11 +20,11 @@ public class ScheduleController {
         }
     }
 
-    public JSONObject getAllWithDiscount() {
+    public JSONObject viewAllWithDiscount() {
         try {
             var response = new JSONObject();
-            response.put("action", "GET_ALL_WITH_DISCOUNT");
-            response.put("value", ScheduleModel.getInstance().getAllWithDiscount());
+            response.put("action", "VIEW_ALL_WITH_DISCOUNT");
+            response.put("view", ScheduleModel.getInstance().viewAllWithDiscount());
             return response;
         } catch (SQLException ex) {
             System.err.format("SQLException: %s%n", ex.getMessage());

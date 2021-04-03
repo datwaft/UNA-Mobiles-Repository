@@ -28,7 +28,7 @@ public class UserController {
     private JSONObject register(JSONObject object) {
         var response = new JSONObject();
         try {
-            UserModel.getInstance().registerUser(
+            UserModel.getInstance().register(
                     object.getString("username"),
                     object.getString("password"),
                     object.getString("name"),
@@ -64,9 +64,9 @@ public class UserController {
 
         try {
             var username = sessionController.getUsernameByToken(token);
-            var data = UserModel.getInstance().getUser(username);
+            var data = UserModel.getInstance().get(username);
             response.put("action", "GET");
-            response.put("value", data);
+            response.put("get", data);
         } catch (SQLException ex) {
             response.put("action", "ERROR");
             response.put("message", ex.getMessage());
@@ -90,7 +90,7 @@ public class UserController {
         }
 
         try {
-            UserModel.getInstance().updateUser(
+            UserModel.getInstance().update(
                     sessionController.getUsernameByToken(token),
                     object.getString("name"),
                     object.getString("lastname"),

@@ -14,9 +14,9 @@ public class ScheduleDBA {
 
     private final Connection connection = DatabaseConnection.getInstance().getConnection();
 
-    public JSONArray getAllWithDiscount() throws SQLException {
+    public JSONArray viewAllWithDiscount() throws SQLException {
         connection.setAutoCommit(false);
-        var query = connection.prepareCall("{ ? = call get_all_schedules_with_discount() }");
+        var query = connection.prepareCall("{ ? = call view_all_schedule_with_discount() }");
         query.registerOutParameter(1, Types.OTHER);
         query.execute();
         var rs = (ResultSet) query.getObject(1);
