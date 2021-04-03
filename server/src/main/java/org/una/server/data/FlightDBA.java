@@ -26,6 +26,7 @@ public class FlightDBA {
             object.put("inbound_date", rs.getDate("inbound_date"));
             object.put("passenger_amount", rs.getInt("passenger_amount"));
             object.put("passenger_total", rs.getInt("passenger_total"));
+            object.put("ticket_price", rs.getDouble("ticket_price"));
             result.put(object);
         }
         rs.close();

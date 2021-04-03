@@ -44,9 +44,10 @@ import { mapState } from "vuex";
 import Toast from "primevue/toast";
 import Menubar from "primevue/menubar";
 import Button from "primevue/button";
+import ConfirmDialog from "primevue/confirmdialog";
+
 import Login from "@/components/Login";
 import Register from "@/components/Register";
-import ConfirmDialog from "primevue/confirmdialog";
 
 export default {
   name: "App",
@@ -54,8 +55,8 @@ export default {
     Toast,
     Menubar,
     Button,
-    Login,
     ConfirmDialog,
+    Login,
     Register,
   },
   data() {

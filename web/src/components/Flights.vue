@@ -1,13 +1,19 @@
 <template>
   <div class="flights">
+    <Purchase
+      v-model:visible="displayPurchase"
+      :selectedFlight="selectedFlight"
+      v-if="session?.authorization == 'user'"
+    />
     <div class="header p-text-center p-d-block">Flights</div>
     <br />
-    <Toolbar v-if="session">
+    <Toolbar v-if="session?.authorization == 'user'">
       <template #left>
         <Button
           icon="pi pi-credit-card"
           label="Buy"
           :disabled="selectedFlight == null"
+          @click="displayPurchase = true"
         />
       </template>
     </Toolbar>
@@ -23,7 +29,7 @@
       responsiveLayout="scroll"
       v-model:selection="selectedFlight"
       dataKey="identifier"
-      v-if="session"
+      v-if="session?.authorization == 'user'"
     >
       <Column selectionMode="single" headerStyle="width: 3em" />
       <Column field="origin" header="Origin" :sortable="true" />
@@ -31,6 +37,7 @@
       <Column field="outboundDate" header="Outbound Date" :sortable="true" />
       <Column field="inboundDate" header="Inbound Date" :sortable="true" />
       <Column field="passengers" header="Passengers" :sortable="true" />
+      <Column field="ticketPrice" header="Ticket Price" :sortable="true" />
     </DataTable>
     <DataTable
       :value="data"
@@ -49,6 +56,7 @@
       <Column field="outboundDate" header="Outbound Date" :sortable="true" />
       <Column field="inboundDate" header="Inbound Date" :sortable="true" />
       <Column field="passengers" header="Passengers" :sortable="true" />
+      <Column field="ticketPrice" header="Ticket Price" :sortable="true" />
     </DataTable>
   </div>
 </template>
@@ -60,6 +68,7 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Toolbar from "primevue/toolbar";
 import Button from "primevue/button";
+import Purchase from "@/components/Purchase";
 
 export default {
   name: "Flights",
@@ -68,10 +77,12 @@ export default {
     Column,
     Toolbar,
     Button,
+    Purchase,
   },
   data() {
     return {
       selectedFlight: null,
+      displayPurchase: false,
     };
   },
   computed: {
@@ -86,6 +97,7 @@ export default {
           outboundDate: o.outbound_date,
           inboundDate: o.inbound_date ?? "N/A",
           passengers: `${o.passenger_amount} of ${o.passenger_total}`,
+          ticketPrice: `$${o.ticket_price}`,
         });
       }
       return result;

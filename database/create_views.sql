@@ -6,19 +6,25 @@
 
 CREATE VIEW "view_flight" AS
   SELECT
-    f.identifier as identifier,
-    r1.origin as origin,
-    r1.destination as destination,
-    f.outbound_date as outbound_date,
-    f.inbound_date as inbound_date,
-    COALESCE(SUM(p.ticket_number), 0) as passenger_amount,
-    (pt.columns * pt.rows) as passenger_total
+    f.identifier AS identifier,
+    r1.origin AS origin,
+    r1.destination AS destination,
+    f.outbound_date AS outbound_date,
+    f.inbound_date AS inbound_date,
+    COALESCE(SUM(p.ticket_number), 0) AS passenger_amount,
+    (pt.columns * pt.rows) AS passenger_total,
+    r1.price - (r1.price * s1.discount) +
+      COALESCE(r2.price - (r2.price * s2.discount), 0) AS ticket_price
   FROM
     flight f
   INNER JOIN schedule s1
     ON s1.identifier = f.outbound_schedule
+  LEFT JOIN schedule s2
+    ON s2.identifier = f.inbound_schedule
   INNER JOIN route r1
     ON r1.identifier = s1.route
+  LEFT JOIN route r2
+    ON r2.identifier = s2.route
   INNER JOIN plane pl
     ON pl.identifier = f.plane
   INNER JOIN plane_type pt
@@ -29,6 +35,10 @@ CREATE VIEW "view_flight" AS
     f.identifier,
     r1.origin,
     r1.destination,
+    r1.price,
+    r2.price,
+    s1.discount,
+    s2.discount,
     f.outbound_date,
     f.inbound_date,
     pt.columns,
@@ -36,14 +46,14 @@ CREATE VIEW "view_flight" AS
 
 CREATE VIEW "view_schedule" AS
   SELECT
-    s.identifier as identifier,
-    r.origin as origin,
-    r.destination as destination,
-    s.departure_time as departure_time,
-    s.weekday as weekday,
-    r.duration as duration,
-    r.price as price,
-    s.discount as discount
+    s.identifier AS identifier,
+    r.origin AS origin,
+    r.destination AS destination,
+    s.departure_time AS departure_time,
+    s.weekday AS weekday,
+    r.duration AS duration,
+    r.price AS price,
+    s.discount AS discount
   FROM
     schedule s
   INNER JOIN route r
