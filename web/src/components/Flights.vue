@@ -12,7 +12,10 @@
         <Button
           icon="pi pi-credit-card"
           label="Buy"
-          :disabled="selectedFlight == null"
+          :disabled="
+            selectedFlight == null ||
+            selectedFlight?.passenger_amount === selectedFlight?.passenger_total
+          "
           @click="displayPurchase = true"
         />
       </template>
@@ -105,13 +108,18 @@ export default {
     },
   },
   watch: {
-    session(newValue) {
-      if (!newValue) {
+    selectedFlight() {
+      this.displayPurchase = false;
+    },
+    session(value) {
+      if (!value) {
         this.displayPurchase = false;
         this.selectedFlight = null;
       }
     },
     purchaseData() {
+      this.displayPurchase = false;
+      this.selectedFlight = null;
       this.$store.dispatch("flight/sendMessage", {
         action: "VIEW_ALL",
       });

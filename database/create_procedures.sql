@@ -175,3 +175,59 @@ AS $$
     RETURN "out_cursor";
   END;
 $$ LANGUAGE plpgsql;
+
+\echo '-> Creating ticket functions and procedures...'
+
+CREATE OR REPLACE FUNCTION "view_all_ticket_per_flight" (
+  "in_flight" INTEGER
+)
+RETURNS REFCURSOR
+AS $$
+  DECLARE
+    "out_cursor" REFCURSOR;
+  BEGIN
+    OPEN "out_cursor" FOR
+      SELECT * 
+      FROM "view_ticket"
+      WHERE "flight" = "in_flight";
+    RETURN "out_cursor";
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION "view_all_ticket_per_purchase" (
+  "in_purchase" INTEGER
+)
+RETURNS REFCURSOR
+AS $$
+  DECLARE
+    "out_cursor" REFCURSOR;
+  BEGIN
+    OPEN "out_cursor" FOR
+      SELECT
+        "identifier" AS "identifier",
+        "row" AS "row",
+        "column" AS "column"
+      FROM "ticket"
+      WHERE "purchase" = "in_purchase";
+    RETURN "out_cursor";
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE PROCEDURE "create_ticket" (
+  "in_purchase" INTEGER,
+  "in_row"      NUMERIC,
+  "in_column"   NUMERIC
+)
+AS $$
+  BEGIN
+    INSERT INTO "ticket" (
+      "purchase",
+      "row",
+      "column"
+    ) VALUES (
+      "in_purchase",
+      "in_row",
+      "in_column"
+    );
+  END;
+$$ LANGUAGE plpgsql;

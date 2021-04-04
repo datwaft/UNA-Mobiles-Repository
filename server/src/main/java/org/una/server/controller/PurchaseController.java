@@ -1,7 +1,6 @@
 package org.una.server.controller;
 
 import jakarta.websocket.Session;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.una.server.model.PurchaseModel;

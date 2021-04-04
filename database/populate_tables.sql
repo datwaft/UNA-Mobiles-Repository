@@ -180,7 +180,20 @@ INSERT INTO "purchase" (
   "flight",
   "user"
 ) VALUES (
-  5,
+  3,
   1,
   'user1'
+), (
+  5,
+  2,
+  'user1'
 );
+
+INSERT INTO "ticket" (
+  "purchase",
+  "row",
+  "column"
+) VALUES
+  (1, 1, 1),
+  (1, 1, 2),
+  (1, 1, 3);

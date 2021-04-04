@@ -57,10 +57,11 @@ CREATE TABLE IF NOT EXISTS "flight" (
 );
 
 CREATE TABLE IF NOT EXISTS "purchase" (
-  "identifier"    SERIAL  NOT NULL PRIMARY KEY,
-  "ticket_number" NUMERIC NOT NULL,
-  "flight"        SERIAL  NOT NULL,
-  "user"          VARCHAR NOT NULL
+  "identifier"    SERIAL    NOT NULL PRIMARY KEY,
+  "ticket_number" NUMERIC   NOT NULL,
+  "timestamp"     TIMESTAMP          WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  "flight"        SERIAL    NOT NULL,
+  "user"          VARCHAR   NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "ticket" (

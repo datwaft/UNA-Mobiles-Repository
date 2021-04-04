@@ -63,6 +63,7 @@ CREATE VIEW "view_purchase" AS
   SELECT
     p.identifier AS identifier,
     p.user AS "user",
+    p.timestamp AS "timestamp",
     r1.origin AS origin,
     r1.destination AS destination,
     f.outbound_date AS outbound_date,
@@ -71,7 +72,10 @@ CREATE VIEW "view_purchase" AS
     r1.price - (r1.price * s1.discount) +
       COALESCE(r2.price - (r2.price * s2.discount), 0) *
       p.ticket_number AS total_cost,
-    count(t) <> 0 AS has_been_reserved
+    count(t) <> 0 AS has_been_reserved,
+    pt.rows AS plane_rows,
+    pt.columns AS plane_columns,
+    p.flight AS flight
   FROM
     purchase p
   INNER JOIN flight f
@@ -86,9 +90,14 @@ CREATE VIEW "view_purchase" AS
     ON r2.identifier = s2.route
   FULL OUTER JOIN ticket t
     ON t.purchase = p.identifier
+  INNER JOIN plane pl
+    ON f.plane = pl.identifier
+  INNER JOIN plane_type pt
+    ON pl.type = pt.identifier
   GROUP BY
     p.identifier,
     p.user,
+    p.timestamp,
     r1.origin,
     r1.destination,
     r1.price,
@@ -97,4 +106,18 @@ CREATE VIEW "view_purchase" AS
     s2.discount,
     f.outbound_date,
     f.inbound_date,
-    p.ticket_number;
+    p.ticket_number,
+    pt.rows,
+    pt.columns,
+    p.flight;
+
+CREATE VIEW "view_ticket" AS
+  SELECT
+    t.identifier AS identifier,
+    t.row AS "row",
+    t.column AS "column",
+    p.flight AS flight
+  FROM
+    ticket t
+  INNER JOIN purchase p
+    ON t.purchase = p.identifier;

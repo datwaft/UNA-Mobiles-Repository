@@ -99,6 +99,74 @@ CREATE TRIGGER "ticket_row_column_trigger_update"
   FOR EACH ROW
     EXECUTE PROCEDURE "ticket_row_column_trigger"();
 
+\echo '-> Creating trigger for ticket no-repeat...'
+
+CREATE OR REPLACE FUNCTION "ticket_no_repeat_trigger" ()
+RETURNS TRIGGER
+AS $$
+  BEGIN
+    IF EXISTS (
+      SELECT
+        t.identifier
+      FROM
+        view_ticket t
+      INNER JOIN purchase p
+        ON NEW.purchase = p.identifier
+      WHERE
+        p.flight = t.flight AND
+        NEW.row = t.row AND
+        NEW.column = t.column
+      ) THEN
+      RAISE EXCEPTION 'Ticket row and column should not be repeated in flight';
+    END IF;
+
+    RETURN NEW;
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER "ticket_no_repeat_trigger_insert"
+  BEFORE INSERT
+  ON "ticket"
+  FOR EACH ROW
+    EXECUTE PROCEDURE "ticket_no_repeat_trigger"();
+
+CREATE TRIGGER "ticket_no_repeat_trigger_update"
+  BEFORE UPDATE
+  ON "ticket"
+  FOR EACH ROW
+    EXECUTE PROCEDURE "ticket_no_repeat_trigger"();
+
+\echo '-> Creating trigger for ticket count...'
+
+CREATE OR REPLACE FUNCTION "ticket_count_trigger" ()
+RETURNS TRIGGER
+AS $$
+  DECLARE
+    exceeds BOOLEAN;
+  BEGIN
+    SELECT COUNT(t.identifier) >= p.ticket_number
+    INTO exceeds
+    FROM ticket t
+    INNER JOIN purchase p
+      ON p.identifier = t.purchase
+    WHERE t.purchase = NEW.purchase
+    GROUP BY
+      p.ticket_number;
+
+    IF exceeds THEN
+      RAISE EXCEPTION 'Ticket count cannot exceed purchase ticket amount';
+    END IF;
+
+    RETURN NEW;
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER "ticket_count_trigger_insert"
+  BEFORE INSERT
+  ON "ticket"
+  FOR EACH ROW
+    EXECUTE PROCEDURE "ticket_count_trigger"();
+
 \echo '-> Creating trigger for flight dates...'
 
 CREATE OR REPLACE FUNCTION "flight_date_trigger" ()

@@ -34,7 +34,7 @@ public class PurchaseDBA {
         while (rs.next()) {
             var object = new JSONObject();
             object.put("identifier", rs.getInt("identifier"));
-            object.put("user", rs.getString("user"));
+            object.put("timestamp", rs.getTimestamp("timestamp"));
             object.put("origin", rs.getString("origin"));
             object.put("destination", rs.getString("destination"));
             object.put("outbound_date", rs.getDate("outbound_date"));
@@ -42,6 +42,9 @@ public class PurchaseDBA {
             object.put("ticket_amount", rs.getInt("ticket_amount"));
             object.put("total_cost", rs.getDouble("total_cost"));
             object.put("has_been_reserved", rs.getBoolean("has_been_reserved"));
+            object.put("plane_rows", rs.getInt("plane_rows"));
+            object.put("plane_columns", rs.getInt("plane_columns"));
+            object.put("flight", rs.getInt("flight"));
             result.put(object);
         }
         rs.close();
