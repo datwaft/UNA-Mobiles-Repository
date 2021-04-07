@@ -32,6 +32,27 @@ AS $$
   END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION "get_user" (
+  "in_username" VARCHAR
+) RETURNS REFCURSOR
+AS $$
+  DECLARE
+    "out_cursor" REFCURSOR;
+  BEGIN
+    OPEN "out_cursor" FOR
+      SELECT 
+        "name",
+        "lastname",
+        "email",
+        "address",
+        "workphone",
+        "mobilephone"
+      FROM "user"
+      WHERE "username" = "in_username";
+    RETURN "out_cursor";
+  END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE PROCEDURE "register_user" (
   "in_username"    VARCHAR,
   "in_password"    VARCHAR,
@@ -65,27 +86,6 @@ AS $$
       "in_workphone",
       "in_mobilephone"
     );
-  END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION "get_user" (
-  "in_username" VARCHAR
-) RETURNS REFCURSOR
-AS $$
-  DECLARE
-    "out_cursor" REFCURSOR;
-  BEGIN
-    OPEN "out_cursor" FOR
-      SELECT 
-        "name",
-        "lastname",
-        "email",
-        "address",
-        "workphone",
-        "mobilephone"
-      FROM "user"
-      WHERE "username" = "in_username";
-    RETURN "out_cursor";
   END;
 $$ LANGUAGE plpgsql;
 
@@ -141,6 +141,22 @@ $$ LANGUAGE plpgsql;
 
 \echo '-> Creating purchase functions and procedures...'
 
+CREATE OR REPLACE FUNCTION "view_all_purchase" (
+  "in_username" VARCHAR
+)
+RETURNS REFCURSOR
+AS $$
+  DECLARE
+    "out_cursor" REFCURSOR;
+  BEGIN
+    OPEN "out_cursor" FOR
+      SELECT * 
+      FROM "view_purchase"
+      WHERE "user" = "in_username";
+    RETURN "out_cursor";
+  END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE PROCEDURE "create_purchase" (
   "in_ticket_number" NUMERIC,
   "in_flight"        INTEGER,
@@ -157,22 +173,6 @@ AS $$
       "in_flight",
       "in_user"
     );
-  END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION "view_all_purchase" (
-  "in_username" VARCHAR
-)
-RETURNS REFCURSOR
-AS $$
-  DECLARE
-    "out_cursor" REFCURSOR;
-  BEGIN
-    OPEN "out_cursor" FOR
-      SELECT * 
-      FROM "view_purchase"
-      WHERE "user" = "in_username";
-    RETURN "out_cursor";
   END;
 $$ LANGUAGE plpgsql;
 
@@ -229,5 +229,64 @@ AS $$
       "in_row",
       "in_column"
     );
+  END;
+$$ LANGUAGE plpgsql;
+
+\echo '-> Creating plane type functions and procedures...'
+
+CREATE OR REPLACE FUNCTION "get_all_plane_type" ()
+RETURNS REFCURSOR
+AS $$
+  DECLARE
+    "out_cursor" REFCURSOR;
+  BEGIN
+    OPEN "out_cursor" FOR
+      SELECT * FROM "plane_type";
+    RETURN "out_cursor";
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE PROCEDURE "create_plane_type" (
+  "in_year"    NUMERIC,
+  "in_model"   VARCHAR,
+  "in_brand"   VARCHAR,
+  "in_rows"    NUMERIC,
+  "in_columns" NUMERIC
+)
+AS $$
+  BEGIN
+    INSERT INTO "ticket" (
+      "year",
+      "model",
+      "brand",
+      "rows",
+      "columns"
+    ) VALUES (
+      "in_year",
+      "in_model",
+      "in_brand",
+      "in_rows",
+      "in_columns"
+    );
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE PROCEDURE "update_plane_type" (
+  "in_identifier"    INTEGER,
+  "in_year"    NUMERIC,
+  "in_model"   VARCHAR,
+  "in_brand"   VARCHAR,
+  "in_rows"    NUMERIC,
+  "in_columns" NUMERIC
+)
+AS $$
+  BEGIN
+    UPDATE "ticket" SET
+      "year"    = "in_year",
+      "model"   = "in_model",
+      "brand"   = "in_brand",
+      "rows"    = "in_rows",
+      "columns" = "in_columns"
+    WHERE "identifier" = "in_identifier";
   END;
 $$ LANGUAGE plpgsql;

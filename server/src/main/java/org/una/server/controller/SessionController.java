@@ -54,6 +54,24 @@ public class SessionController {
         return sessionTokens.containsKey(session);
     }
 
+    public Boolean isTokenAdmin(String token) {
+        return tokenData.get(token).getValue1().equals("admin");
+    }
+
+    public Boolean isSessionAdmin(Session session) {
+        var token = sessionTokens.get(session);
+        return tokenData.get(token).getValue1().equals("admin");
+    }
+
+    public Boolean isTokenUser(String token) {
+        return tokenData.get(token).getValue1().equals("user");
+    }
+
+    public Boolean isSessionUser(Session session) {
+        var token = sessionTokens.get(session);
+        return tokenData.get(token).getValue1().equals("user");
+    }
+
     public String getUsernameByToken(String token) {
         return tokenData.get(token).getValue0();
     }
