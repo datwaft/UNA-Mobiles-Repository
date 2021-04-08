@@ -5,6 +5,9 @@
     :mode="mode"
   />
   <div class="plane-type">
+    <br />
+    <div class="header p-text-center p-d-block">Plane Types</div>
+    <br />
     <Toolbar>
       <template #left>
         <Button
