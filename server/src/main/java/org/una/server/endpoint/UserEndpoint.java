@@ -40,9 +40,9 @@ public class UserEndpoint {
         if (response != null) {
             session.getBasicRemote().sendObject(response);
             if (response.optString("action").equals("UPDATE")) {
-                var getMessage = new JSONObject();
-                getMessage.put("action", "GET");
-                sendToMany(getMessage, (s) -> sessionController.shareUsername(s, session));
+                var _message = new JSONObject();
+                _message.put("action", "GET");
+                sendToMany(_message, (s) -> sessionController.shareUsername(s, session));
             }
         }
     }

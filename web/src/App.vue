@@ -69,8 +69,20 @@ export default {
           label: "User options",
           visible: () => this.session?.authorization == "user",
           items: [
-            { label: "User information", to: "/user/userinformation" },
-            { label: "Purchase history", to: "/user/purchasehistory" },
+            { label: "User information", to: "/user/user-information" },
+            { label: "Purchase history", to: "/user/purchase-history" },
+          ],
+        },
+        {
+          icon: "pi pi-key",
+          label: "Administrator options",
+          visible: () => this.session?.authorization == "admin",
+          items: [
+            { label: "Plane types", to: "/admin/plane-type" },
+            { label: "Planes" },
+            { label: "Routes" },
+            { label: "Schedules" },
+            { label: "Flights" },
           ],
         },
         {

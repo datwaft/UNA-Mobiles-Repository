@@ -68,7 +68,7 @@ INSERT INTO "plane_type" (
   1980,
   'RND-32',
   'Marea',
-  23,
+  30,
   6
 ), (
   2008,

@@ -2,27 +2,28 @@ import connection from "@/assets/connection";
 
 export default function () {
   return (store) => {
-    const socket = new WebSocket(`ws://${connection.url}/flight`);
+    const socket = new WebSocket(`ws://${connection.url}/plane-type`);
     socket.onopen = () => {
-      store.dispatch("flight/connectionOpened");
-
-      // Request data
-      store.dispatch("flight/sendMessage", {
-        action: "VIEW_ALL",
-      });
+      store.dispatch("planeType/connectionOpened");
     };
     socket.onclose = () => {
-      store.dispatch("flight/connectionClosed");
+      store.dispatch("planeType/connectionClosed");
     };
     socket.onerror = (event) => {
-      store.dispatch("flight/connectionError", event);
+      store.dispatch("planeType/connectionError", event);
     };
     // Message handler
     socket.onmessage = (event) => {
       let data = JSON.parse(event.data);
       switch (data.action) {
-        case "VIEW_ALL":
-          store.commit("flight/setView", data.view);
+        case "GET_ALL":
+          store.commit("planeType/setData", data.data);
+          break;
+        case "CREATE":
+          store.dispatch("planeType/emitCreated", data);
+          break;
+        case "UPDATE":
+          store.dispatch("planeType/emitUpdated", data);
           break;
         case "ERROR":
           store.dispatch("processError", data);
@@ -32,7 +33,7 @@ export default function () {
     // Message listener
     store.subscribeAction((action, state) => {
       if (!state.session.connected) return;
-      if (action.type === "flight/sendMessage") {
+      if (action.type === "planeType/sendMessage") {
         socket.send(JSON.stringify(action.payload));
       }
     });

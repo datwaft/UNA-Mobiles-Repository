@@ -40,9 +40,9 @@ public class PurchaseEndpoint {
         if (response != null) {
             session.getBasicRemote().sendObject(response);
             if (response.opt("action") == "CREATE") {
-                var getMessage = new JSONObject();
-                getMessage.put("action", "VIEW_ALL");
-                sendToMany(getMessage, (s) -> sessionController.shareUsername(s, session));
+                var _message = new JSONObject();
+                _message.put("action", "VIEW_ALL");
+                sendToMany(_message, (s) -> sessionController.shareUsername(s, session));
             }
         }
     }

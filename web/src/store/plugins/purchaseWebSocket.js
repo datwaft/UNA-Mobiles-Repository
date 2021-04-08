@@ -1,6 +1,6 @@
 import connection from "@/assets/connection";
 
-export default function purchaseWebSocket() {
+export default function () {
   return (store) => {
     const socket = new WebSocket(`ws://${connection.url}/purchase`);
     socket.onopen = () => {

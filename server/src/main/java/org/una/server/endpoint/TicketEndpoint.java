@@ -33,14 +33,14 @@ public class TicketEndpoint {
         if (response != null) {
             session.getBasicRemote().sendObject(response);
             if (response.optString("type").equals("CREATE")) {
-                var viewPerPurchaseResponse = new JSONObject();
-                viewPerPurchaseResponse.put("type", "VIEW_ALL_PER_PURCHASE");
-                viewPerPurchaseResponse.put("purchase", message.get("purchase"));
-                broadcast(viewPerPurchaseResponse);
-                var viewPerFlightResponse = new JSONObject();
-                viewPerFlightResponse.put("type", "VIEW_ALL_PER_FLIGHT");
-                viewPerFlightResponse.put("flight", message.get("flight"));
-                broadcast(viewPerFlightResponse);
+                var _message = new JSONObject();
+                _message.put("type", "VIEW_ALL_PER_PURCHASE");
+                _message.put("purchase", message.get("purchase"));
+                broadcast(_message);
+                _message.clear();
+                _message.put("type", "VIEW_ALL_PER_FLIGHT");
+                _message.put("flight", message.get("flight"));
+                broadcast(_message);
             }
         }
     }

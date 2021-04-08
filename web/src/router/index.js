@@ -8,14 +8,19 @@ const routes = [
     component: Home,
   },
   {
-    path: "/user/userinformation",
+    path: "/user/user-information",
     name: "User Information",
     component: () => import("@/views/user/UserInformation.vue"),
   },
   {
-    path: "/user/purchasehistory",
+    path: "/user/purchase-history",
     name: "Purchase History",
     component: () => import("@/views/user/PurchaseHistory.vue"),
+  },
+  {
+    path: "/admin/plane-type",
+    name: "Plane Type",
+    component: () => import("@/views/admin/PlaneType.vue"),
   },
   {
     path: "/about/history",

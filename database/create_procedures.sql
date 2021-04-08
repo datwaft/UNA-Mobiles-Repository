@@ -255,7 +255,7 @@ CREATE OR REPLACE PROCEDURE "create_plane_type" (
 )
 AS $$
   BEGIN
-    INSERT INTO "ticket" (
+    INSERT INTO "plane_type" (
       "year",
       "model",
       "brand",
@@ -281,7 +281,7 @@ CREATE OR REPLACE PROCEDURE "update_plane_type" (
 )
 AS $$
   BEGIN
-    UPDATE "ticket" SET
+    UPDATE "plane_type" SET
       "year"    = "in_year",
       "model"   = "in_model",
       "brand"   = "in_brand",

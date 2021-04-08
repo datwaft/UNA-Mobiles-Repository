@@ -16,6 +16,7 @@
               id="username"
               v-model.trim="username"
               :class="{ 'p-invalid': !isUsernameValid }"
+              autofocus
             />
             <label for="username">Username</label>
           </span>

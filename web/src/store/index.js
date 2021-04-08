@@ -19,6 +19,9 @@ import purchaseWebSocket from "./plugins/purchaseWebSocket";
 import ticket from "./modules/ticket";
 import ticketWebSocket from "./plugins/ticketWebSocket";
 
+import planeType from "./modules/plane-type";
+import planeTypeWebSocket from "./plugins/planeTypeWebSocket";
+
 let store = {
   strict: process.env.NODE_ENV !== "production",
   state: () => ({
@@ -74,6 +77,7 @@ let store = {
     schedule,
     purchase,
     ticket,
+    planeType,
   },
   plugins: [
     createLogger(),
@@ -83,6 +87,7 @@ let store = {
     scheduleWebSocket(),
     purchaseWebSocket(),
     ticketWebSocket(),
+    planeTypeWebSocket(),
   ],
 };
 

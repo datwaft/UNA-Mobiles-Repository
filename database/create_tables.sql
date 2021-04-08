@@ -73,6 +73,18 @@ CREATE TABLE IF NOT EXISTS "ticket" (
 
 \echo '=> Creating constraints...'
 
+ALTER TABLE "plane_type"
+ADD CONSTRAINT "plane_type_year_check"
+CHECK ( "year" BETWEEN 1901 AND 2099 );
+
+ALTER TABLE "plane_type"
+ADD CONSTRAINT "plane_type_rows_check"
+CHECK ( "rows" BETWEEN 25 AND 30 );
+
+ALTER TABLE "plane_type"
+ADD CONSTRAINT "plane_type_columns_check"
+CHECK ( "columns" IN (6, 9) );
+
 ALTER TABLE "user"
 ADD CONSTRAINT "user_authorization_check"
 CHECK ( "authorization" IN ('user', 'admin') );

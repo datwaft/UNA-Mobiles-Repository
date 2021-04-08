@@ -125,6 +125,11 @@ export default {
         purchase: this.selectedPurchase.identifier,
       });
     },
+    isVisible(value) {
+      if (!value) {
+        this.selectedTickets = [];
+      }
+    },
   },
   methods: {
     reserve() {
