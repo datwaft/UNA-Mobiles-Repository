@@ -11,7 +11,6 @@ import org.una.server.endpoint.encode.JsonObjectEncoder;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Function;
 
 @ServerEndpoint(value = "/purchase", decoders = {JsonObjectDecoder.class}, encoders = {JsonObjectEncoder.class})
 public class PurchaseEndpoint {
@@ -21,11 +20,9 @@ public class PurchaseEndpoint {
 
     private static final SessionController sessionController = SessionController.getInstance();
 
-    public void sendToMany(JSONObject message, Function<Session, Boolean> condition) throws IOException, EncodeException {
+    public void broadcast(JSONObject message) throws IOException, EncodeException {
         for (var session: sessions) {
-            if (condition.apply(session)) {
-                session.getBasicRemote().sendObject(controller.processQuery(message, session));
-            }
+            session.getBasicRemote().sendObject(controller.processQuery(message, session));
         }
     }
 
@@ -42,7 +39,7 @@ public class PurchaseEndpoint {
             if (response.opt("action") == "CREATE") {
                 var _message = new JSONObject();
                 _message.put("action", "VIEW_ALL");
-                sendToMany(_message, (s) -> sessionController.shareUsername(s, session));
+                broadcast(_message);
             }
         }
     }

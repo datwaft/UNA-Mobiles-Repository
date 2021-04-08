@@ -241,7 +241,7 @@ AS $$
     "out_cursor" REFCURSOR;
   BEGIN
     OPEN "out_cursor" FOR
-      SELECT * FROM "plane_type";
+      SELECT * FROM "plane_type" ORDER BY "identifier";
     RETURN "out_cursor";
   END;
 $$ LANGUAGE plpgsql;
@@ -300,7 +300,7 @@ AS $$
     "out_cursor" REFCURSOR;
   BEGIN
     OPEN "out_cursor" FOR
-      SELECT * FROM "route";
+      SELECT * FROM "route" ORDER BY "identifier";
     RETURN "out_cursor";
   END;
 $$ LANGUAGE plpgsql;
