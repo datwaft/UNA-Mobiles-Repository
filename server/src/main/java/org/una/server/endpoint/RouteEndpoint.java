@@ -3,7 +3,7 @@ package org.una.server.endpoint;
 import jakarta.websocket.*;
 import jakarta.websocket.server.ServerEndpoint;
 import org.json.JSONObject;
-import org.una.server.controller.PurchaseController;
+import org.una.server.controller.RouteController;
 import org.una.server.controller.SessionController;
 import org.una.server.endpoint.decode.JsonObjectDecoder;
 import org.una.server.endpoint.encode.JsonObjectEncoder;
@@ -13,11 +13,11 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
 
-@ServerEndpoint(value = "/purchase", decoders = {JsonObjectDecoder.class}, encoders = {JsonObjectEncoder.class})
-public class PurchaseEndpoint {
+@ServerEndpoint(value = "/route", decoders = {JsonObjectDecoder.class}, encoders = {JsonObjectEncoder.class})
+public class RouteEndpoint {
     private static final Set<Session> sessions = new HashSet<>();
 
-    private static final PurchaseController controller = PurchaseController.getInstance();
+    private static final RouteController controller = RouteController.getInstance();
 
     private static final SessionController sessionController = SessionController.getInstance();
 
@@ -39,10 +39,15 @@ public class PurchaseEndpoint {
         var response = controller.processQuery(message, session);
         if (response != null) {
             session.getBasicRemote().sendObject(response);
-            if (response.opt("action") == "CREATE") {
+            if (response.optString("action").equals("CREATE")) {
                 var _message = new JSONObject();
-                _message.put("action", "VIEW_ALL");
-                sendToMany(_message, (s) -> sessionController.shareUsername(s, session));
+                _message.put("action", "GET_ALL");
+                sendToMany(_message, sessionController::isSessionAdmin);
+            }
+            if (response.optString("action").equals("UPDATE")) {
+                var _message = new JSONObject();
+                _message.put("action", "GET_ALL");
+                sendToMany(_message, sessionController::isSessionAdmin);
             }
         }
     }

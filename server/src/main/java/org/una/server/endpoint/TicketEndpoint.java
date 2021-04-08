@@ -14,11 +14,12 @@ import java.util.Set;
 @ServerEndpoint(value = "/ticket", decoders = {JsonObjectDecoder.class}, encoders = {JsonObjectEncoder.class})
 public class TicketEndpoint {
     private static final Set<Session> sessions = new HashSet<>();
-    private static final TicketController ticketController = TicketController.getInstance();
+
+    private static final TicketController controller = TicketController.getInstance();
 
     public void broadcast(JSONObject message) throws IOException, EncodeException {
         for (var session: sessions) {
-            session.getBasicRemote().sendObject(ticketController.processQuery(message));
+            session.getBasicRemote().sendObject(controller.processQuery(message));
         }
     }
 
@@ -29,7 +30,7 @@ public class TicketEndpoint {
 
     @OnMessage
     public void onMessage(JSONObject message, Session session) throws IOException, EncodeException {
-        var response = ticketController.processQuery(message);
+        var response = controller.processQuery(message);
         if (response != null) {
             session.getBasicRemote().sendObject(response);
             if (response.optString("type").equals("CREATE")) {

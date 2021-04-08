@@ -80,7 +80,7 @@ export default {
           items: [
             { label: "Plane types", to: "/admin/plane-type" },
             { label: "Planes" },
-            { label: "Routes" },
+            { label: "Routes", to: "/admin/route" },
             { label: "Schedules" },
             { label: "Flights" },
           ],

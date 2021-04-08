@@ -18,13 +18,14 @@ import java.util.function.Function;
 public class UserEndpoint {
     private static final Set<Session> sessions = new HashSet<>();
 
-    private static final UserController userController = UserController.getInstance();
+    private static final UserController controller = UserController.getInstance();
+
     private static final SessionController sessionController = SessionController.getInstance();
 
     public void sendToMany(JSONObject message, Function<Session, Boolean> condition) throws IOException, EncodeException {
         for (var session: sessions) {
             if (condition.apply(session)) {
-                session.getBasicRemote().sendObject(userController.processQuery(message, session));
+                session.getBasicRemote().sendObject(controller.processQuery(message, session));
             }
         }
     }
@@ -36,7 +37,7 @@ public class UserEndpoint {
 
     @OnMessage
     public void onMessage(JSONObject message, Session session) throws IOException, EncodeException, JSONException {
-        var response = userController.processQuery(message, session);
+        var response = controller.processQuery(message, session);
         if (response != null) {
             session.getBasicRemote().sendObject(response);
             if (response.optString("action").equals("UPDATE")) {

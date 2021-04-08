@@ -290,3 +290,57 @@ AS $$
     WHERE "identifier" = "in_identifier";
   END;
 $$ LANGUAGE plpgsql;
+
+\echo '-> Creating route functions and procedures...'
+
+CREATE OR REPLACE FUNCTION "get_all_route" ()
+RETURNS REFCURSOR
+AS $$
+  DECLARE
+    "out_cursor" REFCURSOR;
+  BEGIN
+    OPEN "out_cursor" FOR
+      SELECT * FROM "route";
+    RETURN "out_cursor";
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE PROCEDURE "create_route" (
+  "in_origin"      VARCHAR,
+  "in_destination" VARCHAR,
+  "in_duration"    TIME,
+  "in_price"       NUMERIC
+)
+AS $$
+  BEGIN
+    INSERT INTO "route" (
+      "origin",
+      "destination",
+      "duration",
+      "price"
+    ) VALUES (
+      "in_origin",
+      "in_destination",
+      "in_duration",
+      "in_price"
+    );
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE PROCEDURE "update_route" (
+  "in_identifier"  INTEGER,
+  "in_origin"      VARCHAR,
+  "in_destination" VARCHAR,
+  "in_duration"    TIME,
+  "in_price"       NUMERIC
+)
+AS $$
+  BEGIN
+    UPDATE "route" SET
+      "origin"      = "in_origin",
+      "destination" = "in_destination",
+      "duration"    = "in_duration",
+      "price"       = "in_price"
+    WHERE "identifier" = "in_identifier";
+  END;
+$$ LANGUAGE plpgsql;

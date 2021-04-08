@@ -14,7 +14,8 @@ import java.util.Set;
 @ServerEndpoint(value = "/session", decoders = {JsonObjectDecoder.class}, encoders = {JsonObjectEncoder.class})
 public class SessionEndpoint {
     private static final Set<Session> sessions = new HashSet<>();
-    private static final SessionController sessionController = SessionController.getInstance();
+
+    private static final SessionController controller = SessionController.getInstance();
 
     @OnOpen
     public void onOpen(Session session) {
@@ -23,7 +24,7 @@ public class SessionEndpoint {
 
     @OnMessage
     public void onMessage(JSONObject message, Session session) throws IOException, EncodeException {
-        var response = sessionController.processQuery(message, session);
+        var response = controller.processQuery(message, session);
         if (response != null) {
             session.getBasicRemote().sendObject(response);
         }
@@ -37,6 +38,6 @@ public class SessionEndpoint {
     @OnClose
     public void onClose(Session session) {
         sessions.remove(session);
-        sessionController.logout(session);
+        controller.logout(session);
     }
 }

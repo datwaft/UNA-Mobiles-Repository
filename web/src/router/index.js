@@ -23,6 +23,11 @@ const routes = [
     component: () => import("@/views/admin/PlaneType.vue"),
   },
   {
+    path: "/admin/route",
+    name: "Route",
+    component: () => import("@/views/admin/Route.vue"),
+  },
+  {
     path: "/about/history",
     name: "History",
     component: () => import("@/views/about/History.vue"),
