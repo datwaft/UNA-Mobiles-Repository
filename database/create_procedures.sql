@@ -344,3 +344,47 @@ AS $$
     WHERE "identifier" = "in_identifier";
   END;
 $$ LANGUAGE plpgsql;
+
+\echo '-> Creating plane functions and procedures...'
+
+CREATE OR REPLACE FUNCTION "get_all_plane" ()
+RETURNS REFCURSOR
+AS $$
+  DECLARE
+    "out_cursor" REFCURSOR;
+  BEGIN
+    OPEN "out_cursor" FOR
+      SELECT * FROM "plane" ORDER BY "identifier";
+    RETURN "out_cursor";
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE PROCEDURE "create_plane" (
+  "in_name" VARCHAR,
+  "in_type" INTEGER
+)
+AS $$
+  BEGIN
+    INSERT INTO "plane" (
+      "name",
+      "type"
+    ) VALUES (
+      "in_name",
+      "in_type"
+    );
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE PROCEDURE "update_plane" (
+  "in_identifier"  INTEGER,
+  "in_name"        VARCHAR,
+  "in_type"        INTEGER
+)
+AS $$
+  BEGIN
+    UPDATE "plane" SET
+      "name" = "in_name",
+      "type" = "in_type"
+    WHERE "identifier" = "in_identifier";
+  END;
+$$ LANGUAGE plpgsql;

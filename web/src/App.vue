@@ -79,7 +79,7 @@ export default {
           visible: () => this.session?.authorization == "admin",
           items: [
             { label: "Plane types", to: "/admin/plane-type" },
-            { label: "Planes" },
+            { label: "Planes", to: "/admin/plane" },
             { label: "Routes", to: "/admin/route" },
             { label: "Schedules" },
             { label: "Flights" },
