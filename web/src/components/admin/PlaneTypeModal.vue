@@ -104,7 +104,6 @@
                 :max="30"
                 :useGrouping="false"
                 showButtons
-                autofocus
               />
               <label for="rows">Rows</label>
             </span>
@@ -135,7 +134,6 @@
                 :max="9"
                 :useGrouping="false"
                 showButtons
-                autofocus
               />
               <label for="columns">Columns</label>
             </span>

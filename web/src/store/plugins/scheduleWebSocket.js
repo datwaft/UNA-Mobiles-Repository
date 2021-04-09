@@ -24,6 +24,15 @@ export default function () {
         case "VIEW_ALL_WITH_DISCOUNT":
           store.commit("schedule/setView", data.view);
           break;
+        case "GET_ALL":
+          store.commit("schedule/setData", data.data);
+          break;
+        case "CREATE":
+          store.dispatch("schedule/emitCreated", data);
+          break;
+        case "UPDATE":
+          store.dispatch("schedule/emitUpdated", data);
+          break;
         case "ERROR":
           store.dispatch("processError", data);
           break;

@@ -4,18 +4,30 @@ import jakarta.websocket.*;
 import jakarta.websocket.server.ServerEndpoint;
 import org.json.JSONObject;
 import org.una.server.controller.ScheduleController;
+import org.una.server.controller.SessionController;
 import org.una.server.endpoint.decode.JsonObjectDecoder;
 import org.una.server.endpoint.encode.JsonObjectEncoder;
 
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Function;
 
 @ServerEndpoint(value = "/schedule", decoders = {JsonObjectDecoder.class}, encoders = {JsonObjectEncoder.class})
 public class ScheduleEndpoint {
     private static final Set<Session> sessions = new HashSet<>();
 
     private static final ScheduleController controller = ScheduleController.getInstance();
+
+    private static final SessionController sessionController = SessionController.getInstance();
+
+    public void sendToMany(JSONObject message, Function<Session, Boolean> condition) throws IOException, EncodeException {
+        for (var session: sessions) {
+            if (condition.apply(session)) {
+                session.getBasicRemote().sendObject(controller.processQuery(message, session));
+            }
+        }
+    }
 
     @OnOpen
     public void onOpen(Session session) {
@@ -24,9 +36,19 @@ public class ScheduleEndpoint {
 
     @OnMessage
     public void onMessage(JSONObject message, Session session) throws IOException, EncodeException {
-        var response = controller.processQuery(message);
+        var response = controller.processQuery(message, session);
         if (response != null) {
             session.getBasicRemote().sendObject(response);
+            if (response.optString("action").equals("CREATE")) {
+                var _message = new JSONObject();
+                _message.put("action", "GET_ALL");
+                sendToMany(_message, sessionController::isSessionAdmin);
+            }
+            if (response.optString("action").equals("UPDATE")) {
+                var _message = new JSONObject();
+                _message.put("action", "GET_ALL");
+                sendToMany(_message, sessionController::isSessionAdmin);
+            }
         }
     }
 
@@ -36,7 +58,7 @@ public class ScheduleEndpoint {
     }
 
     @OnClose
-    public void onClose(Session session, CloseReason closeReason) {
+    public void onClose(Session session) {
         sessions.remove(session);
     }
 }

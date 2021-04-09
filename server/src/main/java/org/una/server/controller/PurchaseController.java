@@ -10,6 +10,8 @@ import java.sql.SQLException;
 public class PurchaseController {
     private static PurchaseController instance = null;
 
+    private static final PurchaseModel model = PurchaseModel.getInstance();
+
     private static final SessionController sessionController = SessionController.getInstance();
 
     public JSONObject processQuery(JSONObject object, Session session) {
@@ -40,7 +42,7 @@ public class PurchaseController {
         }
 
         try {
-            PurchaseModel.getInstance().create(
+            model.create(
                     object.getInt("ticket_number"),
                     object.getInt("flight"),
                     sessionController.getUsernameByToken(token)
@@ -70,7 +72,7 @@ public class PurchaseController {
         }
 
         try {
-            var view = PurchaseModel.getInstance().viewAll(sessionController.getUsernameByToken(token));
+            var view = model.viewAll(sessionController.getUsernameByToken(token));
             response.put("action", "VIEW_ALL");
             response.put("view", view);
         } catch (SQLException ex) {

@@ -108,7 +108,6 @@
                 v-model.number="price"
                 :class="{ 'p-invalid': !isPriceValid }"
                 prefix="$"
-                autofocus
               />
               <label for="price">Price</label>
             </span>
@@ -212,7 +211,7 @@ export default {
       return [this.duration !== "00:00:00"].every((e) => e);
     },
     isPriceValid() {
-      return [this.price != 0].every((e) => e);
+      return [this.price !== null, this.price != 0].every((e) => e);
     },
     isValid() {
       return [
@@ -246,6 +245,7 @@ export default {
     priceHelp() {
       return [
         this.price == 0 ? "Price must be greater than zero" : null,
+        this.price == null ? "Price is not optional" : null,
       ].filter((e) => !!e);
     },
     isOriginDifferent() {

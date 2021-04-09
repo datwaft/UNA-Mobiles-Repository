@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 public class SessionController {
     private static SessionController instance = null;
 
+    private static final UserModel model = UserModel.getInstance();
+
     private Map<Session, String> sessionTokens = new HashMap<>();
     private final Map<String, Pair<String, String>> tokenData = new HashMap<>();
 
@@ -130,7 +132,7 @@ public class SessionController {
             if (isSessionSignedIn(session)) return loginCaseAlreadyLoggedIn(session);
             // Case 2: Invalid credentials
             if (username == null || password == null) return loginCaseInvalid();
-            var authorization = UserModel.getInstance().getAuthorization(username, password) ;
+            var authorization = model.getAuthorization(username, password) ;
             if (authorization.equals("none")) return loginCaseInvalid();
             // Case 3: Valid credentials
             return loginCaseValid(username, authorization, session);

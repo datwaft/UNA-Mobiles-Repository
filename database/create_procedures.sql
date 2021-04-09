@@ -125,20 +125,6 @@ AS $$
   END;
 $$ LANGUAGE plpgsql;
 
-\echo '-> Creating schedule functions and procedures...'
-
-CREATE OR REPLACE FUNCTION "view_all_schedule_with_discount" ()
-RETURNS REFCURSOR
-AS $$
-  DECLARE
-    "out_cursor" REFCURSOR;
-  BEGIN
-    OPEN "out_cursor" FOR
-      SELECT * FROM "view_schedule" where "discount" > 0;
-    RETURN "out_cursor";
-  END;
-$$ LANGUAGE plpgsql;
-
 \echo '-> Creating purchase functions and procedures...'
 
 CREATE OR REPLACE FUNCTION "view_all_purchase" (
@@ -385,6 +371,72 @@ AS $$
     UPDATE "plane" SET
       "name" = "in_name",
       "type" = "in_type"
+    WHERE "identifier" = "in_identifier";
+  END;
+$$ LANGUAGE plpgsql;
+
+\echo '-> Creating schedule functions and procedures...'
+
+CREATE OR REPLACE FUNCTION "view_all_schedule_with_discount" ()
+RETURNS REFCURSOR
+AS $$
+  DECLARE
+    "out_cursor" REFCURSOR;
+  BEGIN
+    OPEN "out_cursor" FOR
+      SELECT * FROM "view_schedule" WHERE "discount" > 0 ORDER BY "identifier";
+    RETURN "out_cursor";
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION "get_all_schedule" ()
+RETURNS REFCURSOR
+AS $$
+  DECLARE
+    "out_cursor" REFCURSOR;
+  BEGIN
+    OPEN "out_cursor" FOR
+      SELECT * FROM "schedule" ORDER BY "identifier";
+    RETURN "out_cursor";
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE PROCEDURE "create_schedule" (
+  "in_route"          INTEGER,
+  "in_departure_time" TIME,
+  "in_weekday"        NUMERIC(1, 0),
+  "in_discount"       NUMERIC(3, 2)
+)
+AS $$
+  BEGIN
+    INSERT INTO "schedule" (
+      "route",
+      "departure_time",
+      "weekday",
+      "discount"
+    ) VALUES (
+      "in_route",
+      "in_departure_time",
+      "in_weekday",
+      "in_discount"
+    );
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE PROCEDURE "update_schedule" (
+  "in_identifier"     INTEGER,
+  "in_route"          INTEGER,
+  "in_departure_time" TIME,
+  "in_weekday"        NUMERIC(1, 0),
+  "in_discount"       NUMERIC(3, 2)
+)
+AS $$
+  BEGIN
+    UPDATE "schedule" SET
+      "route"          = "in_route",
+      "departure_time" = "in_departure_time",
+      "weekday"        = "in_weekday",
+      "discount"       = "in_discount"
     WHERE "identifier" = "in_identifier";
   END;
 $$ LANGUAGE plpgsql;

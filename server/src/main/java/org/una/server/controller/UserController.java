@@ -10,19 +10,47 @@ import java.sql.SQLException;
 public class UserController {
     private static UserController instance = null;
 
+    private static final UserModel model = UserModel.getInstance();
+
     private static final SessionController sessionController = SessionController.getInstance();
 
     public JSONObject processQuery(JSONObject object, Session session) {
         try {
             return switch (object.getString("action")) {
-                case "REGISTER" -> register(object);
                 case "GET" -> get(object.optString("token"), session);
+                case "REGISTER" -> register(object);
                 case "UPDATE" -> update(object, session);
                 default -> null;
             };
         } catch (JSONException ex) {
             return null;
         }
+    }
+
+    private JSONObject get(String token, Session session) {
+        var response = new JSONObject();
+
+        if ((token == null || token.isEmpty()) && sessionController.isSessionSignedIn(session)) {
+            token = sessionController.getTokenBySession(session);
+        }
+        if (!sessionController.isTokenValid(token)) {
+            response.put("action", "ERROR");
+            response.put("type", "CREDENTIALS");
+            return response;
+        } else {
+            sessionController.registerSession(session, token);
+        }
+
+        try {
+            var username = sessionController.getUsernameByToken(token);
+            var data = model.get(username);
+            response.put("action", "GET");
+            response.put("get", data);
+        } catch (SQLException ex) {
+            response.put("action", "ERROR");
+            response.put("message", ex.getMessage());
+        }
+        return response;
     }
 
     private JSONObject register(JSONObject object) {
@@ -48,32 +76,6 @@ public class UserController {
         return response;
     }
 
-    private JSONObject get(String token, Session session) {
-        var response = new JSONObject();
-
-        if ((token == null || token.isEmpty()) && sessionController.isSessionSignedIn(session)) {
-            token = sessionController.getTokenBySession(session);
-        }
-        if (!sessionController.isTokenValid(token)) {
-            response.put("action", "ERROR");
-            response.put("type", "CREDENTIALS");
-            return response;
-        } else {
-            sessionController.registerSession(session, token);
-        }
-
-        try {
-            var username = sessionController.getUsernameByToken(token);
-            var data = UserModel.getInstance().get(username);
-            response.put("action", "GET");
-            response.put("get", data);
-        } catch (SQLException ex) {
-            response.put("action", "ERROR");
-            response.put("message", ex.getMessage());
-        }
-        return response;
-    }
-
     private JSONObject update(JSONObject object, Session session) {
         var response = new JSONObject();
 
@@ -90,7 +92,7 @@ public class UserController {
         }
 
         try {
-            UserModel.getInstance().update(
+            model.update(
                     sessionController.getUsernameByToken(token),
                     object.getString("name"),
                     object.getString("lastname"),

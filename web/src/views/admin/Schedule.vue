@@ -1,13 +1,13 @@
 <template>
-  <PlaneModal
+  <ScheduleModal
     v-model:visible="showModal"
     :selected="selected"
     :mode="mode"
-    :types="types"
+    :routes="routes"
   />
-  <div class="plane">
+  <div class="schedule">
     <br />
-    <div class="header p-text-center p-d-block">Planes</div>
+    <div class="header p-text-center p-d-block">Schedules</div>
     <br />
     <Toolbar>
       <template #left>
@@ -39,8 +39,14 @@
       dataKey="identifier"
     >
       <Column selectionMode="single" headerStyle="width: 3em" />
-      <Column field="name" header="Name" :sortable="true" />
-      <Column field="typeName" header="Plane Type" :sortable="true" />
+      <Column field="routeName" header="Route" :sortable="true" />
+      <Column field="departureTime" header="Departure Time" :sortable="true" />
+      <Column field="weekday" header="Weekday" :sortable="true" />
+      <Column field="discount" header="Discount" :sortable="true">
+        <template #body="slotProps">
+          {{ slotProps.data[slotProps.column.props.field] * 100 }}%
+        </template>
+      </Column>
     </DataTable>
   </div>
 </template>
@@ -53,16 +59,16 @@ import Button from "primevue/button";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 
-import PlaneModal from "@/components/admin/PlaneModal";
+import ScheduleModal from "@/components/admin/ScheduleModal";
 
 export default {
-  name: "Plane",
+  name: "Schedule",
   components: {
     Toolbar,
     Button,
     DataTable,
     Column,
-    PlaneModal,
+    ScheduleModal,
   },
   data() {
     return {
@@ -73,18 +79,18 @@ export default {
   },
   computed: {
     ...mapState("session", { session: (state) => state.session }),
-    ...mapState("plane", { rawdata: (state) => state.data }),
-    ...mapState("planeType", { rawtypes: (state) => state.data }),
+    ...mapState("schedule", { rawdata: (state) => state.data }),
+    ...mapState("route", { rawroutes: (state) => state.data }),
     canUpdate() {
       return !!this.selected;
     },
-    types() {
+    routes() {
       let result = [];
-      if (!this.rawtypes) return result;
-      for (let o of this.rawtypes) {
+      if (!this.rawroutes) return result;
+      for (let o of this.rawroutes) {
         result.push({
           ...o,
-          name: this.getPlaneTypeName(o),
+          name: this.getRouteName(o),
         });
       }
       return result;
@@ -95,7 +101,9 @@ export default {
       for (let o of this.rawdata) {
         result.push({
           ...o,
-          typeName: this.types.filter((e) => e.identifier == o.type)[0]?.name,
+          routeName: this.routes.filter((e) => e.identifier == o.route)[0]
+            ?.name,
+          departureTime: o.departure_time,
         });
       }
       return result;
@@ -121,8 +129,8 @@ export default {
       this.mode = "update";
       this.showModal = true;
     },
-    getPlaneTypeName(type) {
-      return `${type.brand} ${type.model} from ${type.year}`;
+    getRouteName(route) {
+      return `${route.origin} - ${route.destination} at $${route.price}`;
     },
   },
   created() {
@@ -132,11 +140,11 @@ export default {
   },
   mounted() {
     if (this.session) {
-      this.$store.dispatch("plane/sendMessage", {
+      this.$store.dispatch("schedule/sendMessage", {
         action: "GET_ALL",
         token: this.$store.state.session.session.token,
       });
-      this.$store.dispatch("planeType/sendMessage", {
+      this.$store.dispatch("route/sendMessage", {
         action: "GET_ALL",
         token: this.$store.state.session.session.token,
       });

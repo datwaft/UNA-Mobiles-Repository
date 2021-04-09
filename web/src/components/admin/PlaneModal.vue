@@ -21,6 +21,7 @@
                 id="name"
                 v-model.trim="name"
                 :class="{ 'p-invalid': !isNameValid }"
+                autofocus
               />
               <label for="name">Name</label>
             </span>
@@ -43,7 +44,9 @@
             />
             <span class="p-float-label">
               <Dropdown
+                id="type"
                 v-model="type"
+                :class="{ 'p-invalid': !isRouteValid }"
                 :options="types"
                 optionLabel="name"
                 optionValue="identifier"

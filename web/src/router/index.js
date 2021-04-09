@@ -33,6 +33,11 @@ const routes = [
     component: () => import("@/views/admin/Plane.vue"),
   },
   {
+    path: "/admin/schedule",
+    name: "Schedule",
+    component: () => import("@/views/admin/Schedule.vue"),
+  },
+  {
     path: "/about/history",
     name: "History",
     component: () => import("@/views/about/History.vue"),
