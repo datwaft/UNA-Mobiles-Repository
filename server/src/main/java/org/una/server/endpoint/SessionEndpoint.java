@@ -32,7 +32,7 @@ public class SessionEndpoint {
 
     @OnError
     public void onError(Session session, Throwable throwable) {
-        System.err.format("Error for session %s: %s", session.getId(), throwable.getMessage());
+        System.err.format("Error for session %s: %s%n", session.getId(), throwable.getMessage());
     }
 
     @OnClose

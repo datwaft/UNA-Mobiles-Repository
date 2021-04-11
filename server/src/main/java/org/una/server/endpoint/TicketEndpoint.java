@@ -18,6 +18,7 @@ public class TicketEndpoint {
     private static final TicketController controller = TicketController.getInstance();
 
     public void broadcast(JSONObject message) throws IOException, EncodeException {
+        if (message == null) return;
         for (var session: sessions) {
             session.getBasicRemote().sendObject(controller.processQuery(message));
         }
@@ -48,7 +49,7 @@ public class TicketEndpoint {
 
     @OnError
     public void onError(Session session, Throwable throwable) {
-        System.err.format("Error for session %s: %s", session.getId(), throwable.getMessage());
+        System.err.format("Error for session %s: %s%n", session.getId(), throwable.getMessage());
     }
 
     @OnClose

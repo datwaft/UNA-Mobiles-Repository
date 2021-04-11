@@ -101,6 +101,10 @@ ALTER TABLE "flight"
 ADD CONSTRAINT "flight_date_check"
 CHECK ( "outbound_date" < "inbound_date" );
 
+ALTER TABLE "flight"
+ADD CONSTRAINT "flight_inbound_null_check"
+CHECK ( "inbound_schedule" IS NOT NULL OR "inbound_date" IS NULL );
+
 \echo '=> Creating foreign keys...'
 
 ALTER TABLE "plane"

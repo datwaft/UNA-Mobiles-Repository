@@ -22,6 +22,7 @@ public class RouteEndpoint {
     private static final SessionController sessionController = SessionController.getInstance();
 
     public void sendToMany(JSONObject message, Function<Session, Boolean> condition) throws IOException, EncodeException {
+        if (message == null) return;
         for (var session: sessions) {
             if (condition.apply(session)) {
                 session.getBasicRemote().sendObject(controller.processQuery(message, session));
@@ -48,7 +49,7 @@ public class RouteEndpoint {
 
     @OnError
     public void onError(Session session, Throwable throwable) {
-        System.err.format("Error for session %s: %s", session.getId(), throwable.getMessage());
+        System.err.format("Error for session %s: %s%n", session.getId(), throwable.getMessage());
     }
 
     @OnClose

@@ -20,6 +20,9 @@ public class FlightController {
         try {
             return switch (object.getString("action")) {
                 case "VIEW_ALL" -> viewAll();
+                case "GET_ALL" -> getAll(object.optString("token"), session);
+                case "CREATE" -> create(object, session);
+                case "UPDATE" -> update(object, session);
                 default -> null;
             };
         } catch (JSONException ex) {
@@ -86,8 +89,10 @@ public class FlightController {
                     object.getInt("plane"),
                     LocalDate.parse(object.getString("outbound_date")),
                     object.getInt("outbound_schedule"),
-                    LocalDate.parse(object.getString("inbound_date")),
-                    object.getInt("inbound_schedule")
+                    object.optString("inbound_date").isEmpty() ?
+                            null :
+                            LocalDate.parse(object.getString("inbound_date")),
+                    object.optInt("inbound_schedule") == 0 ? null : object.getInt("inbound_schedule")
             );
             response.put("action", "CREATE");
         } catch (SQLException ex) {
@@ -120,8 +125,10 @@ public class FlightController {
                     object.getInt("plane"),
                     LocalDate.parse(object.getString("outbound_date")),
                     object.getInt("outbound_schedule"),
-                    LocalDate.parse(object.getString("inbound_date")),
-                    object.getInt("inbound_schedule")
+                    object.optString("inbound_date").isEmpty() ?
+                            null :
+                            LocalDate.parse(object.getString("inbound_date")),
+                    object.optInt("inbound_schedule") == 0 ? null : object.getInt("inbound_schedule")
             );
             response.put("action", "UPDATE");
         } catch (SQLException ex) {

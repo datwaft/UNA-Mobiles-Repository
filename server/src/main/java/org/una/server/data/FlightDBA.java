@@ -48,8 +48,8 @@ public class FlightDBA {
             object.put("plane", rs.getInt("plane"));
             object.put("outbound_date", rs.getDate("outbound_date"));
             object.put("outbound_schedule", rs.getInt("outbound_schedule"));
-            object.put("inbound_date", rs.getDate("inbound_date"));
-            object.put("inbound_schedule", rs.getInt("inbound_schedule"));
+            object.put("inbound_date", rs.getObject("inbound_date", LocalDate.class));
+            object.put("inbound_schedule", rs.getObject("inbound_schedule", Integer.class));
             result.put(object);
         }
         rs.close();
@@ -63,8 +63,16 @@ public class FlightDBA {
         query.setInt(1, plane);
         query.setObject(2, outboundDate);
         query.setInt(3, outboundSchedule);
-        query.setObject(4, inboundDate);
-        query.setInt(5, inboundSchedule);
+        if (inboundDate == null) {
+            query.setNull(4, Types.DATE);
+        } else {
+            query.setObject(4, inboundDate);
+        }
+        if (inboundSchedule == null) {
+            query.setNull(5, Types.INTEGER);
+        } else {
+            query.setInt(5, inboundSchedule);
+        }
         query.execute();
         query.close();
     }
@@ -76,8 +84,16 @@ public class FlightDBA {
         query.setInt(2, plane);
         query.setObject(3, outboundDate);
         query.setInt(4, outboundSchedule);
-        query.setObject(5, inboundDate);
-        query.setInt(6, inboundSchedule);
+        if (inboundDate == null) {
+            query.setNull(5, Types.DATE);
+        } else {
+            query.setObject(5, inboundDate);
+        }
+        if (inboundSchedule == null) {
+            query.setNull(6, Types.INTEGER);
+        } else {
+            query.setInt(6, inboundSchedule);
+        }
         query.execute();
         query.close();
     }
