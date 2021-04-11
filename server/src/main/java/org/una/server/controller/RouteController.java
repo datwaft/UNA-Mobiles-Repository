@@ -16,6 +16,7 @@ public class RouteController {
     private static final SessionController sessionController = SessionController.getInstance();
 
     public JSONObject processQuery(JSONObject object, Session session) {
+        if (object == null) return null;
         try {
             return switch (object.getString("action")) {
                 case "GET_ALL" -> getAll(object.optString("token"), session);

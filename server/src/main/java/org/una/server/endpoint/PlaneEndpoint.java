@@ -39,16 +39,10 @@ public class PlaneEndpoint {
         var response = controller.processQuery(message, session);
         if (response != null) {
             session.getBasicRemote().sendObject(response);
-            if (response.optString("action").equals("CREATE")) {
-                var _message = new JSONObject();
-                _message.put("action", "GET_ALL");
-                sendToMany(_message, sessionController::isSessionAdmin);
-            }
-            if (response.optString("action").equals("UPDATE")) {
-                var _message = new JSONObject();
-                _message.put("action", "GET_ALL");
-                sendToMany(_message, sessionController::isSessionAdmin);
-            }
+            sendToMany(switch (response.optString("action")) {
+                case "CREATE", "UPDATE" -> new JSONObject().put("action", "GET_ALL");
+                default -> null;
+            }, sessionController::isSessionAdmin);
         }
     }
 

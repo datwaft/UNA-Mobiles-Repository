@@ -16,6 +16,7 @@ public class ScheduleController {
     private static final SessionController sessionController = SessionController.getInstance();
 
     public JSONObject processQuery(JSONObject object, Session session) {
+        if (object == null) return null;
         try {
             return switch (object.getString("action")) {
                 case "VIEW_ALL_WITH_DISCOUNT" -> viewAllWithDiscount();

@@ -15,6 +15,7 @@ public class UserController {
     private static final SessionController sessionController = SessionController.getInstance();
 
     public JSONObject processQuery(JSONObject object, Session session) {
+        if (object == null) return null;
         try {
             return switch (object.getString("action")) {
                 case "GET" -> get(object.optString("token"), session);

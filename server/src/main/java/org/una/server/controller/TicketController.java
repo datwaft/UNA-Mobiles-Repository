@@ -12,6 +12,7 @@ public class TicketController {
     private static final TicketModel model = TicketModel.getInstance();
 
     public JSONObject processQuery(JSONObject object) {
+        if (object == null) return null;
         try {
             return switch (object.getString("action")) {
                 case "VIEW_ALL_PER_FLIGHT" -> viewAllPerFlight(object);

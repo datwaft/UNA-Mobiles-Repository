@@ -36,10 +36,8 @@ public class PurchaseEndpoint {
         var response = controller.processQuery(message, session);
         if (response != null) {
             session.getBasicRemote().sendObject(response);
-            if (response.opt("action") == "CREATE") {
-                var _message = new JSONObject();
-                _message.put("action", "VIEW_ALL");
-                broadcast(_message);
+            if (response.optString("action").equals("CREATE")) {
+                broadcast(new JSONObject().put("action", "VIEW_ALL"));
             }
         }
     }

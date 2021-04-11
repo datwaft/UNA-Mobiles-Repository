@@ -21,6 +21,7 @@ public class SessionController {
     private final Map<String, Pair<String, String>> tokenData = new HashMap<>();
 
     public JSONObject processQuery(JSONObject object, Session session) {
+        if (object == null) return null;
         try {
             return switch (object.getString("action")) {
                 case "LOGIN" -> login(object.optString("username"), object.optString("password"), session);

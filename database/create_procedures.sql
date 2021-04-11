@@ -111,20 +111,6 @@ AS $$
   END;
 $$ LANGUAGE plpgsql;
 
-\echo '-> Creating flight functions and procedures...'
-
-CREATE OR REPLACE FUNCTION "view_all_flight" ()
-RETURNS REFCURSOR
-AS $$
-  DECLARE
-    "out_cursor" REFCURSOR;
-  BEGIN
-    OPEN "out_cursor" FOR
-      SELECT * FROM "view_flight";
-    RETURN "out_cursor";
-  END;
-$$ LANGUAGE plpgsql;
-
 \echo '-> Creating purchase functions and procedures...'
 
 CREATE OR REPLACE FUNCTION "view_all_purchase" (
@@ -437,6 +423,77 @@ AS $$
       "departure_time" = "in_departure_time",
       "weekday"        = "in_weekday",
       "discount"       = "in_discount"
+    WHERE "identifier" = "in_identifier";
+  END;
+$$ LANGUAGE plpgsql;
+
+\echo '-> Creating flight functions and procedures...'
+
+CREATE OR REPLACE FUNCTION "view_all_flight" ()
+RETURNS REFCURSOR
+AS $$
+  DECLARE
+    "out_cursor" REFCURSOR;
+  BEGIN
+    OPEN "out_cursor" FOR
+      SELECT * FROM "view_flight";
+    RETURN "out_cursor";
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION "get_all_flight" ()
+RETURNS REFCURSOR
+AS $$
+  DECLARE
+    "out_cursor" REFCURSOR;
+  BEGIN
+    OPEN "out_cursor" FOR
+      SELECT * FROM "flight" ORDER BY "identifier";
+    RETURN "out_cursor";
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE PROCEDURE "create_flight" (
+  "in_plane"             INTEGER,
+  "in_outbound_date"     DATE,
+  "in_outbound_schedule" INTEGER,
+  "in_inbound_date"      DATE,
+  "in_inbound_schedule"  INTEGER
+)
+AS $$
+  BEGIN
+    INSERT INTO "flight" (
+      "plane",
+      "outbound_date",
+      "outbound_schedule",
+      "inbound_date",
+      "inbound_schedule"
+    ) VALUES (
+      "in_plane",
+      "in_outbound_date",
+      "in_outbound_schedule",
+      "in_inbound_date",
+      "in_inbound_schedule"
+    );
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE PROCEDURE "update_flight" (
+  "in_identifier"        INTEGER,
+  "in_plane"             INTEGER,
+  "in_outbound_date"     DATE,
+  "in_outbound_schedule" INTEGER,
+  "in_inbound_date"      DATE,
+  "in_inbound_schedule"  INTEGER
+)
+AS $$
+  BEGIN
+    UPDATE "flight" SET
+      "plane"             = "in_plane",
+      "outbound_date"     = "in_outbound_date",
+      "outbound_schedule" = "in_outbound_schedule",
+      "inbound_date"      = "in_inbound_date",
+      "inbound_schedule"  = "in_inbound_schedule"
     WHERE "identifier" = "in_identifier";
   END;
 $$ LANGUAGE plpgsql;
