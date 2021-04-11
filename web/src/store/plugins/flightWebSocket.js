@@ -24,6 +24,15 @@ export default function () {
         case "VIEW_ALL":
           store.commit("flight/setView", data.view);
           break;
+        case "GET_ALL":
+          store.commit("flight/setData", data.data);
+          break;
+        case "CREATE":
+          store.dispatch("flight/emitCreated", data);
+          break;
+        case "UPDATE":
+          store.dispatch("flight/emitUpdated", data);
+          break;
         case "ERROR":
           store.dispatch("processError", data);
           break;

@@ -82,7 +82,7 @@ export default {
             { label: "Planes", to: "/admin/plane" },
             { label: "Routes", to: "/admin/route" },
             { label: "Schedules", to: "/admin/schedule" },
-            { label: "Flights" },
+            { label: "Flights", to: "/admin/flight" },
           ],
         },
         {
