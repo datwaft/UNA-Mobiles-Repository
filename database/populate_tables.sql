@@ -108,6 +108,11 @@ INSERT INTO "route" (
   'USA',
   '08:30:00',
   120
+), (
+  'USA',
+  'Spain',
+  '09:00:00',
+  200
 );
 
 INSERT INTO "plane" (

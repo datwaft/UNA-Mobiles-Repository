@@ -497,3 +497,53 @@ AS $$
     WHERE "identifier" = "in_identifier";
   END;
 $$ LANGUAGE plpgsql;
+
+\echo '-> Creating reports functions...'
+
+CREATE OR REPLACE FUNCTION "purchase_count_per_month_in_last_year" ()
+RETURNS REFCURSOR
+AS $$
+  DECLARE
+    "out_cursor" REFCURSOR;
+  BEGIN
+    OPEN "out_cursor" FOR
+      SELECT * FROM "purchase_count_per_month_in_last_year";
+    RETURN "out_cursor";
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION "revenue_per_month_in_last_year" ()
+RETURNS REFCURSOR
+AS $$
+  DECLARE
+    "out_cursor" REFCURSOR;
+  BEGIN
+    OPEN "out_cursor" FOR
+      SELECT * FROM "revenue_per_month_in_last_year";
+    RETURN "out_cursor";
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION "clients_per_plane" ()
+RETURNS REFCURSOR
+AS $$
+  DECLARE
+    "out_cursor" REFCURSOR;
+  BEGIN
+    OPEN "out_cursor" FOR
+      SELECT * FROM "clients_per_plane";
+    RETURN "out_cursor";
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION "top_5_routes_per_ticket_number" ()
+RETURNS REFCURSOR
+AS $$
+  DECLARE
+    "out_cursor" REFCURSOR;
+  BEGIN
+    OPEN "out_cursor" FOR
+      SELECT * FROM "top_5_routes_per_ticket_number";
+    RETURN "out_cursor";
+  END;
+$$ LANGUAGE plpgsql;
