@@ -125,5 +125,10 @@ export default {
       });
     },
   },
+  mounted() {
+    this.$store.dispatch("flight/sendMessage", {
+      action: "VIEW_ALL",
+    });
+  },
 };
 </script>

@@ -3,7 +3,7 @@ package org.una.server.endpoint;
 import jakarta.websocket.*;
 import jakarta.websocket.server.ServerEndpoint;
 import org.json.JSONObject;
-import org.una.server.controller.RouteController;
+import org.una.server.controller.ReportController;
 import org.una.server.endpoint.decode.JsonObjectDecoder;
 import org.una.server.endpoint.encode.JsonObjectEncoder;
 
@@ -11,7 +11,7 @@ import java.io.IOException;
 
 @ServerEndpoint(value = "/report", decoders = {JsonObjectDecoder.class}, encoders = {JsonObjectEncoder.class})
 public class ReportEndpoint {
-    private static final RouteController controller = RouteController.getInstance();
+    private static final ReportController controller = ReportController.getInstance();
 
     @OnOpen
     public void onOpen(Session session) {

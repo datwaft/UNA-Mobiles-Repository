@@ -18,6 +18,18 @@ public class ReportModel {
         return this.dba.purchaseCountPerMonthInLastYear();
     }
 
+    public JSONArray revenuePerMonthInLastYear() throws SQLException {
+        return this.dba.revenuePerMonthInLastYear();
+    }
+
+    public JSONArray clientsPerPlane() throws SQLException {
+        return this.dba.clientsPerPlane();
+    }
+
+    public JSONArray top5RoutesPerTicketNumber() throws SQLException {
+        return this.dba.top5RoutesPerTicketNumber();
+    }
+
     public static ReportModel getInstance() {
         if (instance == null) instance = new ReportModel();
         return instance;

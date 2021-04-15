@@ -54,5 +54,10 @@ export default {
       return result;
     },
   },
+  mounted() {
+    this.$store.dispatch("schedule/sendMessage", {
+      action: "VIEW_ALL_WITH_DISCOUNT",
+    });
+  },
 };
 </script>

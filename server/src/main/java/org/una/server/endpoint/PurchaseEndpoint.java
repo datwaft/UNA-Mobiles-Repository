@@ -31,10 +31,10 @@ public class PurchaseEndpoint {
             session.getBasicRemote().sendObject(response);
             if (response.optString("action").equals("CREATE")) {
                 controller.broadcast(new JSONObject().put("action", "VIEW_ALL"));
-                reportController.sendToMany(switch (response.optString("action")) {
-                    case "CREATE" -> new JSONObject().put("action", "PURCHASE_COUNT_PER_MONTH_IN_LAST_YEAR");
-                    default -> null;
-                }, sessionController::isSessionAdmin);
+                reportController.sendToMany(new JSONObject().put("action", "PURCHASE_COUNT_PER_MONTH_IN_LAST_YEAR"), sessionController::isSessionAdmin);
+                reportController.sendToMany(new JSONObject().put("action", "REVENUE_PER_MONTH_IN_LAST_YEAR"), sessionController::isSessionAdmin);
+                reportController.sendToMany(new JSONObject().put("action", "CLIENTS_PER_PLANE"), sessionController::isSessionAdmin);
+                reportController.sendToMany(new JSONObject().put("action", "TOP_5_ROUTES_PER_TICKET_NUMBER"), sessionController::isSessionAdmin);
             }
         }
     }

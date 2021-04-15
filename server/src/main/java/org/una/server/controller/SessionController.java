@@ -22,10 +22,10 @@ public class SessionController {
 
     private static final UserModel model = UserModel.getInstance();
 
-    private Map<Session, String> sessionTokens = new HashMap<>();
-    private final Map<String, Pair<String, String>> tokenData = new HashMap<>();
+    private static Map<Session, String> sessionTokens = new HashMap<>();
+    private static final Map<String, Pair<String, String>> tokenData = new HashMap<>();
 
-    private final Set<Session> sessions = new HashSet<>();
+    private static final Set<Session> sessions = new HashSet<>();
 
     public void sendToMany(JSONObject message, Predicate<Session> condition) throws EncodeException, IOException {
         if (message == null) return;
@@ -177,7 +177,7 @@ public class SessionController {
         if (!sessionTokens.containsKey(session)) return null;
 
         var token = sessionTokens.get(session);
-        this.sessionTokens = sessionTokens.entrySet().stream()
+        sessionTokens = sessionTokens.entrySet().stream()
                 .filter((e) -> !e.getValue().equals(token))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         tokenData.remove(token);

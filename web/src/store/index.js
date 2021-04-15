@@ -28,6 +28,9 @@ import routeWebSocket from "./plugins/routeWebSocket";
 import plane from "./modules/plane";
 import planeWebSocket from "./plugins/planeWebSocket";
 
+import report from "./modules/report";
+import reportWebSocket from "./plugins/reportWebSocket";
+
 let store = {
   strict: process.env.NODE_ENV !== "production",
   state: () => ({
@@ -86,6 +89,7 @@ let store = {
     planeType,
     route,
     plane,
+    report,
   },
   plugins: [
     createLogger(),
@@ -98,6 +102,7 @@ let store = {
     planeTypeWebSocket(),
     routeWebSocket(),
     planeWebSocket(),
+    reportWebSocket(),
   ],
 };
 
