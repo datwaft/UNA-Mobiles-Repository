@@ -31,6 +31,9 @@
         </span>
       </template>
       <template v-else>
+        <div class="username p-text-uppercase">
+          {{ session?.username }}
+        </div>
         <Button icon="pi pi-sign-out" label="Logout" @click="logout()" />
       </template>
     </template>
@@ -176,5 +179,16 @@ a {
   color: var(--primary-color);
   margin-right: 0.25rem;
   user-select: none;
+}
+
+.username {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--secondary-color);
+  user-select: none;
+  margin-right: 1rem;
 }
 </style>
