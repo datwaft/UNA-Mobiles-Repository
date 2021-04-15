@@ -13,13 +13,11 @@ import java.util.Set;
 
 @ServerEndpoint(value = "/session", decoders = {JsonObjectDecoder.class}, encoders = {JsonObjectEncoder.class})
 public class SessionEndpoint {
-    private static final Set<Session> sessions = new HashSet<>();
-
     private static final SessionController controller = SessionController.getInstance();
 
     @OnOpen
     public void onOpen(Session session) {
-        sessions.add(session);
+        controller.addSession(session);
     }
 
     @OnMessage
@@ -37,7 +35,7 @@ public class SessionEndpoint {
 
     @OnClose
     public void onClose(Session session) {
-        sessions.remove(session);
+        controller.removeSession(session);
         controller.logout(session);
     }
 }

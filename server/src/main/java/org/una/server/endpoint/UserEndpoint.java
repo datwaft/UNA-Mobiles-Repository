@@ -16,24 +16,13 @@ import java.util.function.Function;
 
 @ServerEndpoint(value = "/user", decoders = {JsonObjectDecoder.class}, encoders = {JsonObjectEncoder.class})
 public class UserEndpoint {
-    private static final Set<Session> sessions = new HashSet<>();
-
     private static final UserController controller = UserController.getInstance();
 
     private static final SessionController sessionController = SessionController.getInstance();
 
-    public void sendToMany(JSONObject message, Function<Session, Boolean> condition) throws IOException, EncodeException {
-        if (message == null) return;
-        for (var session: sessions) {
-            if (condition.apply(session)) {
-                session.getBasicRemote().sendObject(controller.processQuery(message, session));
-            }
-        }
-    }
-
     @OnOpen
     public void onOpen(Session session) {
-        sessions.add(session);
+        controller.addSession(session);
     }
 
     @OnMessage
@@ -42,7 +31,7 @@ public class UserEndpoint {
         if (response != null) {
             session.getBasicRemote().sendObject(response);
             if (response.optString("action").equals("UPDATE")) {
-                sendToMany(new JSONObject().put("action", "GET"), (s) -> sessionController.shareUsername(s, session));
+                controller.sendToMany(new JSONObject().put("action", "GET"), (s) -> sessionController.shareUsername(s, session));
             }
         }
     }
@@ -54,6 +43,6 @@ public class UserEndpoint {
 
     @OnClose
     public void onClose(Session session) {
-        sessions.remove(session);
+        controller.removeSession(session);
     }
 }

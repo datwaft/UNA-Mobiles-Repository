@@ -3,18 +3,15 @@ package org.una.server.endpoint;
 import jakarta.websocket.*;
 import jakarta.websocket.server.ServerEndpoint;
 import org.json.JSONObject;
-import org.una.server.controller.PlaneController;
-import org.una.server.controller.SessionController;
+import org.una.server.controller.RouteController;
 import org.una.server.endpoint.decode.JsonObjectDecoder;
 import org.una.server.endpoint.encode.JsonObjectEncoder;
 
 import java.io.IOException;
 
-@ServerEndpoint(value = "/plane", decoders = {JsonObjectDecoder.class}, encoders = {JsonObjectEncoder.class})
-public class PlaneEndpoint {
-    private static final PlaneController controller = PlaneController.getInstance();
-
-    private static final SessionController sessionController = SessionController.getInstance();
+@ServerEndpoint(value = "/report", decoders = {JsonObjectDecoder.class}, encoders = {JsonObjectEncoder.class})
+public class ReportEndpoint {
+    private static final RouteController controller = RouteController.getInstance();
 
     @OnOpen
     public void onOpen(Session session) {
@@ -26,10 +23,6 @@ public class PlaneEndpoint {
         var response = controller.processQuery(message, session);
         if (response != null) {
             session.getBasicRemote().sendObject(response);
-            controller.sendToMany(switch (response.optString("action")) {
-                case "CREATE", "UPDATE" -> new JSONObject().put("action", "GET_ALL");
-                default -> null;
-            }, sessionController::isSessionAdmin);
         }
     }
 

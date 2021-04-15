@@ -436,7 +436,7 @@ AS $$
     "out_cursor" REFCURSOR;
   BEGIN
     OPEN "out_cursor" FOR
-      SELECT * FROM "view_flight";
+      SELECT * FROM "view_flight" ORDER BY "identifier";
     RETURN "out_cursor";
   END;
 $$ LANGUAGE plpgsql;

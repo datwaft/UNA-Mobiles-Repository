@@ -1,11 +1,11 @@
 <template>
-  <!-- <FlightModal
+  <FlightModal
     v-model:visible="showModal"
     :selected="selected"
     :mode="mode"
     :planes="planes"
     :schedules="schedules"
-  /> -->
+  />
   <div class="flight">
     <br />
     <div class="header p-text-center p-d-block">Flights</div>
@@ -65,7 +65,7 @@ import Button from "primevue/button";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 
-// import FlightModal from "@/components/admin/FlightModal";
+import FlightModal from "@/components/admin/FlightModal";
 
 export default {
   name: "Flight",
@@ -74,7 +74,7 @@ export default {
     Button,
     DataTable,
     Column,
-    // FlightModal,
+    FlightModal,
   },
   data() {
     return {
@@ -98,6 +98,8 @@ export default {
       for (let o of this.rawschedules) {
         result.push({
           ...o,
+          origin: this.getScheduleOrigin(o),
+          destination: this.getScheduleDestination(o),
           name: this.getScheduleName(o),
         });
       }
@@ -109,16 +111,20 @@ export default {
       for (let o of this.rawdata) {
         result.push({
           ...o,
-          planeName: this.planes.filter((e) => e.identifier == o.plane)[0]
+          planeName: this.planes?.filter((e) => e.identifier == o.plane)[0]
             ?.name,
           outboundDate: o.outbound_date,
-          outboundScheduleName: this.schedules.filter(
+          outbound_date: o.outbound_date ?? null,
+          outboundScheduleName: this.schedules?.filter(
             (e) => e.identifier == o.outbound_schedule
           )[0]?.name,
+          outbound_schedule: o.outbound_schedule ?? null,
           inboundDate: o.inbound_date ?? "N/A",
+          inbound_date: o.inbound_date ?? null,
           inboundScheduleName:
             this.schedules?.filter((e) => e.identifier == o.inbound_schedule)[0]
               ?.name ?? "N/A",
+          inbound_schedule: o.inbound_schedule ?? null,
         });
       }
       return result;
@@ -147,6 +153,14 @@ export default {
     getScheduleName(schedule) {
       let route = this.routes?.filter((e) => e.identifier == schedule.route)[0];
       return `${route?.origin} - ${route?.destination} on ${schedule?.weekday}s`;
+    },
+    getScheduleOrigin(schedule) {
+      let route = this.routes?.filter((e) => e.identifier == schedule.route)[0];
+      return route?.origin;
+    },
+    getScheduleDestination(schedule) {
+      let route = this.routes?.filter((e) => e.identifier == schedule.route)[0];
+      return route?.destination;
     },
   },
   created() {

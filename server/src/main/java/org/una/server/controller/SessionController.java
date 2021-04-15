@@ -1,5 +1,6 @@
 package org.una.server.controller;
 
+import jakarta.websocket.EncodeException;
 import jakarta.websocket.Session;
 import org.javatuples.Pair;
 import org.json.JSONException;
@@ -7,9 +8,13 @@ import org.json.JSONObject;
 import org.una.server.model.UserModel;
 import org.una.server.util.TokenUtils;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class SessionController {
@@ -19,6 +24,32 @@ public class SessionController {
 
     private Map<Session, String> sessionTokens = new HashMap<>();
     private final Map<String, Pair<String, String>> tokenData = new HashMap<>();
+
+    private final Set<Session> sessions = new HashSet<>();
+
+    public void sendToMany(JSONObject message, Predicate<Session> condition) throws EncodeException, IOException {
+        if (message == null) return;
+        for (var session: sessions) {
+            if (condition.test(session)) {
+                session.getBasicRemote().sendObject(this.processQuery(message, session));
+            }
+        }
+    }
+
+    public void broadcast(JSONObject message) throws EncodeException, IOException {
+        if (message == null) return;
+        for (var session: sessions) {
+            session.getBasicRemote().sendObject(this.processQuery(message, session));
+        }
+    }
+
+    public void addSession(Session session) {
+        sessions.add(session);
+    }
+
+    public void removeSession(Session session) {
+        sessions.remove(session);
+    }
 
     public JSONObject processQuery(JSONObject object, Session session) {
         if (object == null) return null;

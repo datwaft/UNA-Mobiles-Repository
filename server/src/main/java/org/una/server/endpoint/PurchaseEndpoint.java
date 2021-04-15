@@ -4,32 +4,24 @@ import jakarta.websocket.*;
 import jakarta.websocket.server.ServerEndpoint;
 import org.json.JSONObject;
 import org.una.server.controller.PurchaseController;
+import org.una.server.controller.ReportController;
 import org.una.server.controller.SessionController;
 import org.una.server.endpoint.decode.JsonObjectDecoder;
 import org.una.server.endpoint.encode.JsonObjectEncoder;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 @ServerEndpoint(value = "/purchase", decoders = {JsonObjectDecoder.class}, encoders = {JsonObjectEncoder.class})
 public class PurchaseEndpoint {
-    private static final Set<Session> sessions = new HashSet<>();
-
     private static final PurchaseController controller = PurchaseController.getInstance();
 
     private static final SessionController sessionController = SessionController.getInstance();
 
-    public void broadcast(JSONObject message) throws IOException, EncodeException {
-        if (message == null) return;
-        for (var session: sessions) {
-            session.getBasicRemote().sendObject(controller.processQuery(message, session));
-        }
-    }
+    private static final ReportController reportController = ReportController.getInstance();
 
     @OnOpen
     public void onOpen(Session session) {
-        sessions.add(session);
+        controller.addSession(session);
     }
 
     @OnMessage
@@ -38,7 +30,11 @@ public class PurchaseEndpoint {
         if (response != null) {
             session.getBasicRemote().sendObject(response);
             if (response.optString("action").equals("CREATE")) {
-                broadcast(new JSONObject().put("action", "VIEW_ALL"));
+                controller.broadcast(new JSONObject().put("action", "VIEW_ALL"));
+                reportController.sendToMany(switch (response.optString("action")) {
+                    case "CREATE" -> new JSONObject().put("action", "PURCHASE_COUNT_PER_MONTH_IN_LAST_YEAR");
+                    default -> null;
+                }, sessionController::isSessionAdmin);
             }
         }
     }
@@ -50,6 +46,6 @@ public class PurchaseEndpoint {
 
     @OnClose
     public void onClose(Session session) {
-        sessions.remove(session);
+        controller.removeSession(session);
     }
 }
