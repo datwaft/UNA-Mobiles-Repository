@@ -25,13 +25,13 @@ public class TicketEndpoint {
         var response = controller.processQuery(message);
         if (response != null) {
             session.getBasicRemote().sendObject(response);
-            if (response.optString("type").equals("CREATE")) {
+            if (response.optString("action").equals("CREATE")) {
                 controller.broadcast(new JSONObject()
-                        .put("type", "VIEW_ALL_PER_PURCHASE")
+                        .put("action", "VIEW_ALL_PER_PURCHASE")
                         .put("purchase", message.get("purchase"))
                 );
                 controller.broadcast(new JSONObject()
-                        .put("type", "VIEW_ALL_PER_FLIGHT")
+                        .put("action", "VIEW_ALL_PER_FLIGHT")
                         .put("flight", message.get("flight"))
                 );
             }
