@@ -8,14 +8,35 @@ import org.una.server.endpoint.decode.JsonObjectDecoder;
 import org.una.server.endpoint.encode.JsonObjectEncoder;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Predicate;
 
 @ServerEndpoint(value = "/report", decoders = {JsonObjectDecoder.class}, encoders = {JsonObjectEncoder.class})
 public class ReportEndpoint {
     private static final ReportController controller = ReportController.getInstance();
 
+    private final Set<Session> sessions = new HashSet<>();
+
+    public void sendToMany(JSONObject message, Predicate<Session> condition) throws EncodeException, IOException {
+        if (message == null) return;
+        for (var session: sessions) {
+            if (condition.test(session)) {
+                session.getBasicRemote().sendObject(controller.processQuery(message, session));
+            }
+        }
+    }
+
+    public void broadcast(JSONObject message) throws EncodeException, IOException {
+        if (message == null) return;
+        for (var session: sessions) {
+            session.getBasicRemote().sendObject(controller.processQuery(message, session));
+        }
+    }
+
     @OnOpen
     public void onOpen(Session session) {
-        controller.addSession(session);
+        sessions.add(session);
     }
 
     @OnMessage
@@ -33,6 +54,6 @@ public class ReportEndpoint {
 
     @OnClose
     public void onClose(Session session) {
-        controller.removeSession(session);
+        sessions.remove(session);
     }
 }

@@ -38,7 +38,7 @@ export default function () {
     };
     // Message listener
     store.subscribeAction((action, state) => {
-      if (!state.session.connected) return;
+      if (!state.report.connected) return;
       if (action.type === "report/sendMessage") {
         socket.send(JSON.stringify(action.payload));
       }

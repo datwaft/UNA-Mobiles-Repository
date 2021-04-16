@@ -21,32 +21,6 @@ public class FlightController {
 
     private static final SessionController sessionController = SessionController.getInstance();
 
-    private final Set<Session> sessions = new HashSet<>();
-
-    public void sendToMany(JSONObject message, Predicate<Session> condition) throws EncodeException, IOException {
-        if (message == null) return;
-        for (var session: sessions) {
-            if (condition.test(session)) {
-                session.getBasicRemote().sendObject(this.processQuery(message, session));
-            }
-        }
-    }
-
-    public void broadcast(JSONObject message) throws EncodeException, IOException {
-        if (message == null) return;
-        for (var session: sessions) {
-            session.getBasicRemote().sendObject(this.processQuery(message, session));
-        }
-    }
-
-    public void addSession(Session session) {
-        sessions.add(session);
-    }
-
-    public void removeSession(Session session) {
-        sessions.remove(session);
-    }
-
     public JSONObject processQuery(JSONObject object, Session session) {
         if (object == null) return null;
         try {

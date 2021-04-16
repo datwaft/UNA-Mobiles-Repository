@@ -32,7 +32,7 @@ export default function () {
     };
     // Message listener
     store.subscribeAction((action, state) => {
-      if (!state.session.connected) return;
+      if (!state.route.connected) return;
       if (action.type === "route/sendMessage") {
         socket.send(JSON.stringify(action.payload));
       }

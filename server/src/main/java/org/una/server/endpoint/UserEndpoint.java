@@ -12,7 +12,7 @@ import org.una.server.endpoint.encode.JsonObjectEncoder;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 @ServerEndpoint(value = "/user", decoders = {JsonObjectDecoder.class}, encoders = {JsonObjectEncoder.class})
 public class UserEndpoint {
@@ -20,9 +20,27 @@ public class UserEndpoint {
 
     private static final SessionController sessionController = SessionController.getInstance();
 
+    private final Set<Session> sessions = new HashSet<>();
+
+    public void sendToMany(JSONObject message, Predicate<Session> condition) throws EncodeException, IOException {
+        if (message == null) return;
+        for (var session: sessions) {
+            if (condition.test(session)) {
+                session.getBasicRemote().sendObject(controller.processQuery(message, session));
+            }
+        }
+    }
+
+    public void broadcast(JSONObject message) throws EncodeException, IOException {
+        if (message == null) return;
+        for (var session: sessions) {
+            session.getBasicRemote().sendObject(controller.processQuery(message, session));
+        }
+    }
+
     @OnOpen
     public void onOpen(Session session) {
-        controller.addSession(session);
+        sessions.add(session);
     }
 
     @OnMessage
@@ -31,7 +49,7 @@ public class UserEndpoint {
         if (response != null) {
             session.getBasicRemote().sendObject(response);
             if (response.optString("action").equals("UPDATE")) {
-                controller.sendToMany(new JSONObject().put("action", "GET"), (s) -> sessionController.shareUsername(s, session));
+                this.sendToMany(new JSONObject().put("action", "GET"), (s) -> sessionController.shareUsername(s, session));
             }
         }
     }
@@ -43,6 +61,6 @@ public class UserEndpoint {
 
     @OnClose
     public void onClose(Session session) {
-        controller.removeSession(session);
+        sessions.remove(session);
     }
 }

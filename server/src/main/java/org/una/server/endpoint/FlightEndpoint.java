@@ -11,7 +11,7 @@ import org.una.server.endpoint.encode.JsonObjectEncoder;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 @ServerEndpoint(value = "/flight", decoders = {JsonObjectDecoder.class}, encoders = {JsonObjectEncoder.class})
 public class FlightEndpoint {
@@ -19,9 +19,27 @@ public class FlightEndpoint {
 
     private static final SessionController sessionController = SessionController.getInstance();
 
+    private final Set<Session> sessions = new HashSet<>();
+
+    public void sendToMany(JSONObject message, Predicate<Session> condition) throws EncodeException, IOException {
+        if (message == null) return;
+        for (var session: sessions) {
+            if (condition.test(session)) {
+                session.getBasicRemote().sendObject(controller.processQuery(message, session));
+            }
+        }
+    }
+
+    public void broadcast(JSONObject message) throws EncodeException, IOException {
+        if (message == null) return;
+        for (var session: sessions) {
+            session.getBasicRemote().sendObject(controller.processQuery(message, session));
+        }
+    }
+
     @OnOpen
     public void onOpen(Session session) {
-        controller.addSession(session);
+        sessions.add(session);
     }
 
     @OnMessage
@@ -29,11 +47,11 @@ public class FlightEndpoint {
         var response = controller.processQuery(message, session);
         if (response != null) {
             session.getBasicRemote().sendObject(response);
-            controller.sendToMany(switch (response.optString("action")) {
+            this.sendToMany(switch (response.optString("action")) {
                 case "CREATE", "UPDATE" -> new JSONObject().put("action", "GET_ALL");
                 default -> null;
             }, sessionController::isSessionAdmin);
-            controller.broadcast(switch (response.optString("action")) {
+            this.broadcast(switch (response.optString("action")) {
                 case "CREATE", "UPDATE" -> new JSONObject().put("action", "VIEW_ALL");
                 default -> null;
             });
@@ -47,6 +65,6 @@ public class FlightEndpoint {
 
     @OnClose
     public void onClose(Session session, CloseReason closeReason) {
-        controller.removeSession(session);
+        sessions.remove(session);
     }
 }

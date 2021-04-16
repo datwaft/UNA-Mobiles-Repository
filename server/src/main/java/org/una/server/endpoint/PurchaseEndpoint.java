@@ -4,24 +4,39 @@ import jakarta.websocket.*;
 import jakarta.websocket.server.ServerEndpoint;
 import org.json.JSONObject;
 import org.una.server.controller.PurchaseController;
-import org.una.server.controller.ReportController;
-import org.una.server.controller.SessionController;
 import org.una.server.endpoint.decode.JsonObjectDecoder;
 import org.una.server.endpoint.encode.JsonObjectEncoder;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Predicate;
 
 @ServerEndpoint(value = "/purchase", decoders = {JsonObjectDecoder.class}, encoders = {JsonObjectEncoder.class})
 public class PurchaseEndpoint {
     private static final PurchaseController controller = PurchaseController.getInstance();
 
-    private static final SessionController sessionController = SessionController.getInstance();
+    private final Set<Session> sessions = new HashSet<>();
 
-    private static final ReportController reportController = ReportController.getInstance();
+    public void sendToMany(JSONObject message, Predicate<Session> condition) throws EncodeException, IOException {
+        if (message == null) return;
+        for (var session: sessions) {
+            if (condition.test(session)) {
+                session.getBasicRemote().sendObject(controller.processQuery(message, session));
+            }
+        }
+    }
+
+    public void broadcast(JSONObject message) throws EncodeException, IOException {
+        if (message == null) return;
+        for (var session: sessions) {
+            session.getBasicRemote().sendObject(controller.processQuery(message, session));
+        }
+    }
 
     @OnOpen
     public void onOpen(Session session) {
-        controller.addSession(session);
+        sessions.add(session);
     }
 
     @OnMessage
@@ -30,11 +45,7 @@ public class PurchaseEndpoint {
         if (response != null) {
             session.getBasicRemote().sendObject(response);
             if (response.optString("action").equals("CREATE")) {
-                controller.broadcast(new JSONObject().put("action", "VIEW_ALL"));
-                reportController.sendToMany(new JSONObject().put("action", "PURCHASE_COUNT_PER_MONTH_IN_LAST_YEAR"), sessionController::isSessionAdmin);
-                reportController.sendToMany(new JSONObject().put("action", "REVENUE_PER_MONTH_IN_LAST_YEAR"), sessionController::isSessionAdmin);
-                reportController.sendToMany(new JSONObject().put("action", "CLIENTS_PER_PLANE"), sessionController::isSessionAdmin);
-                reportController.sendToMany(new JSONObject().put("action", "TOP_5_ROUTES_PER_TICKET_NUMBER"), sessionController::isSessionAdmin);
+                this.broadcast(new JSONObject().put("action", "VIEW_ALL"));
             }
         }
     }
@@ -46,6 +57,6 @@ public class PurchaseEndpoint {
 
     @OnClose
     public void onClose(Session session) {
-        controller.removeSession(session);
+        sessions.remove(session);
     }
 }
