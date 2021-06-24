@@ -8,6 +8,7 @@ import org.una.server.endpoint.decode.JsonObjectDecoder;
 import org.una.server.endpoint.encode.JsonObjectEncoder;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -16,7 +17,7 @@ import java.util.function.Predicate;
 public class SessionEndpoint {
     private static final SessionController controller = SessionController.getInstance();
 
-    private final Set<Session> sessions = new HashSet<>();
+    private static final Set<Session> sessions = Collections.synchronizedSet(new HashSet<>());
 
     public void sendToMany(JSONObject message, Predicate<Session> condition) throws EncodeException, IOException {
         if (message == null) return;

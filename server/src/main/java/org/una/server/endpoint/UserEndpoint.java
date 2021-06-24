@@ -10,6 +10,7 @@ import org.una.server.endpoint.decode.JsonObjectDecoder;
 import org.una.server.endpoint.encode.JsonObjectEncoder;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -20,11 +21,11 @@ public class UserEndpoint {
 
     private static final SessionController sessionController = SessionController.getInstance();
 
-    private final Set<Session> sessions = new HashSet<>();
+    private static final Set<Session> sessions = Collections.synchronizedSet(new HashSet<>());
 
     public void sendToMany(JSONObject message, Predicate<Session> condition) throws EncodeException, IOException {
         if (message == null) return;
-        for (var session: sessions) {
+        for (var session : sessions) {
             if (condition.test(session)) {
                 session.getBasicRemote().sendObject(controller.processQuery(message, session));
             }
@@ -33,7 +34,7 @@ public class UserEndpoint {
 
     public void broadcast(JSONObject message) throws EncodeException, IOException {
         if (message == null) return;
-        for (var session: sessions) {
+        for (var session : sessions) {
             session.getBasicRemote().sendObject(controller.processQuery(message, session));
         }
     }
