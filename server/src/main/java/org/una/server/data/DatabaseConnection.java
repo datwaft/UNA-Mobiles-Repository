@@ -2,7 +2,6 @@ package org.una.server.data;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.util.Properties;
 
 import static java.lang.System.exit;
 
@@ -25,12 +24,12 @@ public class DatabaseConnection {
         }
     }
 
-    public Connection getConnection() {
-        return connection;
-    }
-
     public static DatabaseConnection getInstance() {
         if (instance == null) instance = new DatabaseConnection();
         return instance;
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 }

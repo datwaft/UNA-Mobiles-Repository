@@ -13,6 +13,11 @@ public class PlaneDBA {
 
     private final Connection connection = DatabaseConnection.getInstance().getConnection();
 
+    public static PlaneDBA getInstance() {
+        if (instance == null) instance = new PlaneDBA();
+        return instance;
+    }
+
     public JSONArray getAll() throws SQLException {
         connection.setAutoCommit(false);
         var query = connection.prepareCall("{ ? = call get_all_plane() }");
@@ -49,10 +54,5 @@ public class PlaneDBA {
         query.setInt(3, type);
         query.execute();
         query.close();
-    }
-
-    public static PlaneDBA getInstance() {
-        if (instance == null) instance = new PlaneDBA();
-        return instance;
     }
 }

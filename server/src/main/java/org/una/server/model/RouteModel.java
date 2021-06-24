@@ -15,6 +15,11 @@ public class RouteModel {
         this.dba = RouteDBA.getInstance();
     }
 
+    public static RouteModel getInstance() {
+        if (instance == null) instance = new RouteModel();
+        return instance;
+    }
+
     public JSONArray getAll() throws SQLException {
         return this.dba.getAll();
     }
@@ -25,10 +30,5 @@ public class RouteModel {
 
     public void update(Integer identifier, String origin, String destination, LocalTime duration, Integer price) throws SQLException {
         this.dba.update(identifier, origin, destination, duration, price);
-    }
-
-    public static RouteModel getInstance() {
-        if (instance == null) instance = new RouteModel();
-        return instance;
     }
 }

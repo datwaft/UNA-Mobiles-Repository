@@ -8,11 +8,14 @@ import org.una.server.model.UserModel;
 import java.sql.SQLException;
 
 public class UserController {
+    private static final UserModel model = UserModel.getInstance();
+    private static final SessionController sessionController = SessionController.getInstance();
     private static UserController instance = null;
 
-    private static final UserModel model = UserModel.getInstance();
-
-    private static final SessionController sessionController = SessionController.getInstance();
+    public static UserController getInstance() {
+        if (instance == null) instance = new UserController();
+        return instance;
+    }
 
     public JSONObject processQuery(JSONObject object, Session session) {
         if (object == null) return null;
@@ -110,10 +113,5 @@ public class UserController {
             return null;
         }
         return response;
-    }
-
-    public static UserController getInstance() {
-        if (instance == null) instance = new UserController();
-        return instance;
     }
 }

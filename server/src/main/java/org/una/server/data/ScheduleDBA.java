@@ -16,6 +16,11 @@ public class ScheduleDBA {
 
     private final Connection connection = DatabaseConnection.getInstance().getConnection();
 
+    public static ScheduleDBA getInstance() {
+        if (instance == null) instance = new ScheduleDBA();
+        return instance;
+    }
+
     public JSONArray viewAllWithDiscount() throws SQLException {
         connection.setAutoCommit(false);
         var query = connection.prepareCall("{ ? = call view_all_schedule_with_discount() }");
@@ -82,10 +87,5 @@ public class ScheduleDBA {
         query.setBigDecimal(5, discount);
         query.execute();
         query.close();
-    }
-
-    public static ScheduleDBA getInstance() {
-        if (instance == null) instance = new ScheduleDBA();
-        return instance;
     }
 }

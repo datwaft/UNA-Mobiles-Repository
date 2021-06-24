@@ -15,6 +15,11 @@ public class FlightModel {
         this.dba = FlightDBA.getInstance();
     }
 
+    public static FlightModel getInstance() {
+        if (instance == null) instance = new FlightModel();
+        return instance;
+    }
+
     public JSONArray viewAll() throws SQLException {
         return this.dba.viewAll();
     }
@@ -29,10 +34,5 @@ public class FlightModel {
 
     public void update(Integer identifier, Integer plane, LocalDate outboundDate, Integer outboundSchedule, LocalDate inboundDate, Integer inboundSchedule) throws SQLException {
         this.dba.update(identifier, plane, outboundDate, outboundSchedule, inboundDate, inboundSchedule);
-    }
-
-    public static FlightModel getInstance() {
-        if (instance == null) instance = new FlightModel();
-        return instance;
     }
 }

@@ -14,6 +14,11 @@ public class PlaneTypeModel {
         this.dba = PlaneTypeDBA.getInstance();
     }
 
+    public static PlaneTypeModel getInstance() {
+        if (instance == null) instance = new PlaneTypeModel();
+        return instance;
+    }
+
     public JSONArray getAll() throws SQLException {
         return this.dba.getAll();
     }
@@ -24,10 +29,5 @@ public class PlaneTypeModel {
 
     public void update(Integer identifier, Integer year, String model, String brand, Integer rows, Integer columns) throws SQLException {
         this.dba.update(identifier, year, model, brand, rows, columns);
-    }
-
-    public static PlaneTypeModel getInstance() {
-        if (instance == null) instance = new PlaneTypeModel();
-        return instance;
     }
 }

@@ -13,6 +13,11 @@ public class TicketDBA {
 
     private final Connection connection = DatabaseConnection.getInstance().getConnection();
 
+    public static TicketDBA getInstance() {
+        if (instance == null) instance = new TicketDBA();
+        return instance;
+    }
+
     public void create(Integer purchase, Integer row, Integer column) throws SQLException {
         connection.setAutoCommit(true);
         var query = connection.prepareStatement("call create_ticket( ?, ?, ? )");
@@ -61,10 +66,5 @@ public class TicketDBA {
         rs.close();
         query.close();
         return result;
-    }
-
-    public static TicketDBA getInstance() {
-        if (instance == null) instance = new TicketDBA();
-        return instance;
     }
 }

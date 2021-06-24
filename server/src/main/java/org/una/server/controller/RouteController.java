@@ -9,11 +9,14 @@ import java.sql.SQLException;
 import java.time.LocalTime;
 
 public class RouteController {
+    private static final RouteModel model = RouteModel.getInstance();
+    private static final SessionController sessionController = SessionController.getInstance();
     private static RouteController instance = null;
 
-    private static final RouteModel model = RouteModel.getInstance();
-
-    private static final SessionController sessionController = SessionController.getInstance();
+    public static RouteController getInstance() {
+        if (instance == null) instance = new RouteController();
+        return instance;
+    }
 
     public JSONObject processQuery(JSONObject object, Session session) {
         if (object == null) return null;
@@ -119,10 +122,5 @@ public class RouteController {
             return null;
         }
         return response;
-    }
-
-    public static RouteController getInstance() {
-        if (instance == null) instance = new RouteController();
-        return instance;
     }
 }

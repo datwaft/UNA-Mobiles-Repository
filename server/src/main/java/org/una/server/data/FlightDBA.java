@@ -3,13 +3,21 @@ package org.una.server.data;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.time.LocalDate;
 
 public class FlightDBA {
     private static FlightDBA instance = null;
 
     private final Connection connection = DatabaseConnection.getInstance().getConnection();
+
+    public static FlightDBA getInstance() {
+        if (instance == null) instance = new FlightDBA();
+        return instance;
+    }
 
     public JSONArray viewAll() throws SQLException {
         connection.setAutoCommit(false);
@@ -96,10 +104,5 @@ public class FlightDBA {
         }
         query.execute();
         query.close();
-    }
-
-    public static FlightDBA getInstance() {
-        if (instance == null) instance = new FlightDBA();
-        return instance;
     }
 }

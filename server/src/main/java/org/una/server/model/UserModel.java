@@ -14,6 +14,11 @@ public class UserModel {
         this.dba = UserDBA.getInstance();
     }
 
+    public static UserModel getInstance() {
+        if (instance == null) instance = new UserModel();
+        return instance;
+    }
+
     public String getAuthorization(String username, String password) throws SQLException {
         return dba.getAuthorization(username, password);
     }
@@ -30,10 +35,5 @@ public class UserModel {
 
     public JSONObject get(String username) throws SQLException {
         return dba.get(username);
-    }
-
-    public static UserModel getInstance() {
-        if (instance == null) instance = new UserModel();
-        return instance;
     }
 }

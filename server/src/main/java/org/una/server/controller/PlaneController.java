@@ -8,11 +8,14 @@ import org.una.server.model.PlaneModel;
 import java.sql.SQLException;
 
 public class PlaneController {
+    private static final PlaneModel model = PlaneModel.getInstance();
+    private static final SessionController sessionController = SessionController.getInstance();
     private static PlaneController instance = null;
 
-    private static final PlaneModel model = PlaneModel.getInstance();
-
-    private static final SessionController sessionController = SessionController.getInstance();
+    public static PlaneController getInstance() {
+        if (instance == null) instance = new PlaneController();
+        return instance;
+    }
 
     public JSONObject processQuery(JSONObject object, Session session) {
         if (object == null) return null;
@@ -114,10 +117,5 @@ public class PlaneController {
             return null;
         }
         return response;
-    }
-
-    public static PlaneController getInstance() {
-        if (instance == null) instance = new PlaneController();
-        return instance;
     }
 }

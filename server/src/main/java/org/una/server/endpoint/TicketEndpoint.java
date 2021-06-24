@@ -21,7 +21,7 @@ public class TicketEndpoint {
 
     public void sendToMany(JSONObject message, Predicate<Session> condition) throws EncodeException, IOException {
         if (message == null) return;
-        for (var session: sessions) {
+        for (var session : sessions) {
             if (condition.test(session)) {
                 session.getBasicRemote().sendObject(controller.processQuery(message));
             }
@@ -30,7 +30,7 @@ public class TicketEndpoint {
 
     public void broadcast(JSONObject message) throws EncodeException, IOException {
         if (message == null) return;
-        for (var session: sessions) {
+        for (var session : sessions) {
             session.getBasicRemote().sendObject(controller.processQuery(message));
         }
     }

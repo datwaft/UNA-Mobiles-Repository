@@ -7,9 +7,13 @@ import org.una.server.model.TicketModel;
 import java.sql.SQLException;
 
 public class TicketController {
+    private static final TicketModel model = TicketModel.getInstance();
     private static TicketController instance = null;
 
-    private static final TicketModel model = TicketModel.getInstance();
+    public static TicketController getInstance() {
+        if (instance == null) instance = new TicketController();
+        return instance;
+    }
 
     public JSONObject processQuery(JSONObject object) {
         if (object == null) return null;
@@ -73,10 +77,5 @@ public class TicketController {
             return null;
         }
         return response;
-    }
-
-    public static TicketController getInstance() {
-        if (instance == null) instance = new TicketController();
-        return instance;
     }
 }

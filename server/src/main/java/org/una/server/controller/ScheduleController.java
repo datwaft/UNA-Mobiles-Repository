@@ -9,11 +9,14 @@ import java.sql.SQLException;
 import java.time.LocalTime;
 
 public class ScheduleController {
+    private static final ScheduleModel model = ScheduleModel.getInstance();
+    private static final SessionController sessionController = SessionController.getInstance();
     private static ScheduleController instance = null;
 
-    private static final ScheduleModel model = ScheduleModel.getInstance();
-
-    private static final SessionController sessionController = SessionController.getInstance();
+    public static ScheduleController getInstance() {
+        if (instance == null) instance = new ScheduleController();
+        return instance;
+    }
 
     public JSONObject processQuery(JSONObject object, Session session) {
         if (object == null) return null;
@@ -132,10 +135,5 @@ public class ScheduleController {
             return null;
         }
         return response;
-    }
-
-    public static ScheduleController getInstance() {
-        if (instance == null) instance = new ScheduleController();
-        return instance;
     }
 }

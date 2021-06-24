@@ -1,7 +1,6 @@
 package org.una.server.model;
 
 import org.json.JSONArray;
-import org.una.server.data.ScheduleDBA;
 import org.una.server.data.TicketDBA;
 
 import java.sql.SQLException;
@@ -15,6 +14,11 @@ public class TicketModel {
         this.dba = TicketDBA.getInstance();
     }
 
+    public static TicketModel getInstance() {
+        if (instance == null) instance = new TicketModel();
+        return instance;
+    }
+
     public void create(Integer purchase, Integer row, Integer column) throws SQLException {
         this.dba.create(purchase, row, column);
     }
@@ -25,10 +29,5 @@ public class TicketModel {
 
     public JSONArray viewAllPerPurchase(Integer purchase) throws SQLException {
         return this.dba.viewAllPerPurchase(purchase);
-    }
-
-    public static TicketModel getInstance() {
-        if (instance == null) instance = new TicketModel();
-        return instance;
     }
 }

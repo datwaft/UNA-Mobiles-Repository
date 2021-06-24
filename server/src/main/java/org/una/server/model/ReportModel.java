@@ -14,6 +14,11 @@ public class ReportModel {
         this.dba = ReportDBA.getInstance();
     }
 
+    public static ReportModel getInstance() {
+        if (instance == null) instance = new ReportModel();
+        return instance;
+    }
+
     public JSONArray purchaseCountPerMonthInLastYear() throws SQLException {
         return this.dba.purchaseCountPerMonthInLastYear();
     }
@@ -28,10 +33,5 @@ public class ReportModel {
 
     public JSONArray top5RoutesPerTicketNumber() throws SQLException {
         return this.dba.top5RoutesPerTicketNumber();
-    }
-
-    public static ReportModel getInstance() {
-        if (instance == null) instance = new ReportModel();
-        return instance;
     }
 }

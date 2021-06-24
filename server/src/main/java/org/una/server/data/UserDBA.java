@@ -12,6 +12,11 @@ public class UserDBA {
 
     private final Connection connection = DatabaseConnection.getInstance().getConnection();
 
+    public static UserDBA getInstance() {
+        if (instance == null) instance = new UserDBA();
+        return instance;
+    }
+
     public String getAuthorization(String username, String password) throws SQLException {
         var query = connection.prepareCall("{ ? = call get_authorization( ?, ? ) }");
         query.registerOutParameter(1, Types.VARCHAR);
@@ -71,10 +76,5 @@ public class UserDBA {
         rs.close();
         query.close();
         return object;
-    }
-
-    public static UserDBA getInstance() {
-        if (instance == null) instance = new UserDBA();
-        return instance;
     }
 }

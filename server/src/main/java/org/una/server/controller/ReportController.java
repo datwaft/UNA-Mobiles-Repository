@@ -8,11 +8,14 @@ import org.una.server.model.ReportModel;
 import java.sql.SQLException;
 
 public class ReportController {
+    private static final ReportModel model = ReportModel.getInstance();
+    private static final SessionController sessionController = SessionController.getInstance();
     private static ReportController instance = null;
 
-    private static final ReportModel model = ReportModel.getInstance();
-
-    private static final SessionController sessionController = SessionController.getInstance();
+    public static ReportController getInstance() {
+        if (instance == null) instance = new ReportController();
+        return instance;
+    }
 
     public JSONObject processQuery(JSONObject object, Session session) {
         if (object == null) return null;
@@ -135,10 +138,5 @@ public class ReportController {
             return null;
         }
         return response;
-    }
-
-    public static ReportController getInstance() {
-        if (instance == null) instance = new ReportController();
-        return instance;
     }
 }

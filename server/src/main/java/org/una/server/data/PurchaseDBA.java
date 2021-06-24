@@ -13,6 +13,11 @@ public class PurchaseDBA {
 
     private final Connection connection = DatabaseConnection.getInstance().getConnection();
 
+    public static PurchaseDBA getInstance() {
+        if (instance == null) instance = new PurchaseDBA();
+        return instance;
+    }
+
     public void create(Integer tickerNumber, Integer flight, String username) throws SQLException {
         connection.setAutoCommit(true);
         var query = connection.prepareStatement("call create_purchase( ?, ?, ? )");
@@ -50,10 +55,5 @@ public class PurchaseDBA {
         rs.close();
         query.close();
         return result;
-    }
-
-    public static PurchaseDBA getInstance() {
-        if (instance == null) instance = new PurchaseDBA();
-        return instance;
     }
 }

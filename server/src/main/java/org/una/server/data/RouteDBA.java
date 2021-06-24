@@ -14,6 +14,11 @@ public class RouteDBA {
 
     private final Connection connection = DatabaseConnection.getInstance().getConnection();
 
+    public static RouteDBA getInstance() {
+        if (instance == null) instance = new RouteDBA();
+        return instance;
+    }
+
     public JSONArray getAll() throws SQLException {
         connection.setAutoCommit(false);
         var query = connection.prepareCall("{ ? = call get_all_route() }");
@@ -56,10 +61,5 @@ public class RouteDBA {
         query.setInt(5, price);
         query.execute();
         query.close();
-    }
-
-    public static RouteDBA getInstance() {
-        if (instance == null) instance = new RouteDBA();
-        return instance;
     }
 }

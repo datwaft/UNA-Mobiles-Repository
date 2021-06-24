@@ -14,6 +14,11 @@ public class ReportDBA {
 
     private final Connection connection = DatabaseConnection.getInstance().getConnection();
 
+    public static ReportDBA getInstance() {
+        if (instance == null) instance = new ReportDBA();
+        return instance;
+    }
+
     public JSONArray purchaseCountPerMonthInLastYear() throws SQLException {
         connection.setAutoCommit(false);
         var query = connection.prepareCall("{ ? = call purchase_count_per_month_in_last_year() }");
@@ -89,10 +94,5 @@ public class ReportDBA {
         rs.close();
         query.close();
         return result;
-    }
-
-    public static ReportDBA getInstance() {
-        if (instance == null) instance = new ReportDBA();
-        return instance;
     }
 }

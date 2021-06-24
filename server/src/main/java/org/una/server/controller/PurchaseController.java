@@ -8,11 +8,14 @@ import org.una.server.model.PurchaseModel;
 import java.sql.SQLException;
 
 public class PurchaseController {
+    private static final PurchaseModel model = PurchaseModel.getInstance();
+    private static final SessionController sessionController = SessionController.getInstance();
     private static PurchaseController instance = null;
 
-    private static final PurchaseModel model = PurchaseModel.getInstance();
-
-    private static final SessionController sessionController = SessionController.getInstance();
+    public static PurchaseController getInstance() {
+        if (instance == null) instance = new PurchaseController();
+        return instance;
+    }
 
     public JSONObject processQuery(JSONObject object, Session session) {
         if (object == null) return null;
@@ -83,10 +86,5 @@ public class PurchaseController {
             return null;
         }
         return response;
-    }
-
-    public static PurchaseController getInstance() {
-        if (instance == null) instance = new PurchaseController();
-        return instance;
     }
 }

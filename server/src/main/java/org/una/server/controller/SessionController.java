@@ -13,12 +13,15 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SessionController {
-    private static SessionController instance = null;
-
     private static final UserModel model = UserModel.getInstance();
-
-    private static Map<Session, String> sessionTokens = new HashMap<>();
     private static final Map<String, Pair<String, String>> tokenData = new HashMap<>();
+    private static SessionController instance = null;
+    private static Map<Session, String> sessionTokens = new HashMap<>();
+
+    public static SessionController getInstance() {
+        if (instance == null) instance = new SessionController();
+        return instance;
+    }
 
     public JSONObject processQuery(JSONObject object, Session session) {
         if (object == null) return null;
@@ -133,7 +136,7 @@ public class SessionController {
             if (isSessionSignedIn(session)) return loginCaseAlreadyLoggedIn(session);
             // Case 2: Invalid credentials
             if (username == null || password == null) return loginCaseInvalid();
-            var authorization = model.getAuthorization(username, password) ;
+            var authorization = model.getAuthorization(username, password);
             if (authorization.equals("none")) return loginCaseInvalid();
             // Case 3: Valid credentials
             return loginCaseValid(username, authorization, session);
@@ -142,6 +145,7 @@ public class SessionController {
             return null;
         }
     }
+
     public JSONObject logout(Session session) {
         if (!sessionTokens.containsKey(session)) return null;
 
@@ -154,10 +158,5 @@ public class SessionController {
         var response = new JSONObject();
         response.put("action", "LOGOUT");
         return response;
-    }
-
-    public static SessionController getInstance() {
-        if (instance == null) instance = new SessionController();
-        return instance;
     }
 }

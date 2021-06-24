@@ -1,25 +1,22 @@
 package org.una.server.controller;
 
-import jakarta.websocket.EncodeException;
 import jakarta.websocket.Session;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.una.server.model.FlightModel;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class FlightController {
+    private static final FlightModel model = FlightModel.getInstance();
+    private static final SessionController sessionController = SessionController.getInstance();
     private static FlightController instance = null;
 
-    private static final FlightModel model = FlightModel.getInstance();
-
-    private static final SessionController sessionController = SessionController.getInstance();
+    public static FlightController getInstance() {
+        if (instance == null) instance = new FlightController();
+        return instance;
+    }
 
     public JSONObject processQuery(JSONObject object, Session session) {
         if (object == null) return null;
@@ -144,10 +141,5 @@ public class FlightController {
             return null;
         }
         return response;
-    }
-
-    public static FlightController getInstance() {
-        if (instance == null) instance = new FlightController();
-        return instance;
     }
 }
