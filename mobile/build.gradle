@@ -3,6 +3,7 @@ buildscript {
         compose_version = '1.0.0-beta09'
         gradle_version = '7.1.0-alpha02'
         kotlin_version = '1.5.10'
+        ktor_version = '1.6.0'
     }
     repositories {
         google()

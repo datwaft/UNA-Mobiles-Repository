@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.una.mobile">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:fullBackupContent="true"
@@ -14,6 +16,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app.name"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.App.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
