@@ -61,8 +61,14 @@ private fun Content(modifier: Modifier = Modifier) {
                 Card(Modifier.fillMaxWidth()) { Text(item, Modifier.padding(8.dp)) }
             }
         }
-        Row(Modifier.padding(32.dp).fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            OutlinedTextField(text, { text = it }, Modifier.weight(1f).padding(end = 16.dp))
+        Row(Modifier
+            .padding(32.dp)
+            .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically) {
+            OutlinedTextField(text, { text = it },
+                Modifier
+                    .weight(1f)
+                    .padding(end = 16.dp))
             Button(onClick = { viewModel.send(text) }) { Text("SEND") }
         }
     }

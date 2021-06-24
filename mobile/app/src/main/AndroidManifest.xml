@@ -16,8 +16,8 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app.name"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/Theme.App.NoActionBar">
+            android:theme="@style/Theme.App.NoActionBar"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
