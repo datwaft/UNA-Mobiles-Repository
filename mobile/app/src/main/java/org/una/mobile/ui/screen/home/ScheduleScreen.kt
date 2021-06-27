@@ -1,9 +1,6 @@
 package org.una.mobile.ui.screen.home
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
@@ -16,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.una.mobile.model.Flight
 import org.una.mobile.model.Schedule
 import org.una.mobile.ui.components.ListItem
 import org.una.mobile.ui.components.layout.SearchBar
@@ -37,7 +35,7 @@ fun ScheduleScreen(
 
     Scaffold(
         modifier = modifier,
-        topBar = { SearchBar(query, { query = it }, Modifier.padding(16.dp)) },
+        topBar = { SearchBar(query, { query = it }) },
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
@@ -81,34 +79,34 @@ private fun Preview() {
     val items: List<Schedule> by remember {
         mutableStateOf(listOf(
             Schedule(
-                identifier = 0,
-                origin = "Costa Rica",
-                destination = "China",
-                rawDepartureTime = "22:30",
-                weekday = "Sunday",
-                rawDuration = "10:00",
-                price = 2500.00,
-                discount = 0.30,
+                0,
+                "Costa Rica",
+                "China",
+                "22:30",
+                "Sunday",
+                "10:00",
+                2500.00,
+                0.30,
             ),
             Schedule(
-                identifier = 1,
-                origin = "China",
-                destination = "Costa Rica",
-                rawDepartureTime = "00:30",
-                weekday = "Sunday",
-                rawDuration = "08:00",
-                price = 3700.00,
-                discount = 0.50,
+                1,
+                "China",
+                "Costa Rica",
+                "00:30",
+                "Sunday",
+                "08:00",
+                3700.00,
+                0.50,
             ),
             Schedule(
-                identifier = 2,
-                origin = "Costa Rica",
-                destination = "Atlantis",
-                rawDepartureTime = "00:00",
-                weekday = "Sunday",
-                rawDuration = "23:59",
-                price = 7000.00,
-                discount = 0.25,
+                2,
+                "Costa Rica",
+                "Atlantis",
+                "00:00",
+                "Sunday",
+                "23:59",
+                7000.00,
+                0.25,
             ),
         ))
     }
@@ -124,14 +122,14 @@ private fun Preview() {
 @Composable
 private fun ScheduleScreenItemPreview() {
     val item = Schedule(
-        identifier = 0,
-        origin = "Costa Rica",
-        destination = "China",
-        rawDepartureTime = "22:30",
-        weekday = "Sunday",
-        rawDuration = "10:00",
-        price = 2500.00,
-        discount = 0.30,
+        0,
+        "Costa Rica",
+        "China",
+        "22:30",
+        "Sunday",
+        "10:00",
+        2500.00,
+        0.30,
     )
 
     Theme {

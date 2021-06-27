@@ -10,11 +10,11 @@ import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.*
 import org.una.mobile.WEB_SOCKET_PATH
-import org.una.mobile.client.ScheduleWebSocketClient.Event.*
-import org.una.mobile.model.Schedule
+import org.una.mobile.client.FlightWebSocketClient.Event.*
+import org.una.mobile.model.Flight
 import java.security.InvalidParameterException
 
-object ScheduleWebSocketClient {
+object FlightWebSocketClient {
     private var client: HttpClient? = null
     val outputEventChannel: Channel<Event> = Channel(10)
     val inputEventChannel: Channel<Event> = Channel(10)
@@ -32,7 +32,7 @@ object ScheduleWebSocketClient {
             client?.close()
         }
         coroutineScope.launch {
-            outputEventChannel.send(Output.ViewAllWithDiscount)
+            outputEventChannel.send(Output.ViewAll)
         }
     }
 
@@ -77,8 +77,7 @@ object ScheduleWebSocketClient {
         readText().let { string ->
             Json.parseToJsonElement(string).let { json ->
                 when (json.jsonObject["action"]?.jsonPrimitive?.contentOrNull) {
-                    "VIEW_ALL_WITH_DISCOUNT" -> Input.ViewAllWithDiscount(payload = Json.decodeFromJsonElement(
-                        json.jsonObject["view"]!!))
+                    "VIEW_ALL" -> Input.ViewAll(payload = Json.decodeFromJsonElement(json.jsonObject["view"]!!))
                     else -> throw InvalidParameterException("Frame is not an event: $string")
                 }
             }
@@ -86,28 +85,28 @@ object ScheduleWebSocketClient {
 
     private fun Event.parse(): JsonElement = when (this) {
         is Input -> when (this) {
-            is Input.ViewAllWithDiscount -> buildJsonObject {
+            is Input.ViewAll -> buildJsonObject {
                 put("action", "VIEW_ALL")
                 put("view", Json.encodeToJsonElement(this@parse.payload))
             }
         }
         is Output -> when (this) {
-            Output.ViewAllWithDiscount -> buildJsonObject {
-                put("action", "VIEW_ALL_WITH_DISCOUNT")
+            Output.ViewAll -> buildJsonObject {
+                put("action", "VIEW_ALL")
             }
         }
     }
 
     sealed class Event {
         sealed class Input : Event() {
-            data class ViewAllWithDiscount(val payload: List<Schedule>) : Input()
+            data class ViewAll(val payload: List<Flight>) : Input()
         }
 
         sealed class Output : Event() {
-            object ViewAllWithDiscount : Output()
+            object ViewAll : Output()
         }
     }
 
-    private const val CLIENT_PATH = "$WEB_SOCKET_PATH/schedule"
-    private const val TAG = "ScheduleWebSocketClient"
+    private const val CLIENT_PATH = "$WEB_SOCKET_PATH/flight"
+    private const val TAG = "FlightWebSocketClient"
 }

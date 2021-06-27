@@ -15,8 +15,9 @@ fun Dropdown(
     label: String,
     items: List<String>,
     placeholder: String,
-    selected: String?, onSelected: (String) -> Unit,
+    selected: String?, onSelected: (String?) -> Unit,
     modifier: Modifier = Modifier,
+    cleanable: Boolean = false,
 ) {
     var isDropdownExpanded by remember { mutableStateOf(false) }
 
@@ -40,7 +41,8 @@ fun Dropdown(
             })
         DropdownMenu(expanded = isDropdownExpanded,
             onDismissRequest = { isDropdownExpanded = false }) {
-            DropdownMenuItem(onClick = {}, enabled = false) { Text(placeholder) }
+            DropdownMenuItem(onClick = { onSelected(null) },
+                enabled = cleanable) { Text(placeholder) }
             items.forEach { item ->
                 DropdownMenuItem(onClick = { onSelected(item) }) { Text(item) }
             }

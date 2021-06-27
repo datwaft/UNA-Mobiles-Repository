@@ -20,6 +20,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
+import org.una.mobile.client.FlightWebSocketClient
 import org.una.mobile.client.ScheduleWebSocketClient
 import org.una.mobile.client.SessionWebSocketClient
 import org.una.mobile.client.UserWebSocketClient
@@ -46,6 +47,7 @@ class MainActivity : ComponentActivity() {
         SessionWebSocketClient.connect(lifecycleScope)
         UserWebSocketClient.connect(lifecycleScope)
         ScheduleWebSocketClient.connect(lifecycleScope)
+        FlightWebSocketClient.connect(lifecycleScope)
     }
 
     override fun onPause() {
@@ -53,6 +55,7 @@ class MainActivity : ComponentActivity() {
         SessionWebSocketClient.close()
         UserWebSocketClient.close()
         ScheduleWebSocketClient.close()
+        FlightWebSocketClient.close()
         lifecycleScope.launch {
             SessionViewModel.internalChannel.send(SessionViewModel.InternalEvent.Clear)
         }

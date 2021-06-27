@@ -9,10 +9,13 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import org.una.mobile.model.Flight
 import org.una.mobile.model.Schedule
 import org.una.mobile.ui.navigation.HomeScreen.Flights
 import org.una.mobile.ui.navigation.HomeScreen.Schedules
+import org.una.mobile.ui.screen.home.FlightScreen
 import org.una.mobile.ui.screen.home.ScheduleScreen
+import org.una.mobile.viewmodel.FlightViewModel
 import org.una.mobile.viewmodel.ScheduleViewModel
 
 @ExperimentalAnimationApi
@@ -24,10 +27,15 @@ fun HomeNavigationHost(
     startDestination: HomeScreen = Flights,
     // ViewModels
     scheduleViewModel: ScheduleViewModel = viewModel(),
+    flightViewModel: FlightViewModel = viewModel(),
 ) {
     NavHost(navController, startDestination, modifier) {
         composable(Flights) {
-            // TODO: FlightsScreen()
+            LaunchedEffect(true) {
+                flightViewModel.viewAllWithDiscount()
+            }
+            val items: List<Flight> by flightViewModel.items.observeAsState(emptyList())
+            FlightScreen(items)
         }
         composable(Schedules) {
             LaunchedEffect(true) {

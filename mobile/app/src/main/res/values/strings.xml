@@ -41,6 +41,10 @@
     <string name="field.password.label">Password</string>
     <string name="field.paymentMethod.label">Payment method</string>
     <string name="field.paymentMethod.placeholder">Select a payment method</string>
+    <string name="field.origin.label">Origin</string>
+    <string name="field.origin.placeholder">Select</string>
+    <string name="field.destination.label">Destination</string>
+    <string name="field.destination.placeholder">Select</string>
     <string name="field.price.label">Price</string>
     <string name="field.username.label">Username</string>
     <string name="field.workphone.label">Work Phone</string>
