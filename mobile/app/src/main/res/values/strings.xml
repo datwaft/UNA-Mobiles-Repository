@@ -1,3 +1,47 @@
 <resources>
     <string name="app.name" translatable="false">Pepito\'s Airlines</string>
+
+    <string name="snackbar.information.description">Information</string>
+    <string name="snackbar.warning.description">Warning</string>
+    <string name="snackbar.error.description">Error</string>
+
+    <string name="event.user.register.message">User was registered successfully</string>
+    <string name="event.user.update.message">User information was updated successfully</string>
+
+    <string name="action.drawer.open.description">Open Navigation Drawer</string>
+    <string name="action.dropdown.expand.description">Open Dropdown</string>
+    <string name="action.clear.description">Clear</string>
+    <string name="action.search.description">Clear</string>
+    <string name="action.logout.label">Logout</string>
+    <string name="action.return.label">Return</string>
+    <string name="action.password.hide.description">Hide password</string>
+    <string name="action.password.show.description">Show password</string>
+    <string name="action.register.label">Register</string>
+    <string name="action.update.label">Update</string>
+    <string name="action.login.label">Login</string>
+
+    <string name="screen.default.name">No Name</string>
+    <string name="screen.home.name">Home</string>
+    <string name="screen.home.flights.name">Flights</string>
+    <string name="screen.home.schedules.name">Schedules with discount</string>
+    <string name="screen.session.login.name">Login</string>
+    <string name="screen.session.register.name">Register</string>
+    <string name="screen.purchases.name">Purchases</string>
+    <string name="screen.user.name">User Information</string>
+    <string name="screen.reservation.name">Reservation</string>
+
+    <string name="header.session.null">Welcome, please log in</string>
+    <string name="header.session.exists">Welcome, %s</string>
+
+    <string name="field.address.label">Address</string>
+    <string name="field.email.label">Email</string>
+    <string name="field.lastname.label">Lastname</string>
+    <string name="field.mobilephone.label">Mobile Phone</string>
+    <string name="field.name.label">Name</string>
+    <string name="field.password.label">Password</string>
+    <string name="field.paymentMethod.label">Payment method</string>
+    <string name="field.paymentMethod.placeholder">Select a payment method</string>
+    <string name="field.price.label">Price</string>
+    <string name="field.username.label">Username</string>
+    <string name="field.workphone.label">Work Phone</string>
 </resources>
