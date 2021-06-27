@@ -61,22 +61,18 @@ fun FlightScreen(
                 SearchBar(query, { query = it })
                 Row(Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    Box(Modifier.weight(1f)) {
-                        Dropdown(stringResource(R.string.field_origin_label),
-                            originSet.toList(),
-                            stringResource(R.string.field_origin_placeholder),
-                            selectedOrigin, { selectedOrigin = it },
-                            Modifier.fillMaxWidth(),
-                            cleanable = true)
-                    }
-                    Box(Modifier.weight(1f)) {
-                        Dropdown(stringResource(R.string.field_destination_label),
-                            destinationSet.toList(),
-                            stringResource(R.string.field_destination_placeholder),
-                            selectedDestination, { selectedDestination = it },
-                            Modifier.fillMaxWidth(),
-                            cleanable = true)
-                    }
+                    Dropdown(stringResource(R.string.field_origin_label),
+                        originSet.toList(),
+                        stringResource(R.string.field_origin_placeholder),
+                        selectedOrigin, { selectedOrigin = it },
+                        Modifier.weight(1f),
+                        cleanable = true)
+                    Dropdown(stringResource(R.string.field_destination_label),
+                        destinationSet.toList(),
+                        stringResource(R.string.field_destination_placeholder),
+                        selectedDestination, { selectedDestination = it },
+                        Modifier.weight(1f),
+                        cleanable = true)
                 }
             }
         },

@@ -21,9 +21,8 @@ fun Dropdown(
 ) {
     var isDropdownExpanded by remember { mutableStateOf(false) }
 
-    Box(propagateMinConstraints = true) {
+    Box(modifier, propagateMinConstraints = true) {
         OutlinedTextField(
-            modifier = modifier,
             value = when (selected) {
                 null, "" -> placeholder
                 else -> selected
