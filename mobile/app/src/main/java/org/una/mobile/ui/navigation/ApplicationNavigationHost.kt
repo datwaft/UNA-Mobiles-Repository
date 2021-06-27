@@ -14,6 +14,8 @@ import org.una.mobile.model.Session
 import org.una.mobile.ui.screen.LoginScreen
 import org.una.mobile.ui.screen.RegisterScreen
 import org.una.mobile.ui.screen.UserScreen
+import org.una.mobile.ui.screen.home.HomeScreen
+import org.una.mobile.viewmodel.ScheduleViewModel
 import org.una.mobile.viewmodel.SessionViewModel
 import org.una.mobile.viewmodel.UserViewModel
 import org.una.mobile.viewmodel.form.UserFormViewModel
@@ -29,10 +31,11 @@ fun ApplicationNavigationHost(
     sessionViewModel: SessionViewModel = viewModel(),
     userViewModel: UserViewModel = viewModel(),
     userFormViewModel: UserFormViewModel = viewModel(),
+    scheduleViewModel: ScheduleViewModel = viewModel(),
 ) {
     NavHost(navController, startDestination, modifier) {
         composable(ApplicationScreen.Home) {
-            // TODO: HomeScreen()
+            HomeScreen(scheduleViewModel = scheduleViewModel)
         }
         navigation(route = ApplicationScreen.Session, startDestination = ApplicationScreen.Login) {
             composable(ApplicationScreen.Login) {
