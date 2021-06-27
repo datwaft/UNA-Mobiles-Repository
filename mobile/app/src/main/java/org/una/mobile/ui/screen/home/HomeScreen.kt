@@ -30,7 +30,8 @@ fun HomeScreen(
         },
         modifier = modifier,
     ) {
-        HomeNavigationHost(navController = navController,
+        HomeNavigationHost(
+            navController = navController,
             modifier = Modifier.padding(it),
             scheduleViewModel = scheduleViewModel,
             flightViewModel = flightViewModel,

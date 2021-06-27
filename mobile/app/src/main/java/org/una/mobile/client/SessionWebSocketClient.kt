@@ -92,7 +92,7 @@ object SessionWebSocketClient {
         }
 
     private fun Event.parse(): JsonElement = when (this) {
-        is Input -> when(this) {
+        is Input -> when (this) {
             is Input.LogIn -> buildJsonObject {
                 put("action", "LOGIN")
                 put("username", this@parse.session.username)
@@ -100,7 +100,7 @@ object SessionWebSocketClient {
                 put("authorization", "user")
             }
         }
-        is Output -> when(this) {
+        is Output -> when (this) {
             is Output.LogIn -> buildJsonObject {
                 put("action", "LOGIN")
                 put("username", this@parse.username)
