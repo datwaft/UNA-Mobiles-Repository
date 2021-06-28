@@ -110,39 +110,47 @@ CHECK ( "inbound_schedule" IS NOT NULL OR "inbound_date" IS NULL );
 ALTER TABLE "plane"
 ADD CONSTRAINT "plane_plane_type_fk"
 FOREIGN KEY ("type")
-REFERENCES "plane_type" ("identifier");
+REFERENCES "plane_type" ("identifier")
+ON DELETE CASCADE;
 
 ALTER TABLE "schedule"
 ADD CONSTRAINT "schedule_route_fk"
 FOREIGN KEY ("route")
-REFERENCES "route" ("identifier");
+REFERENCES "route" ("identifier")
+ON DELETE CASCADE;
 
 ALTER TABLE "flight"
 ADD CONSTRAINT "flight_plane_fk"
 FOREIGN KEY ("plane")
-REFERENCES "plane" ("identifier");
+REFERENCES "plane" ("identifier")
+ON DELETE CASCADE;
 
 ALTER TABLE "flight"
 ADD CONSTRAINT "flight_outbound_schedule_fk"
 FOREIGN KEY ("outbound_schedule")
-REFERENCES "schedule" ("identifier");
+REFERENCES "schedule" ("identifier")
+ON DELETE CASCADE;
 
 ALTER TABLE "flight"
 ADD CONSTRAINT "flight_inbound_schedule_fk"
 FOREIGN KEY ("inbound_schedule")
-REFERENCES "schedule" ("identifier");
+REFERENCES "schedule" ("identifier")
+ON DELETE CASCADE;
 
 ALTER TABLE "purchase"
 ADD CONSTRAINT "purchase_flight_fk"
 FOREIGN KEY ("flight")
-REFERENCES "flight" ("identifier");
+REFERENCES "flight" ("identifier")
+ON DELETE CASCADE;
 
 ALTER TABLE "purchase"
 ADD CONSTRAINT "purchase_user_fk"
 FOREIGN KEY ("user")
-REFERENCES "user" ("username");
+REFERENCES "user" ("username")
+ON DELETE CASCADE;
 
 ALTER TABLE "ticket"
 ADD CONSTRAINT "ticket_purchase_fk"
 FOREIGN KEY ("purchase")
-REFERENCES "purchase" ("identifier");
+REFERENCES "purchase" ("identifier")
+ON DELETE CASCADE;

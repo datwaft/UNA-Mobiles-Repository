@@ -111,6 +111,13 @@ AS $$
   END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE PROCEDURE "delete_user" ("in_username" VARCHAR)
+AS $$
+  BEGIN
+    DELETE FROM "user" WHERE "username" = "in_username";
+  END;
+$$ LANGUAGE plpgsql;
+
 \echo '-> Creating purchase functions and procedures...'
 
 CREATE OR REPLACE FUNCTION "view_all_purchase" (
@@ -145,6 +152,13 @@ AS $$
       "in_flight",
       "in_user"
     );
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE PROCEDURE "delete_purchase" ("in_identifier" INTEGER)
+AS $$
+  BEGIN
+    DELETE FROM "purchase" WHERE "identifier" = "in_identifier";
   END;
 $$ LANGUAGE plpgsql;
 
@@ -201,6 +215,14 @@ AS $$
       "in_row",
       "in_column"
     );
+  END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE PROCEDURE "delete_ticket" ("in_identifier" INTEGER)
+AS $$
+  BEGIN
+    DELETE FROM "ticket" WHERE "identifier" = "in_identifier";
   END;
 $$ LANGUAGE plpgsql;
 
@@ -263,6 +285,13 @@ AS $$
   END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE PROCEDURE "delete_plane_type" ("in_identifier" INTEGER)
+AS $$
+  BEGIN
+    DELETE FROM "plane_type" WHERE "identifier" = "in_identifier";
+  END;
+$$ LANGUAGE plpgsql;
+
 \echo '-> Creating route functions and procedures...'
 
 CREATE OR REPLACE FUNCTION "get_all_route" ()
@@ -317,6 +346,13 @@ AS $$
   END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE PROCEDURE "delete_route" ("in_identifier" INTEGER)
+AS $$
+  BEGIN
+    DELETE FROM "route" WHERE "identifier" = "in_identifier";
+  END;
+$$ LANGUAGE plpgsql;
+
 \echo '-> Creating plane functions and procedures...'
 
 CREATE OR REPLACE FUNCTION "get_all_plane" ()
@@ -358,6 +394,13 @@ AS $$
       "name" = "in_name",
       "type" = "in_type"
     WHERE "identifier" = "in_identifier";
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE PROCEDURE "delete_plane" ("in_identifier" INTEGER)
+AS $$
+  BEGIN
+    DELETE FROM "plane" WHERE "identifier" = "in_identifier";
   END;
 $$ LANGUAGE plpgsql;
 
@@ -424,6 +467,13 @@ AS $$
       "weekday"        = "in_weekday",
       "discount"       = "in_discount"
     WHERE "identifier" = "in_identifier";
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE PROCEDURE "delete_schedule" ("in_identifier" INTEGER)
+AS $$
+  BEGIN
+    DELETE FROM "schedule" WHERE "identifier" = "in_identifier";
   END;
 $$ LANGUAGE plpgsql;
 
@@ -495,6 +545,13 @@ AS $$
       "inbound_date"      = "in_inbound_date",
       "inbound_schedule"  = "in_inbound_schedule"
     WHERE "identifier" = "in_identifier";
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE PROCEDURE "delete_flight" ("in_identifier" INTEGER)
+AS $$
+  BEGIN
+    DELETE FROM "flight" WHERE "identifier" = "in_identifier";
   END;
 $$ LANGUAGE plpgsql;
 
