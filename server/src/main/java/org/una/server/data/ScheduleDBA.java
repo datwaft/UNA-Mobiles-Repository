@@ -88,4 +88,12 @@ public class ScheduleDBA {
         query.execute();
         query.close();
     }
+
+    public void delete(Integer identifier) throws SQLException {
+        connection.setAutoCommit(true);
+        var query = connection.prepareStatement("call delete_schedule( ? )");
+        query.setInt(1, identifier);
+        query.execute();
+        query.close();
+    }
 }

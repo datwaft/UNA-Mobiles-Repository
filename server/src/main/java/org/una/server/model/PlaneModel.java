@@ -30,4 +30,8 @@ public class PlaneModel {
     public void update(Integer identifier, String name, Integer type) throws SQLException {
         this.dba.update(identifier, name, type);
     }
+
+    public void delete(Integer identifier) throws SQLException {
+        this.dba.delete(identifier);
+    }
 }

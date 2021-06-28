@@ -36,4 +36,8 @@ public class ScheduleModel {
     public void update(Integer identifier, Integer route, LocalTime departureTime, String weekday, BigDecimal discount) throws SQLException {
         this.dba.update(identifier, route, departureTime, weekday, discount);
     }
+
+    public void delete(Integer identifier) throws SQLException {
+        this.dba.delete(identifier);
+    }
 }

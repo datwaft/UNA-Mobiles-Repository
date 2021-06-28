@@ -25,6 +25,7 @@ public class RouteController {
                 case "GET_ALL" -> getAll(object.optString("token"), session);
                 case "CREATE" -> create(object, session);
                 case "UPDATE" -> update(object, session);
+                case "DELETE" -> delete(object, session);
                 default -> null;
             };
         } catch (JSONException ex) {
@@ -115,6 +116,33 @@ public class RouteController {
                     object.getInt("price")
             );
             response.put("action", "UPDATE");
+        } catch (SQLException ex) {
+            response.put("action", "ERROR");
+            response.put("message", ex.getMessage());
+        } catch (JSONException ex) {
+            return null;
+        }
+        return response;
+    }
+
+    public JSONObject delete(JSONObject object, Session session) {
+        var response = new JSONObject();
+
+        var token = object.optString("token");
+        if ((token == null || token.isEmpty()) && sessionController.isSessionSignedIn(session)) {
+            token = sessionController.getTokenBySession(session);
+        }
+        if (token == null || !sessionController.isTokenValid(token) || !sessionController.isTokenAdmin(token)) {
+            response.put("action", "ERROR");
+            response.put("type", "CREDENTIALS");
+            return response;
+        } else {
+            sessionController.registerSession(session, token);
+        }
+
+        try {
+            model.delete(object.getInt("identifier"));
+            response.put("action", "DELETE");
         } catch (SQLException ex) {
             response.put("action", "ERROR");
             response.put("message", ex.getMessage());

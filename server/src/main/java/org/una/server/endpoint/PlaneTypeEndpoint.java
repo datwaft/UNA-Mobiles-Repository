@@ -49,7 +49,7 @@ public class PlaneTypeEndpoint {
         if (response != null) {
             session.getBasicRemote().sendObject(response);
             this.sendToMany(switch (response.optString("action")) {
-                case "CREATE", "UPDATE" -> new JSONObject().put("action", "GET_ALL");
+                case "CREATE", "UPDATE", "DELETE" -> new JSONObject().put("action", "GET_ALL");
                 default -> null;
             }, sessionController::isSessionAdmin);
         }

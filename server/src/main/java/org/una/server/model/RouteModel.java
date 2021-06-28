@@ -31,4 +31,8 @@ public class RouteModel {
     public void update(Integer identifier, String origin, String destination, LocalTime duration, Integer price) throws SQLException {
         this.dba.update(identifier, origin, destination, duration, price);
     }
+
+    public void delete(Integer identifier) throws SQLException {
+        this.dba.delete(identifier);
+    }
 }

@@ -49,11 +49,11 @@ public class FlightEndpoint {
         if (response != null) {
             session.getBasicRemote().sendObject(response);
             this.sendToMany(switch (response.optString("action")) {
-                case "CREATE", "UPDATE" -> new JSONObject().put("action", "GET_ALL");
+                case "CREATE", "UPDATE", "DELETE" -> new JSONObject().put("action", "GET_ALL");
                 default -> null;
             }, sessionController::isSessionAdmin);
             this.broadcast(switch (response.optString("action")) {
-                case "CREATE", "UPDATE" -> new JSONObject().put("action", "VIEW_ALL");
+                case "CREATE", "UPDATE", "DELETE" -> new JSONObject().put("action", "VIEW_ALL");
                 default -> null;
             });
         }

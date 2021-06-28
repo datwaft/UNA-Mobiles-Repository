@@ -35,4 +35,8 @@ public class FlightModel {
     public void update(Integer identifier, Integer plane, LocalDate outboundDate, Integer outboundSchedule, LocalDate inboundDate, Integer inboundSchedule) throws SQLException {
         this.dba.update(identifier, plane, outboundDate, outboundSchedule, inboundDate, inboundSchedule);
     }
+
+    public void delete(Integer identifier) throws SQLException {
+        this.dba.delete(identifier);
+    }
 }
