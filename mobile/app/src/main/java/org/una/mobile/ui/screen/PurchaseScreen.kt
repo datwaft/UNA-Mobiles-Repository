@@ -27,7 +27,7 @@ import org.una.mobile.ui.theme.Theme
 @Composable
 fun PurchaseScreen(
     items: List<Purchase>,
-    onNavigateToReservationScreen: (purchase: Purchase, flight: Long) -> Unit,
+    onNavigateToReservationScreen: (purchase: Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var query: String by remember { mutableStateOf("") }
@@ -52,7 +52,7 @@ fun PurchaseScreen(
             items(filteredItems, key = { it.identifier }) { item ->
                 PurchaseScreenItem(item,
                     onLongPress = {
-                        onNavigateToReservationScreen(item, item.flight)
+                        onNavigateToReservationScreen(item.identifier)
                     })
             }
         }

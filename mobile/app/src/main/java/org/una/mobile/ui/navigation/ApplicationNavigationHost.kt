@@ -79,12 +79,13 @@ fun ApplicationNavigationHost(
                 purchaseViewModel.viewAll()
             }
             val items: List<Purchase> by purchaseViewModel.items.observeAsState(emptyList())
-            PurchaseScreen(items, onNavigateToReservationScreen = { purchase, flight ->
+            PurchaseScreen(items, onNavigateToReservationScreen = { identifier ->
+                val purchase by derivedStateOf { items.first { it.identifier == identifier } }
                 reservationFormViewModel.purchase = purchase
                 if (purchase.hasBeenReserved) {
                     ticketViewModel.viewAllPerPurchase(purchase.identifier)
                 }
-                ticketViewModel.viewAllPerFlight(flight)
+                ticketViewModel.viewAllPerFlight(purchase.flight)
                 navController.navigate(ApplicationScreen.Reservation)
             })
         }
