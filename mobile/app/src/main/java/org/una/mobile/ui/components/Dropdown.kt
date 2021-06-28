@@ -24,7 +24,7 @@ fun Dropdown(
     Box(modifier, propagateMinConstraints = true) {
         OutlinedTextField(
             value = when (selected) {
-                null, "" -> placeholder
+                null -> placeholder
                 else -> selected
             },
             onValueChange = {},

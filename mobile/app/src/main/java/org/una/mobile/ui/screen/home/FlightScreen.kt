@@ -9,25 +9,35 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import org.una.mobile.R
 import org.una.mobile.model.Flight
 import org.una.mobile.ui.components.Dropdown
 import org.una.mobile.ui.components.ListItem
 import org.una.mobile.ui.components.layout.SearchBar
 import org.una.mobile.ui.theme.Theme
+import org.una.mobile.viewmodel.PurchaseViewModel
+import org.una.mobile.viewmodel.SessionViewModel
+import org.una.mobile.viewmodel.form.PurchaseFormViewModel
 
 @ExperimentalAnimationApi
 @Composable
 fun FlightScreen(
     items: List<Flight>,
     modifier: Modifier = Modifier,
+    sessionViewModel: SessionViewModel = viewModel(),
+    purchaseFormViewModel: PurchaseFormViewModel = viewModel(),
+    purchaseViewModel: PurchaseViewModel = viewModel(),
 ) {
+    val isLoggedIn: Boolean by sessionViewModel.isLoggedIn.observeAsState(false)
+
     var query: String by remember { mutableStateOf("") }
     var selectedOrigin: String? by remember { mutableStateOf(null) }
     val originSet: Set<String> by remember(items) {
@@ -48,6 +58,22 @@ fun FlightScreen(
                         (selectedOrigin == null || item.origin == selectedOrigin) &&
                         (selectedDestination == null || item.destination == selectedDestination)
             }
+        }
+    }
+
+    var selectedIdentifier: Long? by remember { mutableStateOf(null) }
+    val selected: Flight? by remember(selectedIdentifier, items) {
+        derivedStateOf {
+            items.firstOrNull { selectedIdentifier == it.identifier }
+        }
+    }
+    var showPurchaseDialog: Boolean by remember { mutableStateOf(false) }
+
+    LaunchedEffect(selected) {
+        if (selected == null) {
+            showPurchaseDialog = false
+        } else {
+            purchaseFormViewModel.flight = selected
         }
     }
 
@@ -84,9 +110,23 @@ fun FlightScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(filteredItems, key = { it.identifier }) { item ->
-                FlightScreenItem(item)
+                FlightScreenItem(item, onLongPress = when {
+                    isLoggedIn -> if (item.availableTickets > 0) ({
+                        showPurchaseDialog = true
+                        selectedIdentifier = item.identifier
+                    }) else null
+                    else -> null
+                })
             }
         }
+    }
+    if (selected != null && isLoggedIn && selected!!.availableTickets > 0) {
+        PurchaseDialog(showPurchaseDialog, { showPurchaseDialog = it },
+            onSubmit = { ticketNumber, flight ->
+                purchaseViewModel.create(ticketNumber, flight.identifier)
+                showPurchaseDialog = false
+            },
+            viewModel = purchaseFormViewModel)
     }
 }
 

@@ -1,24 +1,18 @@
 package org.una.mobile.ui.navigation
 
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import org.una.mobile.model.Purchase
 import org.una.mobile.model.Session
-import org.una.mobile.ui.screen.LoginScreen
-import org.una.mobile.ui.screen.RegisterScreen
-import org.una.mobile.ui.screen.UserScreen
+import org.una.mobile.ui.screen.*
 import org.una.mobile.ui.screen.home.HomeScreen
-import org.una.mobile.viewmodel.FlightViewModel
-import org.una.mobile.viewmodel.ScheduleViewModel
-import org.una.mobile.viewmodel.SessionViewModel
-import org.una.mobile.viewmodel.UserViewModel
+import org.una.mobile.viewmodel.*
+import org.una.mobile.viewmodel.form.ReservationFormViewModel
 import org.una.mobile.viewmodel.form.UserFormViewModel
 
 @ExperimentalAnimationApi
@@ -34,10 +28,16 @@ fun ApplicationNavigationHost(
     userFormViewModel: UserFormViewModel = viewModel(),
     scheduleViewModel: ScheduleViewModel = viewModel(),
     flightViewModel: FlightViewModel = viewModel(),
+    purchaseViewModel: PurchaseViewModel = viewModel(),
+    ticketViewModel: TicketViewModel = viewModel(),
+    reservationFormViewModel: ReservationFormViewModel = viewModel(),
 ) {
     NavHost(navController, startDestination, modifier) {
         composable(ApplicationScreen.Home) {
-            HomeScreen(scheduleViewModel = scheduleViewModel, flightViewModel = flightViewModel)
+            HomeScreen(scheduleViewModel = scheduleViewModel,
+                flightViewModel = flightViewModel,
+                sessionViewModel = sessionViewModel,
+                purchaseViewModel = purchaseViewModel)
         }
         navigation(route = ApplicationScreen.Session, startDestination = ApplicationScreen.Login) {
             composable(ApplicationScreen.Login) {
@@ -75,10 +75,25 @@ fun ApplicationNavigationHost(
                 })
         }
         composable(ApplicationScreen.Purchases) {
-            // TODO: PurchasesScreen()
+            LaunchedEffect(true) {
+                purchaseViewModel.viewAll()
+            }
+            val items: List<Purchase> by purchaseViewModel.items.observeAsState(emptyList())
+            PurchaseScreen(items, onNavigateToReservationScreen = { purchase, flight ->
+                reservationFormViewModel.purchase = purchase
+                if (purchase.hasBeenReserved) {
+                    ticketViewModel.viewAllPerPurchase(purchase.identifier)
+                }
+                ticketViewModel.viewAllPerFlight(flight)
+                navController.navigate(ApplicationScreen.Reservation)
+            })
         }
         composable(ApplicationScreen.Reservation) {
-            // TODO: ReservationScreen()
+            ReservationScreen(
+                onReturn = { navController.popBackStack() },
+                reservationFormViewModel = reservationFormViewModel,
+                ticketViewModel = ticketViewModel,
+            )
         }
     }
 }

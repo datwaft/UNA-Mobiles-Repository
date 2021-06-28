@@ -16,7 +16,9 @@ import org.una.mobile.ui.navigation.HomeScreen.Schedules
 import org.una.mobile.ui.screen.home.FlightScreen
 import org.una.mobile.ui.screen.home.ScheduleScreen
 import org.una.mobile.viewmodel.FlightViewModel
+import org.una.mobile.viewmodel.PurchaseViewModel
 import org.una.mobile.viewmodel.ScheduleViewModel
+import org.una.mobile.viewmodel.SessionViewModel
 
 @ExperimentalAnimationApi
 @Composable
@@ -26,16 +28,18 @@ fun HomeNavigationHost(
     navController: NavHostController = rememberNavController(),
     startDestination: HomeScreen = Flights,
     // ViewModels
+    sessionViewModel: SessionViewModel = viewModel(),
     scheduleViewModel: ScheduleViewModel = viewModel(),
     flightViewModel: FlightViewModel = viewModel(),
+    purchaseViewModel: PurchaseViewModel = viewModel(),
 ) {
     NavHost(navController, startDestination, modifier) {
         composable(Flights) {
             LaunchedEffect(true) {
-                flightViewModel.viewAllWithDiscount()
+                flightViewModel.viewAll()
             }
             val items: List<Flight> by flightViewModel.items.observeAsState(emptyList())
-            FlightScreen(items)
+            FlightScreen(items, sessionViewModel = sessionViewModel, purchaseViewModel = purchaseViewModel)
         }
         composable(Schedules) {
             LaunchedEffect(true) {

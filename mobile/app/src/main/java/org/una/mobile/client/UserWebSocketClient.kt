@@ -6,6 +6,7 @@ import io.ktor.client.features.websocket.*
 import io.ktor.http.cio.websocket.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.*
@@ -65,8 +66,10 @@ object UserWebSocketClient {
                     send(it.toString())
                 }
             }
+        } catch (e: ClosedReceiveChannelException) {
+            Log.d(TAG, "onClose: ${closeReason.await()}")
         } catch (e: Throwable) {
-            Log.e(TAG, "${e.message}", e)
+            Log.e(TAG, "onError${closeReason.await()}")
         }
     }
 

@@ -20,10 +20,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
-import org.una.mobile.client.FlightWebSocketClient
-import org.una.mobile.client.ScheduleWebSocketClient
-import org.una.mobile.client.SessionWebSocketClient
-import org.una.mobile.client.UserWebSocketClient
+import org.una.mobile.client.*
 import org.una.mobile.model.Session
 import org.una.mobile.model.User
 import org.una.mobile.ui.components.layout.ApplicationBar
@@ -34,10 +31,7 @@ import org.una.mobile.ui.navigation.ApplicationScreen.Home
 import org.una.mobile.ui.navigation.buildNavigationDrawerMenuItems
 import org.una.mobile.ui.navigation.switch
 import org.una.mobile.ui.theme.Theme
-import org.una.mobile.viewmodel.SessionListener
-import org.una.mobile.viewmodel.SessionViewModel
-import org.una.mobile.viewmodel.UserListener
-import org.una.mobile.viewmodel.UserViewModel
+import org.una.mobile.viewmodel.*
 import org.una.mobile.viewmodel.form.UserFormViewModel
 
 @ExperimentalAnimationApi
@@ -48,6 +42,8 @@ class MainActivity : ComponentActivity() {
         UserWebSocketClient.connect(lifecycleScope)
         ScheduleWebSocketClient.connect(lifecycleScope)
         FlightWebSocketClient.connect(lifecycleScope)
+        PurchaseWebSocketClient.connect(lifecycleScope)
+        TicketWebSocketClient.connect(lifecycleScope)
     }
 
     override fun onPause() {
@@ -56,6 +52,8 @@ class MainActivity : ComponentActivity() {
         UserWebSocketClient.close()
         ScheduleWebSocketClient.close()
         FlightWebSocketClient.close()
+        PurchaseWebSocketClient.close()
+        TicketWebSocketClient.close()
         lifecycleScope.launch {
             SessionViewModel.internalChannel.send(SessionViewModel.InternalEvent.Clear)
         }
@@ -91,6 +89,7 @@ private fun App(
     val sessionViewModel: SessionViewModel = viewModel()
     val userViewModel: UserViewModel = viewModel()
     val userFormViewModel: UserFormViewModel = viewModel()
+    val purchaseViewModel: PurchaseViewModel = viewModel()
 
     /************
      * Data State
@@ -104,6 +103,7 @@ private fun App(
      */
     SessionListener(scaffoldState)
     UserListener(scaffoldState, navController)
+    PurchaseListener(scaffoldState)
 
     LaunchedEffect(session) {
         navController.switch(Home)
@@ -112,6 +112,13 @@ private fun App(
     LaunchedEffect(user) {
         if (user != null) {
             userFormViewModel.import(user!!)
+        }
+    }
+
+    LaunchedEffect(session) {
+        if (session != null) {
+            purchaseViewModel.token = session!!.token
+            purchaseViewModel.viewAll(session!!.token)
         }
     }
 
@@ -138,6 +145,7 @@ private fun App(
         ApplicationNavigationHost(navController = navController, modifier = Modifier.padding(it),
             sessionViewModel = sessionViewModel,
             userViewModel = userViewModel,
-            userFormViewModel = userFormViewModel)
+            userFormViewModel = userFormViewModel,
+            purchaseViewModel = purchaseViewModel)
     }
 }

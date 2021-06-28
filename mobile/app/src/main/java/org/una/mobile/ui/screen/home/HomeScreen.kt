@@ -12,15 +12,19 @@ import org.una.mobile.ui.navigation.HomeNavigationHost
 import org.una.mobile.ui.navigation.HomeScreen.Flights
 import org.una.mobile.ui.navigation.HomeScreen.Schedules
 import org.una.mobile.viewmodel.FlightViewModel
+import org.una.mobile.viewmodel.PurchaseViewModel
 import org.una.mobile.viewmodel.ScheduleViewModel
+import org.una.mobile.viewmodel.SessionViewModel
 
 @ExperimentalAnimationApi
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
     // ViewModels
+    sessionViewModel: SessionViewModel = viewModel(),
     scheduleViewModel: ScheduleViewModel = viewModel(),
     flightViewModel: FlightViewModel = viewModel(),
+    purchaseViewModel: PurchaseViewModel = viewModel(),
 ) {
     val navController = rememberNavController()
 
@@ -35,6 +39,8 @@ fun HomeScreen(
             modifier = Modifier.padding(it),
             scheduleViewModel = scheduleViewModel,
             flightViewModel = flightViewModel,
+            sessionViewModel = sessionViewModel,
+            purchaseViewModel = purchaseViewModel,
         )
     }
 }

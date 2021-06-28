@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import org.una.mobile.client.FlightWebSocketClient
@@ -17,7 +18,7 @@ class FlightViewModel : ViewModel() {
     private val _items = MutableLiveData<List<Flight>>(emptyList())
     val items: LiveData<List<Flight>> = _items
 
-    fun viewAllWithDiscount() {
+    fun viewAll() {
         viewModelScope.launch {
             client.outputEventChannel.send(Output.ViewAll)
         }
@@ -32,5 +33,23 @@ class FlightViewModel : ViewModel() {
                 }
             }
         }
+    }
+
+    init {
+        viewModelScope.launch {
+            internalChannel.consumeEach {
+                when (it) {
+                    is InternalEvent.ViewAll -> viewAll()
+                }
+            }
+        }
+    }
+
+    sealed class InternalEvent {
+        object ViewAll : InternalEvent()
+    }
+
+    companion object {
+        val internalChannel: Channel<InternalEvent> = Channel(10)
     }
 }
