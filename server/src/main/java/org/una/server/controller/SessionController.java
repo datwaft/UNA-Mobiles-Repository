@@ -66,6 +66,7 @@ public class SessionController {
 
     public Boolean isSessionAdmin(Session session) {
         var token = sessionTokens.get(session);
+        if (token == null) return false;
         return tokenData.get(token).getValue1().equals("admin");
     }
 
