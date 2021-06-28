@@ -4,6 +4,7 @@ import jakarta.websocket.*;
 import jakarta.websocket.server.ServerEndpoint;
 import org.json.JSONObject;
 import org.una.server.controller.PurchaseController;
+import org.una.server.controller.SessionController;
 import org.una.server.endpoint.decode.JsonObjectDecoder;
 import org.una.server.endpoint.encode.JsonObjectEncoder;
 
@@ -16,6 +17,8 @@ import java.util.function.Predicate;
 @ServerEndpoint(value = "/purchase", decoders = {JsonObjectDecoder.class}, encoders = {JsonObjectEncoder.class})
 public class PurchaseEndpoint {
     private static final PurchaseController controller = PurchaseController.getInstance();
+
+    private static final SessionController sessionController = SessionController.getInstance();
 
     private static final Set<Session> sessions = Collections.synchronizedSet(new HashSet<>());
 
@@ -46,7 +49,7 @@ public class PurchaseEndpoint {
         if (response != null) {
             session.getBasicRemote().sendObject(response);
             if (response.optString("action").equals("CREATE")) {
-                this.broadcast(new JSONObject().put("action", "VIEW_ALL"));
+                this.sendToMany(new JSONObject().put("action", "VIEW_ALL"), (s) -> sessionController.shareUsername(s, session));
             }
         }
     }
