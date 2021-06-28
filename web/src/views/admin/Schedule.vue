@@ -1,29 +1,25 @@
 <template>
-  <ScheduleModal
-    v-model:visible="showModal"
-    :selected="selected"
-    :mode="mode"
-    :routes="routes"
-  />
+  <ScheduleModal v-model:visible="showModal" :selected="selected" :mode="mode" :routes="routes" />
   <div class="schedule">
     <br />
     <div class="header p-text-center p-d-block">Schedules</div>
     <br />
     <Toolbar>
       <template #left>
-        <Button
-          icon="pi pi-plus"
-          label="Create"
-          class="p-button-success"
-          @click="create()"
-        />
-        &nbsp;
+        <Button icon="pi pi-plus" label="Create" class="p-button-success" @click="create()" />&nbsp;
         <Button
           icon="pi pi-pencil"
           label="Edit"
           class="p-button-warning"
           :disabled="!canUpdate"
           @click="update()"
+        />&nbsp;
+        <Button
+          icon="pi pi-exclamation-triangle"
+          label="Delete"
+          class="p-button-danger"
+          :disabled="!canUpdate"
+          @click="remove()"
         />
       </template>
     </Toolbar>
@@ -36,16 +32,14 @@
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
       responsiveLayout="scroll"
       v-model:selection="selected"
-      dataKey="identifier"
+      data-key="identifier"
     >
       <Column selectionMode="single" headerStyle="width: 3em" />
       <Column field="routeName" header="Route" :sortable="true" />
       <Column field="departureTime" header="Departure Time" :sortable="true" />
       <Column field="weekday" header="Weekday" :sortable="true" />
       <Column field="discount" header="Discount" :sortable="true">
-        <template #body="slotProps">
-          {{ slotProps.data[slotProps.column.props.field] * 100 }}%
-        </template>
+        <template #body="slotProps">{{ slotProps.data[slotProps.column.props.field] * 100 }}%</template>
       </Column>
     </DataTable>
   </div>
@@ -128,6 +122,22 @@ export default {
     update() {
       this.mode = "update";
       this.showModal = true;
+    },
+    remove() {
+      this.$confirm.require({
+        message: "Are you sure you want to proceed?",
+        header: "Confirmation",
+        icon: "pi pi-exclamation-triangle",
+        acceptClass: "p-button-danger",
+        accept: () => {
+          this.$store.dispatch("schedule/sendMessage", {
+            action: "DELETE",
+            identifier: this.selected?.identifier,
+            token: this.$store.state.session.session.token,
+          });
+        },
+        reject: () => {},
+      });
     },
     getRouteName(route) {
       return `${route.origin} - ${route.destination} at $${route.price}`;

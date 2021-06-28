@@ -12,19 +12,20 @@
     <br />
     <Toolbar>
       <template #left>
-        <Button
-          icon="pi pi-plus"
-          label="Create"
-          class="p-button-success"
-          @click="create()"
-        />
-        &nbsp;
+        <Button icon="pi pi-plus" label="Create" class="p-button-success" @click="create()" />&nbsp;
         <Button
           icon="pi pi-pencil"
           label="Edit"
           class="p-button-warning"
           :disabled="!canUpdate"
           @click="update()"
+        />&nbsp;
+        <Button
+          icon="pi pi-exclamation-triangle"
+          label="Delete"
+          class="p-button-danger"
+          :disabled="!canUpdate"
+          @click="remove()"
         />
       </template>
     </Toolbar>
@@ -37,22 +38,14 @@
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
       responsiveLayout="scroll"
       v-model:selection="selected"
-      dataKey="identifier"
+      data-key="identifier"
     >
       <Column selectionMode="single" headerStyle="width: 3em" />
       <Column field="planeName" header="Plane" :sortable="true" />
       <Column field="outboundDate" header="Outbound Date" :sortable="true" />
-      <Column
-        field="outboundScheduleName"
-        header="Outbound Schedule"
-        :sortable="true"
-      />
+      <Column field="outboundScheduleName" header="Outbound Schedule" :sortable="true" />
       <Column field="inboundDate" header="Inbound Date" :sortable="true" />
-      <Column
-        field="inboundScheduleName"
-        header="Inbound Schedule"
-        :sortable="true"
-      />
+      <Column field="inboundScheduleName" header="Inbound Schedule" :sortable="true" />
     </DataTable>
   </div>
 </template>
@@ -149,6 +142,22 @@ export default {
     update() {
       this.mode = "update";
       this.showModal = true;
+    },
+    remove() {
+      this.$confirm.require({
+        message: "Are you sure you want to proceed?",
+        header: "Confirmation",
+        icon: "pi pi-exclamation-triangle",
+        acceptClass: "p-button-danger",
+        accept: () => {
+          this.$store.dispatch("flight/sendMessage", {
+            action: "DELETE",
+            identifier: this.selected?.identifier,
+            token: this.$store.state.session.session.token,
+          });
+        },
+        reject: () => {},
+      });
     },
     getScheduleName(schedule) {
       let route = this.routes?.filter((e) => e.identifier == schedule.route)[0];
