@@ -1,6 +1,5 @@
 package org.una.mobile.model
 
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import kotlinx.serialization.Serializable
 

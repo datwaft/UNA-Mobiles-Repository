@@ -39,7 +39,9 @@ fun HomeNavigationHost(
                 flightViewModel.viewAll()
             }
             val items: List<Flight> by flightViewModel.items.observeAsState(emptyList())
-            FlightScreen(items, sessionViewModel = sessionViewModel, purchaseViewModel = purchaseViewModel)
+            FlightScreen(items,
+                sessionViewModel = sessionViewModel,
+                purchaseViewModel = purchaseViewModel)
         }
         composable(Schedules) {
             LaunchedEffect(true) {

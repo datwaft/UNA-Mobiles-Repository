@@ -151,7 +151,11 @@ object TicketWebSocketClient {
         sealed class Output : Event() {
             data class ViewAllPerFlight(val flight: Long) : Output()
             data class ViewAllPerPurchase(val purchase: Long) : Output()
-            data class Create(val purchase: Long, val flight: Long, val payload: List<Pair<Int, Int>>) : Output()
+            data class Create(
+                val purchase: Long,
+                val flight: Long,
+                val payload: List<Pair<Int, Int>>,
+            ) : Output()
         }
 
         sealed class Error(open val message: String) : Event() {
